@@ -580,6 +580,169 @@ footer.site-footer { position: relative; z-index: 1; border-top: 1px solid var(-
 .find-list { margin: 0; padding-left: 1.2em; font-size: .9rem; }
 .find-list mark { background: rgba(240,169,160,.25); color: var(--paper); border-radius: 3px; padding: 0 3px; }
 
+/* =========================================================
+   第五版：可以探索的雲端海洋與立體書架
+   ========================================================= */
+/* ---------- 雲端海洋：海面場景 ---------- */
+.sea { position: relative; height: clamp(440px, 64vh, 620px); border-radius: 22px; overflow: hidden; border: 1px solid var(--line); background: #0F1A33; isolation: isolate; --sea-scale: 1; }
+.sea-bg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 0; }
+.sea-wave { position: absolute; left: 0; width: 100%; pointer-events: none; display: block; }
+.sea-wave path { animation: drift var(--wd, 18s) linear infinite; }
+.sea-shimmer { animation: shimmer-glint 6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes shimmer-glint { 0%,100% { opacity: .35; transform: scaleX(.85); } 50% { opacity: .8; transform: scaleX(1.08); } }
+.sea-bottle { position: absolute; left: var(--x); top: var(--y); width: calc(var(--w) * var(--sea-scale) + 12px); height: calc(var(--w) * 2 * var(--sea-scale) + 12px); min-width: 44px; min-height: 44px; transform: translate(-50%, -64%); padding: 6px; border: 0; background: transparent; cursor: pointer; border-radius: 16px; -webkit-tap-highlight-color: transparent; }
+.sea-bottle .sb-drift { display: block; width: 100%; height: 100%; animation: sbDrift var(--dd) ease-in-out var(--d2) infinite alternate; }
+.sea-bottle .sb-bob { display: block; width: 100%; height: 100%; animation: sbBob var(--bd) ease-in-out var(--d1) infinite; transform-origin: 50% 85%; }
+.sea-bottle .sb-art { display: block; width: 100%; height: 100%; transform: rotate(var(--tilt)); transition: transform .35s ease, filter .35s ease; transform-origin: 50% 80%; }
+.sea-bottle .sb-art svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.sea-bottle .sb-ripple { position: absolute; left: 50%; bottom: 8%; width: 130%; height: 14%; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(closest-side, var(--mc), transparent); opacity: .35; pointer-events: none; animation: sbRipple var(--bd) ease-in-out var(--d1) infinite; }
+@keyframes sbBob { 0%,100% { transform: translateY(0) rotate(calc(var(--sway) * -1)); } 50% { transform: translateY(calc(var(--amp) * -1)) rotate(var(--sway)); } }
+@keyframes sbDrift { from { transform: translateX(calc(var(--dx) * -1)); } to { transform: translateX(var(--dx)); } }
+@keyframes sbRipple { 0%,100% { opacity: .22; transform: translateX(-50%) scaleX(1); } 50% { opacity: .45; transform: translateX(-50%) scaleX(1.18); } }
+.sea-bottle:hover .sb-art, .sea-bottle:focus-visible .sb-art { transform: rotate(calc(var(--tilt) * .3)) scale(1.14); filter: drop-shadow(0 0 10px rgba(233, 216, 166, .75)) drop-shadow(0 0 22px rgba(184, 216, 232, .45)); }
+.sea-bottle:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.sea-bottle:active .sb-art { transform: scale(1.04); }
+.sea-bottle.picked .sb-art, .sea-bottle.picked .sb-ripple { visibility: hidden; }
+.sea-bottle.mine .sb-ripple { opacity: .6; }
+.sea-tip { position: absolute; left: 50%; bottom: calc(100% + 4px); transform: translateX(-50%); white-space: nowrap; max-width: 220px; overflow: hidden; text-overflow: ellipsis; background: rgba(14, 23, 48, .88); border: 1px solid var(--line-strong); color: var(--paper); font-size: .8rem; line-height: 1.4; padding: 5px 10px; border-radius: 10px; pointer-events: none; opacity: 0; transition: opacity .2s ease; z-index: 5; }
+.sea-tip small { display: block; color: var(--muted); font-size: .72rem; }
+.sea-bottle:hover .sea-tip, .sea-bottle:focus-visible .sea-tip { opacity: 1; }
+@media (hover: none) { .sea-tip { display: none; } }
+.sea-layer { position: absolute; inset: 0; pointer-events: none; }
+.sea-layer .sea-bottle { pointer-events: auto; }
+.sea-layer.far { z-index: 2; }
+.sea-layer.mid { z-index: 4; }
+.sea-layer.near { z-index: 6; }
+.sea-wave.w-far { z-index: 3; }
+.sea-wave.w-mid { z-index: 5; }
+.sea-wave.w-near { z-index: 7; }
+.sea-bottle.appear { animation: sbAppear .9s ease both; animation-delay: var(--ad, 0s); }
+@keyframes sbAppear { from { opacity: 0; } to { opacity: 1; } }
+.sea-bottle.arriving { animation: sbArrive 2.2s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes sbArrive { 0% { opacity: 0; transform: translate(calc(-50% + 160px), -50%) scale(.7); } 60% { opacity: 1; } 100% { opacity: 1; transform: translate(-50%, -64%) scale(1); } }
+.sea-bottle.arriving::after { content: '剛漂來'; position: absolute; top: -6px; left: 50%; transform: translate(-50%, -100%); font-size: .7rem; color: var(--deep); background: var(--gold); border-radius: 999px; padding: 1px 8px; white-space: nowrap; animation: fadeOutLate 6s ease forwards; }
+@keyframes fadeOutLate { 0%, 80% { opacity: 1; } 100% { opacity: 0; } }
+.sea-hud { position: absolute; left: 14px; right: 14px; bottom: 12px; z-index: 9; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; pointer-events: none; }
+.sea-hud > * { pointer-events: auto; }
+.sea-hint { font-size: .85rem; color: var(--paper); background: rgba(14, 23, 48, .62); border: 1px solid var(--line); padding: 6px 12px; border-radius: 999px; backdrop-filter: blur(4px); }
+.sea-empty { position: absolute; inset: 0; z-index: 8; display: grid; place-items: center; text-align: center; padding: 24px; }
+.sea-empty .box { max-width: 420px; background: rgba(14, 23, 48, .6); border: 1px solid var(--line); border-radius: 18px; padding: 20px 22px; backdrop-filter: blur(6px); display: grid; gap: 12px; justify-items: center; }
+.sea-waiting { position: absolute; left: 0; top: 47%; width: 34px; height: 68px; z-index: 3; opacity: .55; animation: seaWait 16s linear infinite; pointer-events: none; }
+@keyframes seaWait { 0% { transform: translateX(110vw) translateY(0) rotate(8deg); opacity: 0; } 15% { opacity: .55; } 50% { transform: translateX(55vw) translateY(-6px) rotate(-6deg); } 85% { opacity: .55; } 100% { transform: translateX(20vw) translateY(0) rotate(6deg); opacity: 0; } }
+.sea-fly { position: fixed; z-index: 60; pointer-events: none; }
+.sea-fly svg { width: 100%; height: 100%; display: block; overflow: visible; }
+dialog.letter[open] .dlg-body { animation: unroll .7s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes unroll { from { clip-path: inset(46% 6% 46% 6% round 18px); opacity: .2; } 40% { opacity: 1; } to { clip-path: inset(0 0 0 0 round 0); opacity: 1; } }
+.reader-time { font-size: .82rem; color: var(--muted); }
+@media (max-width: 640px) { .sea { --sea-scale: .78; height: clamp(420px, 70vh, 560px); } .sea-hud { bottom: 8px; left: 8px; right: 8px; } .sea-hint { font-size: .78rem; } }
+
+/* ---------- 立體書架 ---------- */
+.book-tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.book-tools input[type=search] { max-width: 260px; }
+.bookcase { position: relative; padding: 16px 16px 20px; border-radius: 16px; background: linear-gradient(180deg, #5C4635, #3F2F25); box-shadow: 0 24px 60px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,235,200,.15); }
+.bookcase-inner { border-radius: 8px; overflow: hidden; background: linear-gradient(180deg, #172440 0%, #111B33 100%); box-shadow: inset 0 0 40px rgba(0,0,0,.6), inset 0 0 0 1px rgba(0,0,0,.4); }
+.shelf-row { position: relative; display: flex; align-items: flex-end; gap: 3px; min-height: 238px; padding: 26px 18px 0; perspective: 900px; }
+.shelf-row::before { content: ''; position: absolute; inset: 0 0 14px; background: radial-gradient(600px 160px at 50% 0%, rgba(233, 216, 166, .10), transparent 70%); pointer-events: none; }
+.shelf-row::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 16px; background: linear-gradient(180deg, #8A6A4F 0%, #6E523C 40%, #4C3829 100%); box-shadow: 0 8px 14px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,235,200,.35); z-index: 1; }
+.shelf-plaque { position: absolute; left: 50%; bottom: 1px; transform: translateX(-50%); z-index: 2; font-size: .7rem; letter-spacing: .1em; color: #2A1E14; background: linear-gradient(180deg, #E9D8A6, #C9B27A); padding: 0 10px; border-radius: 3px; line-height: 14px; box-shadow: 0 1px 2px rgba(0,0,0,.4); }
+.book { --c: #4A5D8C; --ink: var(--paper); position: relative; z-index: 2; flex: 0 0 auto; width: var(--bw); height: var(--bh); margin-bottom: 16px; padding: 0; border: 0; border-radius: 3px 3px 2px 2px; cursor: pointer; color: var(--ink); background:
+  linear-gradient(90deg, rgba(0,0,0,.35) 0, rgba(255,255,255,.18) 9%, rgba(255,255,255,0) 22%, rgba(0,0,0,0) 78%, rgba(0,0,0,.4) 100%), var(--c);
+  box-shadow: 0 2px 0 rgba(0,0,0,.35), 2px 0 6px rgba(0,0,0,.35); transform: rotate(var(--lean, 0deg)); transform-origin: 50% 100%; transition: transform .28s ease, box-shadow .28s ease, filter .28s ease, opacity .3s ease; display: flex; flex-direction: column; align-items: center; justify-content: space-between; font-family: var(--font-display); }
+.book::before, .book::after { content: ''; position: absolute; left: 3px; right: 3px; height: 3px; background: var(--band, rgba(233,216,166,.7)); border-radius: 1px; }
+.book::before { top: 14px; } .book::after { bottom: 14px; }
+.book .spine-title { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; font-size: clamp(.8rem, calc(var(--bw) * .34), 1.02rem); letter-spacing: .12em; margin-top: 24px; height: calc(var(--bh) - 84px); overflow: hidden; line-height: 1.1; text-shadow: 0 1px 1px rgba(0,0,0,.35); }
+.book .spine-count { font-family: var(--font-ui); font-size: .68rem; margin-bottom: 20px; opacity: .85; }
+.book .spine-mark { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--band, rgba(233,216,166,.7)); margin-bottom: 4px; }
+.book.light { --ink: #22304F; --band: rgba(41,59,99,.55); }
+.book.empty { filter: saturate(.5) brightness(.8); }
+.book:hover, .book:focus-visible { transform: translateY(-12px) rotate(0deg); box-shadow: 0 10px 22px rgba(0,0,0,.5), 0 0 0 1px rgba(233,216,166,.5), 0 0 24px rgba(233,216,166,.25); z-index: 3; }
+.book:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.book:active { transform: translateY(-6px) scale(.98); }
+.book.pulled { visibility: hidden; }
+.book.dim { opacity: .22; filter: grayscale(.6); }
+.book.match { box-shadow: 0 0 0 2px var(--gold), 0 0 18px rgba(233,216,166,.45); }
+.book.book-new { animation: bookIn 1s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes bookIn { from { opacity: 0; transform: translateY(-60px) rotate(-6deg); } to { opacity: 1; transform: rotate(var(--lean, 0deg)); } }
+.book.book-grew { animation: bookGlow 1.8s ease 2; }
+@keyframes bookGlow { 50% { box-shadow: 0 0 0 2px var(--gold), 0 0 26px rgba(233,216,166,.6); } }
+.book .spine-new { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); font-family: var(--font-ui); font-size: .66rem; background: var(--gold); color: var(--deep); border-radius: 999px; padding: 0 6px; white-space: nowrap; animation: fadeOutLate 7s ease forwards; }
+.shelf-deco { flex: 0 0 auto; align-self: flex-end; margin: 0 6px 16px auto; position: relative; z-index: 2; display: flex; align-items: flex-end; gap: 10px; }
+.shelf-deco .deco-bottle { width: 30px; height: 60px; opacity: .9; display: block; }
+.shelf-deco .deco-bottle svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.book .spine-title span { display: block; line-height: 1.15; }
+.shelf-deco .deco-lamp { width: 26px; height: 26px; border-radius: 50%; background: radial-gradient(circle at 40% 40%, #FFF6DA, #E9D8A6 60%, #C9B27A); box-shadow: 0 0 22px rgba(233,216,166,.55), 0 0 60px rgba(233,216,166,.25); margin-bottom: 4px; }
+.shelf-deco .deco-stack { display: grid; gap: 2px; }
+.shelf-deco .deco-stack span { display: block; height: 11px; border-radius: 2px; box-shadow: 0 1px 0 rgba(0,0,0,.35); }
+.bookend { flex: 0 0 auto; width: 10px; height: 96px; margin: 0 2px 16px; background: linear-gradient(90deg, #8A6A4F, #5C4635); border-radius: 2px 2px 0 0; position: relative; z-index: 2; box-shadow: 2px 0 6px rgba(0,0,0,.35); }
+.shelf-gap { flex: 1 1 auto; }
+
+/* 抽出與翻開 */
+.fly-book { position: fixed; z-index: 70; pointer-events: none; border-radius: 4px; box-shadow: 0 20px 50px rgba(0,0,0,.55); overflow: hidden; }
+.fly-book .fb-face { position: absolute; inset: 0; }
+.book-reader { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 16px; }
+.book-reader .br-backdrop { position: absolute; inset: 0; background: rgba(6, 10, 24, .78); backdrop-filter: blur(3px); }
+.br-wrap { position: relative; width: min(980px, 100%); display: grid; gap: 10px; }
+.br-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; color: var(--paper); }
+.br-top .eyebrow { margin: 0; }
+.br-book { position: relative; display: grid; grid-template-columns: 1fr 1fr; height: min(620px, calc(100vh - 140px)); perspective: 1800px; border-radius: 6px 10px 10px 6px; background: var(--c, #4A5D8C); padding: 10px; box-shadow: 0 40px 90px rgba(0,0,0,.6); }
+.br-page-l, .br-page-r { position: relative; background: linear-gradient(90deg, #EFE8DA 0%, #F7F4EE 12%, #F7F4EE 100%); color: #22304F; overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
+.br-page-l { border-radius: 4px 0 0 4px; background: linear-gradient(270deg, #E6DECD 0%, #F3EEE4 10%, #F7F4EE 100%); box-shadow: inset -12px 0 20px rgba(41, 59, 99, .12); }
+.br-page-r { border-radius: 0 4px 4px 0; box-shadow: inset 12px 0 20px rgba(41, 59, 99, .12); }
+.br-scroll { flex: 1 1 auto; overflow: auto; padding: 26px 28px 12px; min-height: 0; }
+.br-page-r .br-scroll { transform-origin: 0 50%; }
+.br-book h3, .br-book h4 { font-family: var(--font-display); color: #22304F; margin: 0 0 6px; }
+.br-book .muted, .br-book .tiny.muted { color: #5D6380; }
+.br-book .eyebrow { color: #7A6A4F; }
+.br-book .badge { background: rgba(41,59,99,.08); color: #22304F; border-color: rgba(41,59,99,.25); }
+.br-book .badge.demo { background: rgba(201,133,0,.14); color: #6B4A00; border-color: rgba(201,133,0,.45); }
+.br-book .btn { color: #22304F; border-color: rgba(41,59,99,.35); background: rgba(41,59,99,.06); }
+.br-book .btn:hover:not(:disabled) { background: rgba(41,59,99,.14); border-color: #22304F; }
+.br-book .btn.primary { background: #293B63; color: var(--paper); border-color: #293B63; }
+.br-book .btn.danger { color: #8E2F23; border-color: rgba(142,47,35,.4); }
+.br-text { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 1rem; line-height: 1.85; margin: 10px 0; }
+.br-quote { font-family: var(--font-display); font-size: 1.15rem; line-height: 1.7; margin: 0 0 14px; padding-left: 12px; border-left: 3px solid #C9B27A; }
+.br-art { border-radius: 8px; overflow: hidden; margin: 8px 0; background: #1A2848; aspect-ratio: 3 / 2; }
+.br-art svg { width: 100%; height: 100%; display: block; }
+.br-toc { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 2px; }
+.br-toc button { width: 100%; text-align: left; background: transparent; border: 0; border-bottom: 1px dashed rgba(41,59,99,.2); color: #22304F; padding: 7px 4px; font: inherit; font-size: .9rem; cursor: pointer; display: flex; gap: 8px; justify-content: space-between; border-radius: 4px; min-height: 40px; }
+.br-toc button:hover, .br-toc button:focus-visible { background: rgba(41,59,99,.08); }
+.br-toc button[aria-current="true"] { background: rgba(201,178,122,.3); font-weight: 600; }
+.br-toc .n { color: #5D6380; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+.br-nav { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 16px 14px; border-top: 1px solid rgba(41,59,99,.12); font-size: .88rem; }
+.br-nav .pg { color: #5D6380; font-variant-numeric: tabular-nums; }
+.br-cover { position: absolute; top: 0; bottom: 0; left: 50%; right: 0; transform-origin: 0 50%; transform-style: preserve-3d; border-radius: 0 10px 10px 0; z-index: 4; pointer-events: none; }
+.br-cover .face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 0 10px 10px 0; }
+.br-cover .front { background: linear-gradient(90deg, rgba(0,0,0,.35), rgba(255,255,255,.08) 6%, rgba(0,0,0,0) 14%), var(--c); display: grid; place-items: center; text-align: center; padding: 30px; color: var(--ink, var(--paper)); box-shadow: inset 0 0 0 10px rgba(255,255,255,.04), inset 0 0 0 12px rgba(233,216,166,.35); }
+.br-cover .front .ct { font-family: var(--font-display); font-size: clamp(1.4rem, 3vw, 2rem); line-height: 1.3; }
+.br-cover .front .cs { font-size: .85rem; opacity: .85; margin-top: 8px; }
+.br-cover .back { transform: rotateY(180deg); background: var(--c); filter: brightness(.85); }
+.br-mobile-toc { display: none; }
+@media (max-width: 760px) {
+  .br-book { grid-template-columns: 1fr; height: calc(100vh - 120px); height: calc(100dvh - 120px); padding: 6px; }
+  .br-page-l { display: none; position: absolute; inset: 6px; z-index: 3; border-radius: 4px; }
+  .br-book.toc-open .br-page-l { display: flex; }
+  .br-page-r { border-radius: 4px; }
+  .br-cover { left: 0; border-radius: 6px; }
+  .br-cover .face { border-radius: 6px; }
+  .br-mobile-toc { display: inline-flex; }
+  .br-scroll { padding: 20px 18px 10px; }
+  .br-nav { padding: 8px 10px 10px; }
+  .shelf-row { padding: 22px 10px 0; min-height: 214px; }
+  .bookcase { padding: 10px 10px 14px; }
+}
+
+/* ---------- 整體互動回饋 ---------- */
+.btn, .chip { transition: background .2s ease, border-color .2s ease, transform .12s ease, box-shadow .2s ease; }
+.btn:active:not(:disabled), .chip:active { transform: scale(.96); }
+.bottle-card, .recent-item { transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
+.bottle-card:hover, .recent-item:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,.3); }
+.bottle-card:active, .recent-item:active { transform: translateY(0) scale(.99); }
+.toast.ok::before { content: ''; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 8px var(--gold); margin-right: 8px; vertical-align: middle; }
+.toast .toast-act { margin-left: 10px; background: transparent; border: 1px solid var(--line-strong); color: var(--moon); border-radius: 999px; padding: 2px 10px; font: inherit; font-size: .85rem; cursor: pointer; min-height: 30px; }
+.toast .toast-act:hover { border-color: var(--moon); }
+@keyframes viewIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+.view:not([hidden]) { animation: viewIn .5s cubic-bezier(.2,.7,.2,1); }
+
 /* ---------- 減少動態效果 ---------- */
 @media (prefers-reduced-motion: reduce) {
   html:not(.motion-on) *, html:not(.motion-on) *::before, html:not(.motion-on) *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
@@ -924,6 +1087,10 @@ html.reduce-motion *, html.reduce-motion *::before, html.reduce-motion *::after 
   <div class="ocean-tools">
     <div class="chips" id="oceanMoodFilter" role="group" aria-label="依情緒篩選"></div>
     <div class="row">
+      <div class="mode-switch" role="group" aria-label="海洋的顯示方式">
+        <button class="btn sm" type="button" id="oceanViewSea" aria-pressed="true">海面</button>
+        <button class="btn sm" type="button" id="oceanViewList" aria-pressed="false">清單</button>
+      </div>
       <button class="btn" type="button" id="oceanReload">重新整理</button>
       <button class="btn moon" type="button" id="oceanDaily">今天的瓶子</button>
       <button class="btn primary" type="button" id="oceanRandom">隨機撿起一個漂流瓶</button>
@@ -1000,10 +1167,16 @@ html.reduce-motion *, html.reduce-motion *::before, html.reduce-motion *::after 
 
   <div role="tabpanel" id="arch-shelves" aria-labelledby="tab-shelves" hidden>
     <div class="row" style="justify-content:space-between;margin-bottom:12px">
-      <p class="muted small">把想記得的語錄、漂流瓶、日記和在海裡撿到的作品，整理成自己的收藏集。</p>
-      <button class="btn primary" type="button" id="newShelfBtn">新增書架</button>
+      <p class="muted small">你的日記、漂流瓶、信件與收藏會自動整理成幾本書；也可以自己做主題書。點一本書，就能把它抽出來翻閱。</p>
+      <button class="btn primary" type="button" id="newShelfBtn">新增主題書</button>
     </div>
-    <div id="shelfList" class="stack"></div>
+    <div class="book-tools">
+      <div class="chips" id="bookFilter" role="group" aria-label="依分類找書"></div>
+      <label class="sr-only" for="bookSearch">搜尋書名或書裡的內容</label>
+      <input type="search" id="bookSearch" placeholder="搜尋書名或內容" autocomplete="off">
+    </div>
+    <p class="small muted" id="bookFound" role="status" aria-live="polite"></p>
+    <div id="shelfList"></div>
   </div>
 
   <div role="tabpanel" id="arch-favs" aria-labelledby="tab-favs" hidden>
@@ -1408,12 +1581,13 @@ function seeded(seed) {
   return () => { t += 0x6D2B79F5; let r = Math.imul(t ^ (t >>> 15), 1 | t); r ^= r + Math.imul(r ^ (r >>> 7), 61 | r); return ((r ^ (r >>> 14)) >>> 0) / 4294967296; };
 }
 
-function toast(msg, kind = '') {
+function toast(msg, kind = '', action = null) {
   const box = $('#toasts');
   const t = h('div', { class: `toast ${kind}`, text: msg });
+  if (action && action.label) t.appendChild(h('button', { class: 'toast-act', type: 'button', text: action.label, onclick: () => { t.remove(); action.fn(); } }));
   box.appendChild(t);
   while (box.children.length > 3) box.firstElementChild.remove();
-  setTimeout(() => t.remove(), kind === 'err' ? 6000 : 3200);
+  setTimeout(() => t.remove(), kind === 'err' ? 6000 : action ? 6000 : 3200);
 }
 
 async function copyText(text) {
@@ -1450,7 +1624,7 @@ const Dialog = {
   init() {
     this.el = $('#dlg'); this.body = $('#dlgBody');
     // close 事件是非同步送達的：若這段時間內已經開了下一個對話框（例如「放進雲端海洋」接著開確認框），就不要把新的那個當成已取消
-    this.el.addEventListener('close', () => { if (this.el.open) return; if (this.resolver) { const r = this.resolver; this.resolver = null; r(this.el.returnValue === 'ok' ? true : (this._value ?? false)); } this._value = undefined; this.el.classList.remove('wide'); });
+    this.el.addEventListener('close', () => { if (this.el.open) return; if (this.resolver) { const r = this.resolver; this.resolver = null; r(this.el.returnValue === 'ok' ? true : (this._value ?? false)); } this._value = undefined; this.el.classList.remove('wide', 'letter'); });
     this.el.addEventListener('click', (e) => { if (e.target === this.el) this.close('cancel'); });
   },
   /** 開啟對話框；build(body, close) 建立內容，回傳 Promise */
@@ -1460,7 +1634,7 @@ const Dialog = {
     this._value = undefined;
     this.el.returnValue = '';
     clear(this.body);
-    this.el.classList.toggle('wide', wide);
+    this.el.classList.toggle('wide', wide); this.el.classList.remove('letter');
     let resolverRef = null;
     const done = (value) => { if (this.resolver !== resolverRef) return; this._value = value; this.close(value === true ? 'ok' : 'cancel'); };
     build(this.body, done);
@@ -1541,7 +1715,8 @@ const DEFAULT_SETTINGS = {
   backupSnoozeUntil: null,
   dailyBottle: null,      // { date, cloudId }：每日一瓶
   soundVolume: 0.5, stardust: 'on',
-  heroWeather: 'on'       // 首頁場景跟著即時天氣變換
+  heroWeather: 'on',      // 首頁場景跟著即時天氣變換
+  oceanView: 'sea'        // 雲端海洋：sea 海面／list 清單
 };
 let settings = {};
 function loadSettings() {
@@ -3777,6 +3952,7 @@ const Cloud = {
       doc.publishedAt = new Date().toISOString();
       if (Studio.doc.id === doc.id) Studio.saveDraft(); else Works.upsert(doc);
       settings.published[doc.id] = cloudId; saveSettings();
+      OceanSea.arriving.add(cloudId);
       toast('漂流瓶已放進雲端海洋', 'ok');
       Router.go('ocean');
     } catch (e) {
@@ -3808,7 +3984,10 @@ const Ocean = {
     for (const m of MOODS) f.appendChild(mk(m.id, m.label));
     $('#oceanReload').addEventListener('click', () => this.load());
     $('#oceanRandom').addEventListener('click', (e) => this.pickRandom(e.currentTarget));
+    for (const [id, v] of [['#oceanViewSea', 'sea'], ['#oceanViewList', 'list']]) $(id).addEventListener('click', () => { settings.oceanView = v; saveSettings(); this.syncView(); this.renderList(); });
+    this.syncView();
   },
+  syncView() { $('#oceanViewSea').setAttribute('aria-pressed', String(OceanSea.view() === 'sea')); $('#oceanViewList').setAttribute('aria-pressed', String(OceanSea.view() === 'list')); },
   syncFilter() { for (const c of $$('#oceanMoodFilter .chip')) c.setAttribute('aria-pressed', String(c.dataset.mood === this.mood)); },
   renderMode() {
     const box = clear($('#oceanMode'));
@@ -3840,6 +4019,7 @@ const Ocean = {
   },
   renderList() {
     const box = clear($('#oceanList'));
+    if (OceanSea.view() === 'sea') return OceanSea.render(box, this.items, this.mood);
     if (!this.items.length) {
       box.appendChild(h('div', { class: 'state' },
         h('p', { text: this.mood ? `目前沒有標記為「${moodLabel(this.mood)}」的公開漂流瓶。` : '海面上還沒有任何公開的漂流瓶。做一個，成為第一個放進海裡的人吧。' }),
@@ -3862,18 +4042,29 @@ const Ocean = {
     if (Cloud.mode === 'demo') {
       const pool = demoBottles().filter(d => !this.mood || d.mood === this.mood);
       if (!pool.length) { toast('目前沒有符合條件的漂流瓶'); return; }
-      return this.open(pool[Math.floor(Math.random() * pool.length)]);
+      const others = pool.filter(d => d.cloudId !== OceanSea.lastOpened);
+      const list = others.length ? others : pool;
+      return OceanSea.openFromSea(list[Math.floor(Math.random() * list.length)]);
     }
     setBusy(btn, true);
     try {
-      const d = await Cloud.random({ mood: this.mood });
+      let d = await Cloud.random({ mood: this.mood });
+      // 盡量不要連續撿到同一個（資料只有一個時就還是它）
+      if (d && d.cloudId === OceanSea.lastOpened) d = (await Cloud.random({ mood: this.mood })) || d;
       if (!d) { toast(this.mood ? `海裡還沒有「${moodLabel(this.mood)}」的漂流瓶` : '海裡還沒有公開的漂流瓶'); return; }
-      this.open(d);
+      OceanSea.openFromSea(d);
     } catch (e) { toast('撿瓶子失敗：' + Cloud.message(e), 'err'); }
     finally { setBusy(btn, false); }
   },
-  open(d) {
-    Dialog.open((body, done) => {
+  open(d, fromEl = null) {
+    OceanSea.lastOpened = d.cloudId;
+    const fly = OceanSea.flyOut(fromEl);
+    // 瓶子先漂到畫面中央，再展開紙條
+    if (fly.delay) return sleep(fly.delay).then(() => this.reveal(d, fly));
+    return this.reveal(d, fly);
+  },
+  reveal(d, fly) {
+    const closed = Dialog.open((body, done) => {
       const reactRow = h('div', { class: 'row', role: 'group', 'aria-label': '溫和的回應' });
       for (const [type, r] of Object.entries(REACTIONS)) {
         const mine = d.myReactions.has(type);
@@ -3896,7 +4087,8 @@ const Ocean = {
       }
       put(body, 
         h('div', { class: 'dlg-head' },
-          h('div', {}, h('p', { class: 'eyebrow', text: d.demo ? '示範內容' : `${d.nickname} · ${fmtDate(d.createdAt)}` }), h('h3', { id: 'dlgTitle', text: d.title || '無題' })),
+          h('div', {}, h('p', { class: 'eyebrow', text: d.demo ? '示範內容・不是真實訪客的投稿' : `${d.nickname} · ${fmtDate(d.createdAt)}` }), h('h3', { id: 'dlgTitle', text: d.title || '無題' }),
+            d.demo ? null : h('p', { class: 'reader-time', text: `${OceanSea.ago(d.createdAt)}漂進這片海` })),
           h('span', { class: 'badge mood', text: moodLabel(d.mood) })),
         h('div', { class: 'preview-stage' }, renderDoc(d)),
         h('p', { class: 'small muted', text: `場景：${SCENES[d.scene].label}` }),
@@ -3908,9 +4100,13 @@ const Ocean = {
           d.isMine ? h('button', { class: 'btn sm danger', type: 'button', text: '刪除我的漂流瓶', onclick: () => { done(false); setTimeout(() => this.removeMine(d), 0); } }) : null,
           !d.isMine ? h('button', { class: 'btn sm ghost', type: 'button', text: '檢舉', onclick: () => { done(false); setTimeout(() => this.reportFlow(d), 0); } }) : null),
         h('div', { class: 'dlg-actions' },
-          h('button', { class: 'btn ghost', type: 'button', text: '回到列表', onclick: () => done(false) }),
-          h('button', { class: 'btn primary', type: 'button', text: '再撿一個', onclick: () => { done(false); setTimeout(() => this.pickRandom($('#oceanRandom')), 0); } })));
+          h('button', { class: 'btn ghost', type: 'button', text: OceanSea.view() === 'sea' ? '放回海面' : '回到列表', onclick: () => done(false) }),
+          h('button', { class: 'btn primary', type: 'button', text: '繼續探索下一個', onclick: () => { done(false); setTimeout(() => this.pickRandom($('#oceanRandom')), 0); } })));
     }, { wide: true });
+    Dialog.el.classList.add('letter');
+    Dialog.body.scrollTop = 0;
+    closed.then(() => fly.back());
+    return closed;
   },
   async reportFlow(d) {
     let reason = 'spam';
@@ -4757,7 +4953,7 @@ const Shelves = {
   init() {
     const raw = Store.load(KEYS.shelves, null);
     this.list = Array.isArray(raw) ? raw.map(x => this.sanitize(x)).filter(Boolean) : DEFAULT_SHELVES.map(([id, name]) => ({ id, name, items: [] }));
-    $('#newShelfBtn').addEventListener('click', () => this.nameDialog().then(name => { if (name) { this.list.push({ id: uid('shelf'), name, items: [] }); this.persist(); this.render(); } }));
+    $('#newShelfBtn').addEventListener('click', () => this.nameDialog().then(name => { if (name) { this.list.push({ id: uid('shelf'), name, items: [] }); if (this.persist()) toast(`新的主題書「${name}」已放上書架`, 'ok'); this.render(); } }));
   },
   sanitize(x) {
     if (!x || typeof x !== 'object') return null;
@@ -4771,37 +4967,37 @@ const Shelves = {
   nameDialog(current = '') {
     const input = h('input', { type: 'text', id: 'shelfName', maxlength: 20, value: current, placeholder: '例如：讓我笑出來的事' });
     return Dialog.open((body, done) => {
-      const form = h('form', { class: 'stack' }, h('h3', { id: 'dlgTitle', text: current ? '重新命名書架' : '新增書架' }),
-        h('div', { class: 'field' }, h('label', { for: 'shelfName', text: '書架名稱（最多 20 字）' }), input),
+      const form = h('form', { class: 'stack' }, h('h3', { id: 'dlgTitle', text: current ? '重新命名這本主題書' : '新增主題書' }),
+        h('div', { class: 'field' }, h('label', { for: 'shelfName', text: '書名（最多 20 字）' }), input),
         h('div', { class: 'dlg-actions' }, h('button', { class: 'btn ghost', type: 'button', text: '取消', onclick: () => done(false) }), h('button', { class: 'btn primary', type: 'submit', text: '確定' })));
-      form.addEventListener('submit', (e) => { e.preventDefault(); const v = input.value.trim(); if (!v) { input.setAttribute('aria-invalid', 'true'); toast('請輸入書架名稱', 'err'); return; } done(v); });
+      form.addEventListener('submit', (e) => { e.preventDefault(); const v = input.value.trim(); if (!v) { input.setAttribute('aria-invalid', 'true'); toast('請輸入書名', 'err'); return; } done(v); });
       body.appendChild(form);
     });
   },
   async addFlow(item) {
     let choice = this.list[0] ? this.list[0].id : '__new';
     if (item.kind === 'ocean') { const oc = this.list.find(s => s.id === 'shelf-ocean'); if (oc) choice = oc.id; }
-    const newName = h('input', { type: 'text', id: 'shelfNew', maxlength: 20, placeholder: '新書架名稱' });
+    const newName = h('input', { type: 'text', id: 'shelfNew', maxlength: 20, placeholder: '新主題書的書名' });
     const ok = await Dialog.open((body, done) => {
       const group = h('div', { class: 'stack', role: 'radiogroup', 'aria-labelledby': 'dlgTitle', style: { gap: '6px' } });
-      const opts = [...this.list.map(sh => [sh.id, `${sh.name}（${sh.items.length}）`]), ['__new', '新增一個書架']];
+      const opts = [...this.list.map(sh => [sh.id, `${sh.name}（${sh.items.length}）`]), ['__new', '新增一本主題書']];
       for (const [id, label] of opts) {
         const r = h('input', { type: 'radio', name: 'shelfPick', id: `sp-${id}`, value: id, checked: id === choice });
         r.addEventListener('change', () => { choice = id; newName.hidden = id !== '__new'; });
         group.appendChild(h('label', { class: 'check', for: `sp-${id}` }, r, label));
       }
       newName.hidden = choice !== '__new';
-      body.append(h('h3', { id: 'dlgTitle', text: '放到哪一個書架？' }), group, newName,
+      body.append(h('h3', { id: 'dlgTitle', text: '放進哪一本主題書？' }), group, newName,
         h('div', { class: 'dlg-actions' }, h('button', { class: 'btn ghost', type: 'button', text: '取消', onclick: () => done(false) }), h('button', { class: 'btn primary', type: 'button', text: '加入', onclick: () => done(true) })));
     });
     if (!ok) return;
     let shelf;
-    if (choice === '__new') { const n = newName.value.trim(); if (!n) { toast('請輸入新書架名稱', 'err'); return; } shelf = { id: uid('shelf'), name: n.slice(0, 20), items: [] }; this.list.push(shelf); }
+    if (choice === '__new') { const n = newName.value.trim(); if (!n) { toast('請輸入新主題書的書名', 'err'); return; } shelf = { id: uid('shelf'), name: n.slice(0, 20), items: [] }; this.list.push(shelf); }
     else shelf = this.list.find(s => s.id === choice);
     if (!shelf) return;
     if (shelf.items.some(i => i.kind === item.kind && i.ref === item.ref)) { toast(`已經在「${shelf.name}」裡了`); return; }
     shelf.items.unshift(Object.assign({ id: uid('item'), addedAt: new Date().toISOString() }, item));
-    if (this.persist()) toast(`已放進「${shelf.name}」`, 'ok');
+    if (this.persist()) toast(`已放進「${shelf.name}」`, 'ok', Archive.tab === 'shelves' && Router.current === 'archive' ? null : { label: '到書架看看', fn: () => { Router.go('archive'); Archive.show('shelves'); } });
     if (Archive.tab === 'shelves') this.render();
   },
   renderItem(sh, it) {
@@ -4824,7 +5020,9 @@ const Shelves = {
     box.append(h('p', { class: 'tiny muted', text: `加入於 ${fmtDate(it.addedAt)}` }), remove);
     return box;
   },
-  render() {
+  render() { return Bookcase.render(); },
+  /** 舊版卡片式清單（保留給沒有書架畫面的情境使用） */
+  renderCards() {
     const box = clear($('#shelfList'));
     if (!this.list.length) { box.appendChild(h('div', { class: 'state' }, h('p', { text: '還沒有書架。按「新增書架」建立一個。' }))); return; }
     for (const sh of this.list) {
@@ -5216,6 +5414,609 @@ const HeroWeather = {
 function defsOf(svg) { return svg.querySelector('defs') || svg.insertBefore(s('defs'), svg.firstChild); }
 
 /* =========================================================================
+   22. 可以探索的雲端海洋（海面場景）
+   畫面與資料分開：瓶子只是 Ocean.items 的呈現方式。示範模式時資料仍是 demoBottles()，
+   清楚標示「示範內容」；雲端模式時才是 Supabase 讀到的公開作品。
+   ========================================================================= */
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const SEA_LAYERS = {
+  far: { w: 30, y: 47, amp: [3, 5], label: '遠方' },
+  mid: { w: 42, y: 64, amp: [5, 8], label: '中間' },
+  near: { w: 56, y: 84, amp: [7, 11], label: '近處' }
+};
+const BOTTLE_VARIANTS = ['clear', 'lightblue', 'deepblue', 'frosted', 'starry'];
+
+const OceanSea = {
+  seen: null,              // 上一次畫面上的瓶子，用來找出「剛漂來」的新瓶子
+  arriving: new Set(),     // 指定要帶著漂入動畫出現的瓶子（例如剛發布的）
+  lastOpened: null, openId: null, busy: false,
+  view() { return settings.oceanView === 'list' ? 'list' : 'sea'; },
+  ago(iso) {
+    const t = new Date(iso).getTime(); if (!Number.isFinite(t)) return '';
+    const m = Math.max(0, Math.round((Date.now() - t) / 60000));
+    if (m < 1) return '剛剛'; if (m < 60) return `${m} 分鐘前`;
+    const hr = Math.round(m / 60); if (hr < 24) return `${hr} 小時前`;
+    const d = Math.round(hr / 24); return d < 30 ? `${d} 天前` : `${fmtDate(iso)} `;
+  },
+  find(id) { return id ? document.querySelector(`#oceanList .sea-bottle[data-id="${CSS.escape(id)}"]`) : null; },
+
+  /** 背景：夜空、月亮、星點、月光倒影 */
+  background(p) {
+    const W = 1200, H = 600;
+    const svg = s('svg', { class: 'sea-bg', viewBox: `0 0 ${W} ${H}`, preserveAspectRatio: 'xMidYMid slice', 'aria-hidden': 'true' });
+    const defs = s('defs');
+    defs.append(lin(p + 'sky', 0, 1, [[0, '#0A1229'], [0.7, '#1E2E55'], [1, '#2D4271']]),
+      lin(p + 'sea', 0, 1, [[0, '#24386A'], [0.35, '#16264A'], [1, '#08101F']]),
+      rad(p + 'halo', [[0, '#F7F4EE', 0.5], [0.35, '#B8D8E8', 0.16], [1, '#B8D8E8', 0]]),
+      rad(p + 'glow', [[0, '#E9D8A6', 0.35], [1, '#E9D8A6', 0]]));
+    svg.appendChild(defs);
+    svg.appendChild(s('rect', { width: W, height: H * 0.47, fill: `url(#${p}sky)` }));
+    const rnd = seeded(20261013);
+    const sg = s('g'); stars(sg, rnd, 130, 0, 0, W, H * 0.44, 1.5, 1, true); svg.appendChild(sg);
+    svg.appendChild(s('circle', { cx: 870, cy: 110, r: 150, fill: `url(#${p}halo)` }));
+    svg.appendChild(s('circle', { cx: 870, cy: 110, r: 36, fill: '#F4EEDC' }));
+    svg.appendChild(s('circle', { cx: 858, cy: 100, r: 6, fill: '#E2DAC4' }));
+    svg.appendChild(s('rect', { y: H * 0.47, width: W, height: H * 0.53, fill: `url(#${p}sea)` }));
+    svg.appendChild(s('ellipse', { cx: 870, cy: H * 0.47, rx: 260, ry: 22, fill: `url(#${p}glow)` }));
+    // 月光倒影：一條條會輕輕閃動的光
+    for (let i = 0; i < 12; i++) {
+      const y = H * 0.49 + i * 24 + rnd() * 6, w = 140 - i * 6 + rnd() * 40;
+      svg.appendChild(s('rect', { class: 'sea-shimmer', x: round1(870 - w / 2 + (rnd() - 0.5) * 30), y: round1(y), width: round1(w), height: 3, rx: 1.5, fill: '#F7F4EE', 'fill-opacity': round1(0.5 - i * 0.03), style: `animation-delay:${round1(-rnd() * 6)}s` }));
+    }
+    return svg;
+  },
+  /** 一條波浪帶：放在某一層瓶子前面，讓瓶身下半部像泡在水裡 */
+  wave(cls, top, height, color, op, dur, amp) {
+    const svg = s('svg', { class: `sea-wave ${cls}`, viewBox: '0 0 1200 100', preserveAspectRatio: 'none', 'aria-hidden': 'true', style: `top:${top}%;height:${height}%;--wd:${dur}s` });
+    svg.appendChild(s('path', { d: `${wavePath(20, amp, 100)} L 1600 100 L -200 100 Z`, fill: color, 'fill-opacity': op }));
+    svg.appendChild(s('path', { d: wavePath(20, amp, 100), fill: 'none', stroke: '#B8D8E8', 'stroke-opacity': 0.35, 'stroke-width': 1.5, 'vector-effect': 'non-scaling-stroke' }));
+    return svg;
+  },
+  /** 依容器寬度分配三層瓶子的位置；放不下的數量回傳給畫面提示 */
+  layout(items, width) {
+    const scale = width < 640 ? 0.78 : 1;
+    const usable = width * 0.86;
+    const cap = Object.fromEntries(Object.entries(SEA_LAYERS).map(([k, L]) => [k, Math.max(1, Math.floor(usable / (L.w * scale + 22)))]));
+    const order = items.map(d => ({ d, hsh: hashStr(d.cloudId || d.id || d.title) })).sort((a, b) => a.hsh - b.hsh);
+    const pattern = order.length <= 2 ? ['mid', 'near'] : ['mid', 'near', 'far', 'mid', 'far', 'near'];
+    const by = { far: [], mid: [], near: [] }; const hidden = [];
+    order.forEach((o, i) => {
+      let L = pattern[i % pattern.length];
+      if (by[L].length >= cap[L]) L = ['mid', 'far', 'near'].find(k => by[k].length < cap[k]);
+      if (L) by[L].push(o); else hidden.push(o.d);
+    });
+    const out = [];
+    for (const [L, list] of Object.entries(by)) {
+      const k = list.length; if (!k) continue;
+      const slot = 86 / k, shift = { far: 0.18, mid: 0, near: -0.18 }[L];
+      list.forEach((o, j) => {
+        const r = seeded(o.hsh);
+        const x = Math.min(94, Math.max(6, 7 + slot * (j + 0.5 + shift) + (r() - 0.5) * slot * 0.35));
+        const A = SEA_LAYERS[L];
+        out.push({ d: o.d, layer: L, x, y: A.y + (r() - 0.5) * 2.4, w: A.w, tilt: round1((r() - 0.5) * 22), amp: round1(A.amp[0] + r() * (A.amp[1] - A.amp[0])), sway: round1(2 + r() * 4), bd: round1(4.2 + r() * 3.8), d1: round1(-r() * 8), dd: round1(14 + r() * 12), d2: round1(-r() * 12), dx: round1(5 + r() * 12) });
+      });
+    }
+    return { placed: out, hidden };
+  },
+  bottleArt(d, p) {
+    const own = (d.elements || []).find(e => e.type === 'bottle');
+    const variant = own && BOTTLE_VARIANTS.includes(own.variant) ? own.variant : BOTTLE_VARIANTS[hashStr(d.cloudId || d.title) % BOTTLE_VARIANTS.length];
+    const el = makeElement('bottle', variant, { x: 0, y: 0, width: 120, height: 240 });
+    return s('svg', { viewBox: '0 0 120 240', 'aria-hidden': 'true', focusable: 'false' }, drawAsset(el, p));
+  },
+  bottleNode(pl, p, i) {
+    const d = pl.d;
+    const when = d.demo ? '示範內容' : this.ago(d.createdAt);
+    const btn = h('button', { class: 'sea-bottle' + (d.isMine ? ' mine' : ''), type: 'button', 'data-id': d.cloudId, 'data-layer': pl.layer,
+      'aria-label': `打開漂流瓶「${d.title || '無題'}」，情緒：${moodLabel(d.mood)}，${d.demo ? '示範內容，不是真實投稿' : when + '漂來'}` },
+      h('span', { class: 'sb-ripple' }),
+      h('span', { class: 'sb-drift' }, h('span', { class: 'sb-bob' }, h('span', { class: 'sb-art' }, this.bottleArt(d, `${p}b${i}-`)))),
+      h('span', { class: 'sea-tip', 'aria-hidden': 'true' }, d.title || '無題', h('small', { text: `${moodLabel(d.mood)}・${when}` })));
+    const vars = { '--x': `${round1(pl.x)}%`, '--y': `${round1(pl.y)}%`, '--w': `${pl.w}px`, '--tilt': `${pl.tilt}deg`, '--amp': `${pl.amp}px`, '--sway': `${pl.sway}deg`, '--bd': `${pl.bd}s`, '--d1': `${pl.d1}s`, '--dd': `${pl.dd}s`, '--d2': `${pl.d2}s`, '--dx': `${pl.dx}px`, '--mc': moodColor(d.mood) };
+    for (const [k, v] of Object.entries(vars)) btn.style.setProperty(k, v);
+    btn.addEventListener('click', () => { if (!this.busy) Ocean.open(d, btn); });
+    return btn;
+  },
+  render(box, items, mood) {
+    const p = nextPrefix();
+    const sea = h('div', { class: 'sea', role: 'region', 'aria-label': items.length ? `雲端海洋的海面，漂著 ${items.length} 個漂流瓶。按任一個瓶子就能打開。` : '雲端海洋的海面，目前沒有漂流瓶' });
+    sea.appendChild(this.background(p));
+    const width = box.clientWidth || Math.min(window.innerWidth, 1320) - 32;
+    const { placed, hidden } = this.layout(items, width);
+    const layers = { far: h('div', { class: 'sea-layer far' }), mid: h('div', { class: 'sea-layer mid' }), near: h('div', { class: 'sea-layer near' }) };
+    // 同一層由左到右排列，鍵盤 Tab 順序也就是從遠到近、從左到右
+    placed.sort((a, b) => ['far', 'mid', 'near'].indexOf(a.layer) - ['far', 'mid', 'near'].indexOf(b.layer) || a.x - b.x);
+    const first = this.seen === null;
+    placed.forEach((pl, i) => {
+      const node = this.bottleNode(pl, p, i);
+      const id = pl.d.cloudId;
+      if (this.arriving.has(id) || (!first && !this.seen.has(id))) { node.classList.add('arriving'); this.arriving.delete(id); }
+      else if (first) { node.classList.add('appear'); node.style.setProperty('--ad', `${Math.min(i, 20) * 0.06}s`); }
+      if (this.openId === id) node.classList.add('picked');
+      layers[pl.layer].appendChild(node);
+    });
+    sea.append(layers.far, this.wave('w-far', 45.6, 8, '#1B2C55', 0.55, 26, 3), layers.mid, this.wave('w-mid', 61.6, 12, '#14244A', 0.6, 20, 5), layers.near, this.wave('w-near', 80, 20, '#0D1A38', 0.66, 15, 7));
+    if (!items.length) {
+      const waitBottle = h('div', { class: 'sea-waiting', 'aria-hidden': 'true' }, this.bottleArt({ cloudId: 'waiting', title: '' }, `${p}w-`));
+      sea.append(waitBottle, h('div', { class: 'sea-empty' }, h('div', { class: 'box' },
+        h('p', { style: { fontFamily: 'var(--font-display)', fontSize: '1.25rem', margin: 0 }, text: '海面很安靜，正在等第一個漂流瓶' }),
+        h('p', { class: 'small muted', style: { margin: 0 }, text: mood ? `目前沒有標記為「${moodLabel(mood)}」的公開漂流瓶。換個情緒看看，或做一個自己的。` : '還沒有人把漂流瓶放進這片海。你可以做一個，成為第一個漂來的故事。' }),
+        h('div', { class: 'row', style: { justifyContent: 'center' } },
+          mood ? h('button', { class: 'btn', type: 'button', text: '看全部的瓶子', onclick: () => { Ocean.mood = ''; Ocean.syncFilter(); Ocean.load(); } }) : null,
+          h('button', { class: 'btn primary', type: 'button', text: '製作我的漂流瓶', onclick: () => Router.go('studio') })))));
+    } else {
+      sea.appendChild(h('div', { class: 'sea-hud' },
+        h('span', { class: 'sea-hint', text: hidden.length ? `海面上先漂著 ${placed.length} 個，另外 ${hidden.length} 個在「清單」或「隨機撿起」裡` : (window.matchMedia('(hover: none)').matches ? '點一個漂流瓶，打開裡面的心事' : '把滑鼠移到瓶子上看看，點一下就能打開') }),
+        Cloud.mode === 'demo' ? h('span', { class: 'badge demo', text: '示範內容，不是真實投稿' }) : null));
+    }
+    box.appendChild(sea);
+    this.seen = new Set(items.map(d => d.cloudId));
+  },
+  /** 瓶子靠近畫面中央，再交給對話框展開紙條；回傳 back() 讓瓶子回到海面 */
+  flyOut(el) {
+    const none = { delay: 0, back() {} };
+    if (!el || !el.isConnected || !el.classList.contains('sea-bottle')) return none;
+    const id = el.dataset.id, art = el.querySelector('.sb-art');
+    const r = art.getBoundingClientRect(); if (!r.width) return none;
+    this.openId = id;
+    el.classList.add('picked');
+    const restore = () => { this.openId = null; const n = this.find(id); if (n) n.classList.remove('picked'); };
+    if (motionReduced()) return { delay: 0, back: restore };
+    this.busy = true;
+    const tilt = parseFloat(el.style.getPropertyValue('--tilt')) || 0;
+    const fly = h('div', { class: 'sea-fly', 'aria-hidden': 'true' });
+    fly.appendChild(art.querySelector('svg').cloneNode(true));
+    Object.assign(fly.style, { left: `${r.left}px`, top: `${r.top}px`, width: `${r.width}px`, height: `${r.height}px` });
+    document.body.appendChild(fly);
+    const k = Math.min(260, window.innerHeight * 0.4) / r.height;
+    const dx = window.innerWidth / 2 - (r.left + r.width / 2), dy = window.innerHeight * 0.45 - (r.top + r.height / 2);
+    const center = `translate(${dx}px, ${dy}px) rotate(0deg) scale(${k})`;
+    fly.animate([
+      { transform: `translate(0, 0) rotate(${tilt}deg) scale(1)`, opacity: 1 },
+      { transform: center, opacity: 1, offset: 0.6 },
+      { transform: `translate(${dx}px, ${dy - 18}px) rotate(-16deg) scale(${k * 1.05})`, opacity: 0 }
+    ], { duration: 950, easing: 'cubic-bezier(.3,.7,.2,1)', fill: 'forwards' });
+    setTimeout(() => { this.busy = false; }, 650);
+    return {
+      delay: 560,
+      back: () => {
+        const target = this.find(id);
+        const tr = target && target.querySelector('.sb-art').getBoundingClientRect();
+        if (!target || !tr.width || target.closest('[hidden]')) { fly.remove(); restore(); return; }
+        const ex = (tr.left + tr.width / 2) - (r.left + r.width / 2), ey = (tr.top + tr.height / 2) - (r.top + r.height / 2);
+        const a = fly.animate([
+          { transform: center, opacity: 0 }, { transform: center, opacity: 1, offset: 0.2 },
+          { transform: `translate(${ex}px, ${ey}px) rotate(${tilt}deg) scale(${tr.height / r.height})`, opacity: 1 }
+        ], { duration: 760, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' });
+        const finish = () => { if (fly.isConnected) fly.remove(); restore(); };
+        a.onfinish = finish; setTimeout(finish, 1300);
+      }
+    };
+  },
+  /** 「隨機撿起」：瓶子在海面上就從海面撿起；不在畫面上的瓶子先漂進來再打開 */
+  async openFromSea(d) {
+    if (this.view() !== 'sea' || Router.current !== 'ocean') return Ocean.open(d);
+    let el = this.find(d.cloudId);
+    if (!el && !Ocean.items.some(x => x.cloudId === d.cloudId)) {
+      Ocean.items.push(d); this.arriving.add(d.cloudId); Ocean.renderList();
+      el = this.find(d.cloudId);
+      if (el && !motionReduced()) await sleep(1500);
+    }
+    return Ocean.open(d, el);
+  }
+};
+
+/* =========================================================================
+   23. 立體書架：把既有資料整理成書，可以抽出、翻開、翻頁、放回
+   書的內容每次都從日記、作品、信件、收藏與主題書架的資料即時產生，不另外存一份。
+   ========================================================================= */
+const BOOK_TYPES = {
+  diary: { label: '心情日誌', sub: '我的日記，依日期排列', color: '#E6DCC4', light: true, h: 198, group: 'records', unit: '篇' },
+  works: { label: '我的漂流瓶', sub: '親手做的每一個瓶子', color: '#35558A', h: 210, group: 'records', unit: '個' },
+  ocean: { label: '漂流瓶收藏冊', sub: '在雲端海洋撿到、收藏下來的瓶子', color: '#2E6A78', h: 186, group: 'records', unit: '個' },
+  letters: { label: '信件集', sub: '寄給未來的信，與回給過去自己的信', color: '#7D5A6E', h: 176, group: 'records', unit: '封' },
+  quotes: { label: '收藏的短句', sub: '想留下來的一句話', color: '#D4C08A', light: true, h: 154, group: 'records', unit: '句' },
+  theme: { label: '主題書', sub: '自己整理的收藏', h: 182, group: 'theme', unit: '項' }
+};
+const THEME_COLORS = ['#4A5D8C', '#5E4F86', '#3F6E73', '#7A6A4F', '#5C6F94', '#8B5E5A', '#46557A', '#6B7A5A'];
+const BOOK_GROUPS = { records: '我的紀錄', theme: '主題書' };
+
+const Bookcase = {
+  q: '', cat: 'all', lastCounts: null, cur: null, lastWidth: 0,
+  init() {
+    const f = $('#bookFilter');
+    for (const [id, label] of [['all', '全部'], ['records', '我的紀錄'], ['theme', '主題書']]) {
+      const c = h('button', { class: 'chip', type: 'button', 'aria-pressed': String(this.cat === id), text: label, 'data-cat': id });
+      c.addEventListener('click', () => { this.cat = id; for (const x of $$('#bookFilter .chip')) x.setAttribute('aria-pressed', String(x.dataset.cat === id)); this.render(); });
+      f.appendChild(c);
+    }
+    let t = null;
+    $('#bookSearch').addEventListener('input', (e) => { clearTimeout(t); t = setTimeout(() => { this.q = e.target.value.trim(); this.render(); }, 160); });
+    // 視窗寬度改變時重新把書分配到層板上
+    if (window.ResizeObserver) new ResizeObserver(() => {
+      const w = $('#shelfList').clientWidth;
+      if (w && Math.abs(w - this.lastWidth) > 30 && Archive.tab === 'shelves') this.render();
+    }).observe($('#shelfList'));
+    // 在書裡打開其他對話框（回信、移出、重新命名）後，書的內容跟著更新
+    Dialog.el.addEventListener('close', () => { if (this.cur) setTimeout(() => this.refresh(), 30); });
+  },
+
+  /* ---------- 從現有資料產生書 ---------- */
+  books() {
+    const B = [];
+    const byDate = (a, b) => String(a).localeCompare(String(b));
+    const diaries = Diary.list.slice().sort((a, b) => byDate(a.date + a.createdAt, b.date + b.createdAt));
+    B.push(this.make('auto-diary', 'diary', diaries.map(d => this.diaryPage(d)), { empty: ['還沒有日記。寫下今天的一小段，這本書就會有第一頁。', '寫一篇日記', () => { this.close(true); Router.go('archive'); Archive.show('diary'); Diary.openEditor(); }] }));
+    const works = Works.list.slice().sort((a, b) => byDate(a.createdAt || a.date, b.createdAt || b.date));
+    B.push(this.make('auto-works', 'works', works.map(w => this.workPage(w)), { empty: ['還沒有做過漂流瓶。做好的瓶子會一頁一頁收進這本書。', '去做一個漂流瓶', () => { this.close(true); Router.go('studio'); }] }));
+    const seenOcean = new Set(); const oceanItems = [];
+    for (const sh of Shelves.list) for (const it of sh.items) if (it.kind === 'ocean' && it.snapshot && it.snapshot.doc && !seenOcean.has(it.ref)) { seenOcean.add(it.ref); oceanItems.push(it); }
+    oceanItems.sort((a, b) => byDate(a.addedAt, b.addedAt));
+    B.push(this.make('auto-ocean', 'ocean', oceanItems.map(it => this.oceanPage(it)), { empty: ['還沒有收藏海裡的瓶子。在雲端海洋讀到喜歡的瓶子時，按「收藏到書架」就會收進來。', '去海上看看', () => { this.close(true); Router.go('ocean'); }] }));
+    const letters = [
+      ...Letters.list.map(l => ({ at: l.openDate, page: this.letterPage(l) })),
+      ...Diary.list.flatMap(d => d.replies.map(r => ({ at: (r.at || '').slice(0, 10), page: this.replyPage(d, r) })))
+    ].sort((a, b) => byDate(a.at, b.at)).map(x => x.page);
+    B.push(this.make('auto-letters', 'letters', letters, { empty: ['還沒有信。寫一封給未來的自己，或在日記上回信給過去的自己。', '寫一封給未來的信', () => { this.close(true); Router.go('archive'); Archive.show('letters'); }] }));
+    const quotePages = [];
+    for (let i = 0; i < Quotes.favorites.length; i += 5) quotePages.push(this.quotesPage(Quotes.favorites.slice(i, i + 5), i));
+    B.push(this.make('auto-quotes', 'quotes', quotePages, { count: Quotes.favorites.length, empty: ['還沒有收藏的短句。在首頁或「片刻」按收藏，就會抄進這本小書。', '到片刻看看', () => { this.close(true); Router.go('moment'); }] }));
+    Shelves.list.forEach((sh, i) => {
+      const pages = sh.items.map(it => this.themePage(sh, it)).filter(Boolean);
+      B.push(this.make(`theme-${sh.id}`, 'theme', pages, { title: sh.name, shelf: sh, color: THEME_COLORS[hashStr(sh.id) % THEME_COLORS.length], h: 168 + hashStr(sh.id + 'h') % 34,
+        empty: ['這本主題書還是空的。在日記、作品、短句或海裡的瓶子上按「加入書架」，就能把它放進這本書。', null, null] }));
+    });
+    return B;
+  },
+  make(id, type, pages, opt = {}) {
+    const T = BOOK_TYPES[type];
+    return { id, type, group: T.group, title: opt.title || T.label, sub: T.sub, pages, count: opt.count ?? pages.length, unit: T.unit, color: opt.color || T.color, light: !!T.light, h: opt.h || T.h, shelf: opt.shelf || null, empty: opt.empty };
+  },
+  page(key, title, search, build) { return { key, title, search: String(search || '').toLowerCase(), build }; },
+  actions(list) { const row = h('div', { class: 'row', style: { marginTop: '12px', gap: '6px' } }); for (const [label, fn, cls] of list.filter(Boolean)) row.appendChild(h('button', { class: `btn sm ${cls || ''}`, type: 'button', text: label, onclick: fn })); return row; },
+  diaryPage(d, extra = []) {
+    return this.page(`diary:${d.id}`, d.title || fmtDate(d.date), [d.title, d.content, (d.tags || []).join(' '), moodLabel(d.mood)].join(' '), () => put(h('div'),
+      h('p', { class: 'eyebrow', text: `${fmtDate(d.date)}・${moodLabel(d.mood)}${d.intensity ? `・強度 ${d.intensity} / 5` : ''}` }),
+      h('h3', { text: d.title || '這一天' }),
+      (d.tags || []).length ? h('div', { class: 'row', style: { gap: '4px' } }, d.tags.map(t => h('span', { class: 'badge', text: `#${t}` }))) : null,
+      h('p', { class: 'br-text', text: d.content || '（這篇日記沒有寫內容）' }),
+      d.replies.length ? h('div', {}, h('h4', { text: `回給這天的信（${d.replies.length}）` }), ...d.replies.map(r => h('p', { class: 'br-quote', style: { fontSize: '1rem' } }, h('span', { class: 'tiny muted', style: { display: 'block' }, text: fmtDate(r.at) }), r.text))) : null,
+      this.actions([['回信給這天的自己', () => PastMe.open(d.id)], ['在時光盒打開', () => Constellation.openEntry({ kind: 'diary', id: d.id })], ...extra])));
+  },
+  workPage(w, extra = []) {
+    return this.page(`work:${w.id}`, w.title || '未命名漂流瓶', [w.title, w.message, w.note, moodLabel(w.mood)].join(' '), () => put(h('div'),
+      h('p', { class: 'eyebrow', text: `${fmtDate(w.date)}・${moodLabel(w.mood)}${settings.published[w.id] ? '・已放進雲端海洋' : '・只留給自己'}` }),
+      h('h3', { text: w.title || '未命名漂流瓶' }),
+      h('div', { class: 'br-art' }, renderDoc(w)),
+      w.message ? h('p', { class: 'br-text', text: w.message }) : null,
+      w.note ? h('p', { class: 'br-quote', text: `「${w.note}」` }) : null,
+      this.actions([['看它的旅程', () => Journey.open(w.id)], ['在創作室打開', () => { this.close(true); openWorkInStudio(w.id); }], ...extra])));
+  },
+  oceanPage(it, extra = []) {
+    const sd = it.snapshot, doc = sd.doc;
+    return this.page(`ocean:${it.ref}`, doc.title || '無題', [doc.title, doc.message, doc.note, sd.nickname].join(' '), () => put(h('div'),
+      h('div', { class: 'row', style: { gap: '6px' } }, h('span', { class: sd.demo ? 'badge demo' : 'badge', text: sd.demo ? '示範內容，不是真實投稿' : '海裡撿到的' }), h('span', { class: 'badge', text: moodLabel(doc.mood) })),
+      h('h3', { style: { marginTop: '8px' }, text: doc.title || '無題' }),
+      h('p', { class: 'tiny muted', text: `${sd.nickname || '匿名旅人'}${sd.createdAt && !sd.demo ? `・${fmtDate(sd.createdAt)} 放進海裡` : ''}・${fmtDate(it.addedAt)} 收藏` }),
+      h('div', { class: 'br-art' }, renderDoc(doc)),
+      doc.message ? h('p', { class: 'br-text', text: doc.message }) : null,
+      doc.note ? h('p', { class: 'br-quote', text: `「${doc.note}」` }) : null,
+      h('p', { class: 'tiny muted', text: '收藏的是當時的副本，原作者之後修改或刪除，這裡不會跟著變。' }),
+      extra.length ? this.actions(extra) : null));
+  },
+  letterPage(l) {
+    const due = Letters.isDue(l);
+    return this.page(`letter:${l.id}`, l.title || '給未來的自己', due ? [l.title, l.content].join(' ') : l.title, () => {
+      if (due && !l.openedAt) { l.openedAt = new Date().toISOString(); Letters.persist(); Home.renderLetterNotice(); }
+      return put(h('div'),
+        h('p', { class: 'eyebrow', text: `寄給未來的信・寫於 ${fmtDate(l.createdAt)}` }),
+        h('h3', { text: l.title || '給未來的自己' }),
+        due ? h('p', { class: 'tiny muted', text: `${fmtDate(l.openDate)} 可以打開` }) : h('span', { class: 'badge demo', text: `封存到 ${fmtDate(l.openDate)}` }),
+        due ? h('p', { class: 'br-text', text: l.content }) : h('p', { class: 'br-text', text: '這封信還在封存中，到了那天才會打開。書裡只放信封，不會偷看內容。' }),
+        due ? null : this.actions([['提早打開', () => Letters.read(l, { early: true })]]));
+    });
+  },
+  replyPage(d, r) {
+    return this.page(`reply:${r.id}`, `回信給 ${fmtDate(d.date)} 的自己`, [r.text, r.need].join(' '), () => put(h('div'),
+      h('p', { class: 'eyebrow', text: `回給過去的自己・${fmtDate(r.at)}` }),
+      h('h3', { text: `寫給 ${fmtDate(d.date)} 的自己` }),
+      h('p', { class: 'tiny muted', text: `當時 ${moodLabel(d.mood)} ${d.intensity}/5 → 寫信時 ${moodLabel(r.mood)} ${r.intensity}/5` }),
+      h('p', { class: 'br-text', text: r.text }),
+      r.need ? h('p', { class: 'br-quote', style: { fontSize: '1rem' }, text: `那時候需要的：${r.need}` }) : null,
+      this.actions([['看原本的日記', () => Constellation.openEntry({ kind: 'diary', id: d.id })]])));
+  },
+  quotesPage(chunk, start) {
+    return this.page(`quotes:${start}`, `短句 ${start + 1}–${start + chunk.length}`, chunk.join(' '), () => put(h('div'),
+      h('p', { class: 'eyebrow', text: '收藏的短句' }), ...chunk.map(q => h('p', { class: 'br-quote', text: q }))));
+  },
+  themePage(sh, it) {
+    const out = ['從這本書移出', () => this.removeItem(sh, it), 'danger'];
+    if (it.kind === 'quote') return this.page(`q:${it.id}`, it.ref.slice(0, 18), it.ref, () => put(h('div'), h('p', { class: 'eyebrow', text: `短句・${fmtDate(it.addedAt)} 放進來` }), h('p', { class: 'br-quote', text: it.ref }), this.actions([out])));
+    if (it.kind === 'bottle') { const w = Works.get(it.ref); return w ? this.workPage(w, [out]) : this.missing(it, '這個漂流瓶已從時光盒刪除', out); }
+    if (it.kind === 'diary') { const d = Diary.list.find(x => x.id === it.ref); return d ? this.diaryPage(d, [out]) : this.missing(it, '這篇日記已被刪除', out); }
+    if (it.kind === 'ocean' && it.snapshot && it.snapshot.doc) return this.oceanPage(it, [out]);
+    return null;
+  },
+  missing(it, text, out) { return this.page(`gone:${it.id}`, text, text, () => put(h('div'), h('p', { class: 'br-text', text: `${text}，這一頁只剩下書籤。` }), this.actions([out]))); },
+  removeItem(sh, it) {
+    sh.items = sh.items.filter(x => x !== it);
+    if (Shelves.persist()) toast(`已從「${sh.name}」移出`, 'ok');
+    this.refresh();
+  },
+
+  /* ---------- 書架畫面 ---------- */
+  matches(b) {
+    if (this.cat !== 'all' && b.group !== this.cat) return false;
+    if (!this.q) return true;
+    const q = this.q.toLowerCase();
+    return b.title.toLowerCase().includes(q) || b.pages.some(p => p.search.includes(q) || p.title.toLowerCase().includes(q));
+  },
+  spineWidth(b) { return Math.round(Math.min(78, 40 + Math.min(b.count, 30) * 1.3)); },
+  spine(b) {
+    const btn = h('button', { class: 'book' + (b.light ? ' light' : '') + (b.count ? '' : ' empty'), type: 'button', 'data-book': b.id,
+      'aria-label': `${b.title}，${b.count ? `${b.count} ${b.unit}` : '還是空的'}${b.type === 'theme' ? '，主題書' : ''}。按一下抽出來翻閱` },
+      h('span', { class: 'spine-title', 'aria-hidden': 'true' }, [...b.title].map(ch => h('span', { text: ch }))), h('span', {}, h('span', { class: 'spine-mark', style: { display: 'block', margin: '0 auto 4px' } }), h('span', { class: 'spine-count', text: b.count ? `${b.count} ${b.unit}` : '空' })));
+    btn.style.setProperty('--c', b.color);
+    btn.style.setProperty('--bw', `${this.spineWidth(b)}px`);
+    btn.style.setProperty('--bh', `${b.h}px`);
+    // 書名太長時縮小字，讓整個書名都放得進書脊
+    btn.querySelector('.spine-title').style.fontSize = `${Math.max(10, Math.min(16, (b.h - 88) / ([...b.title].length * 1.18)))}px`;
+    const hs = hashStr(b.id);
+    if (hs % 4 === 0) btn.style.setProperty('--lean', `${hs % 2 ? 1.6 : -1.6}deg`);
+    btn.addEventListener('click', () => this.open(b.id, btn));
+    return btn;
+  },
+  render() {
+    const box = $('#shelfList'); if (!box) return;
+    const books = this.books();
+    const width = box.clientWidth || Math.min(window.innerWidth, 1320) - 40;
+    this.lastWidth = width;
+    const inner = width - (width < 760 ? 40 : 68);
+    const prev = this.lastCounts;
+    this.lastCounts = new Map(books.map(b => [b.id, b.count]));
+    const shown = books.filter(b => this.matches(b));
+    // 依寬度把書分到層板上；不同分類從新的一層開始
+    const rows = [];
+    for (const b of books) {
+      const w = this.spineWidth(b) + 3;
+      let row = rows[rows.length - 1];
+      if (!row || row.group !== b.group || row.used + w > inner) { row = { group: b.group, books: [], used: 0, first: !rows.some(r => r.group === b.group) }; rows.push(row); }
+      row.books.push(b); row.used += w;
+    }
+    const inside = h('div', { class: 'bookcase-inner' });
+    for (const row of rows) {
+      const r = h('div', { class: 'shelf-row', role: 'group', 'aria-label': `${BOOK_GROUPS[row.group]}的層板` });
+      for (const b of row.books) {
+        const sp = this.spine(b);
+        if ((this.q || this.cat !== 'all') && !shown.includes(b)) sp.classList.add('dim');
+        else if (this.q) sp.classList.add('match');
+        if (prev && !prev.has(b.id)) sp.classList.add('book-new');
+        else if (prev && prev.get(b.id) < b.count) { sp.classList.add('book-grew'); sp.appendChild(h('span', { class: 'spine-new', text: `+${b.count - prev.get(b.id)}` })); }
+        if (this.cur && this.cur.id === b.id) sp.classList.add('pulled');
+        r.appendChild(sp);
+      }
+      // 每一層留一點小擺設：書擋、瓶子、月光小燈或橫放的書，讓書架看起來有人在用
+      const ri = rows.indexOf(row);
+      if (inner - row.used > 30) r.appendChild(h('span', { class: 'bookend', 'aria-hidden': 'true' }));
+      if (inner - row.used > 120) r.appendChild(this.deco(ri));
+      if (row.first) r.appendChild(h('span', { class: 'shelf-plaque', 'aria-hidden': 'true', text: BOOK_GROUPS[row.group] }));
+      inside.appendChild(r);
+    }
+    // 給螢幕閱讀器與搜尋用的文字目錄（畫面上看不到）
+    const toc = h('div', { class: 'sr-only' }, h('p', { text: '書架上的書與內容：' }), h('ul', {}, books.map(b => h('li', { text: `${b.title}（${b.count}）：${b.pages.map(p => p.title).join('、') || '還是空的'}` }))));
+    put(clear(box), h('div', { class: 'bookcase' }, inside), toc);
+    const found = $('#bookFound');
+    if (this.q) found.textContent = shown.length ? `找到 ${shown.length} 本書有「${this.q}」，打開會直接翻到符合的那一頁。` : `沒有書裡有「${this.q}」。`;
+    else found.textContent = this.cat === 'all' ? `書架上有 ${books.length} 本書，共 ${books.reduce((s, b) => s + b.count, 0)} 頁紀錄。資料只存在這個瀏覽器。` : `只看「${BOOK_GROUPS[this.cat]}」：${shown.length} 本。`;
+  },
+
+  deco(i) {
+    const kind = i % 3;
+    const box = h('span', { class: 'shelf-deco', 'aria-hidden': 'true' });
+    if (kind === 0) box.append(h('span', { class: 'deco-lamp' }), h('span', { class: 'deco-bottle' }, OceanSea.bottleArt({ cloudId: 'deco', title: '', elements: [{ type: 'bottle', variant: 'starry' }] }, nextPrefix())));
+    else if (kind === 1) box.append(h('span', { class: 'deco-stack' }, h('span', { style: { width: '92px', background: '#5C6F94' } }), h('span', { style: { width: '84px', background: '#C9B27A' } }), h('span', { style: { width: '96px', background: '#7D5A6E' } })));
+    else box.append(h('span', { class: 'deco-bottle' }, OceanSea.bottleArt({ cloudId: 'deco2', title: '', elements: [{ type: 'bottle', variant: 'lightblue' }] }, nextPrefix())), h('span', { class: 'deco-lamp' }));
+    return box;
+  },
+
+  /* ---------- 抽出、翻開、翻頁、放回 ---------- */
+  bookById(id) { return this.books().find(b => b.id === id) || null; },
+  spineEl(id) { return document.querySelector(`#shelfList .book[data-book="${CSS.escape(id)}"]`); },
+  async open(id, spine) {
+    if (this.cur) return;
+    const b = this.bookById(id); if (!b) return;
+    let page = 0;
+    if (this.q) { const q = this.q.toLowerCase(); const i = b.pages.findIndex(p => p.search.includes(q) || p.title.toLowerCase().includes(q)); if (i > 0) page = i; }
+    const cur = this.cur = { id, page, b, spine, busy: true };
+    const ov = this.build(b);
+    cur.el = ov;
+    document.body.appendChild(ov);
+    document.documentElement.style.overflow = 'hidden';
+    this.renderPage(false);
+    const bookEl = ov.querySelector('.br-book'), cover = ov.querySelector('.br-cover'), left = ov.querySelector('.br-page-l');
+    const reduce = motionReduced();
+    spine.classList.add('pulled');
+    if (reduce) { cover.hidden = true; cur.busy = false; ov.querySelector('.br-close').focus(); return; }
+    bookEl.style.opacity = '0';
+    const sr = spine.getBoundingClientRect(), cr = cover.getBoundingClientRect();
+    const fly = this.flyBook(b, spine, sr);
+    ov.querySelector('.br-backdrop').animate([{ opacity: 0 }, { opacity: 1 }], { duration: 500, fill: 'both' });
+    ov.querySelector('.br-top').animate([{ opacity: 0 }, { opacity: 0, offset: 0.6 }, { opacity: 1 }], { duration: 900, fill: 'both' });
+    const anim = fly.el.animate([
+      { left: `${sr.left}px`, top: `${sr.top}px`, width: `${sr.width}px`, height: `${sr.height}px` },
+      { left: `${sr.left}px`, top: `${sr.top - 36}px`, width: `${sr.width}px`, height: `${sr.height}px`, offset: 0.22 },
+      { left: `${cr.left}px`, top: `${cr.top}px`, width: `${cr.width}px`, height: `${cr.height}px` }
+    ], { duration: 820, easing: 'cubic-bezier(.3,.7,.2,1)', fill: 'forwards' });
+    fly.cover.animate([{ opacity: 0 }, { opacity: 0, offset: 0.35 }, { opacity: 1 }], { duration: 820, fill: 'forwards' });
+    await anim.finished.catch(() => {});
+    if (this.cur !== cur) { fly.el.remove(); return; }
+    bookEl.style.opacity = '1'; fly.el.remove();
+    left.animate([{ opacity: 0 }, { opacity: 0, offset: 0.35 }, { opacity: 1 }], { duration: 900, fill: 'both' });
+    const c = cover.animate([{ transform: 'rotateY(0deg)', opacity: 1 }, { transform: 'rotateY(-165deg)', opacity: 1, offset: 0.8 }, { transform: 'rotateY(-180deg)', opacity: 0 }], { duration: 900, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' });
+    await c.finished.catch(() => {});
+    cover.hidden = true; cur.busy = false;
+    if (this.cur === cur) ov.querySelector('.br-close').focus();
+  },
+  flyBook(b, spine, sr) {
+    const el = h('div', { class: 'fly-book', 'aria-hidden': 'true' });
+    el.style.setProperty('--c', b.color);
+    const sp = spine.cloneNode(true);
+    sp.classList.remove('pulled', 'dim', 'match', 'book-new', 'book-grew');
+    Object.assign(sp.style, { width: '100%', height: '100%', margin: '0', transform: 'none', visibility: 'visible', position: 'absolute', inset: '0' });
+    const cover = h('div', { class: 'fb-face', style: { background: b.color, color: b.light ? '#22304F' : 'var(--paper)', display: 'grid', placeItems: 'center', textAlign: 'center', fontFamily: 'var(--font-display)', fontSize: '1.5rem', padding: '20px', opacity: '0', boxShadow: 'inset 0 0 0 12px rgba(233,216,166,.3)' }, text: b.title });
+    el.append(sp, cover);
+    Object.assign(el.style, { left: `${sr.left}px`, top: `${sr.top}px`, width: `${sr.width}px`, height: `${sr.height}px` });
+    document.body.appendChild(el);
+    return { el, cover };
+  },
+  build(b) {
+    const ov = h('div', { class: 'book-reader', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'brTitle' });
+    const isTheme = b.type === 'theme';
+    const toc = h('ol', { class: 'br-toc', id: 'brToc', 'aria-label': '目錄' });
+    b.pages.forEach((p, i) => toc.appendChild(h('li', {}, h('button', { type: 'button', 'data-page': i, onclick: () => { this.go(i); ov.querySelector('.br-book').classList.remove('toc-open'); } }, h('span', { text: p.title }), h('span', { class: 'n', text: String(i + 1) })))));
+    const bookEl = h('div', { class: 'br-book' });
+    bookEl.style.setProperty('--c', b.color);
+    if (b.light) bookEl.style.setProperty('--ink', '#22304F');
+    bookEl.append(
+      h('div', { class: 'br-page-l' }, h('div', { class: 'br-scroll' },
+        h('p', { class: 'eyebrow', text: isTheme ? '主題書' : BOOK_GROUPS[b.group] }),
+        h('h3', { text: b.title }), h('p', { class: 'small muted', text: b.sub }),
+        h('p', { class: 'small', text: b.count ? `共 ${b.count} ${b.unit}${b.pages.length !== b.count ? `，${b.pages.length} 頁` : ''}` : '這本書還是空的' }),
+        b.pages.length ? toc : null)),
+      h('div', { class: 'br-page-r' },
+        h('div', { class: 'br-scroll', id: 'brPage', tabindex: '-1' }),
+        h('div', { class: 'br-nav' },
+          h('button', { class: 'btn sm', type: 'button', id: 'brPrev', text: '‹ 上一頁', onclick: () => this.turn(-1) }),
+          h('button', { class: 'btn sm br-mobile-toc', type: 'button', text: '目錄', 'aria-controls': 'brToc', onclick: () => bookEl.classList.toggle('toc-open') }),
+          h('span', { class: 'pg', id: 'brPg', 'aria-live': 'polite' }),
+          h('button', { class: 'btn sm', type: 'button', id: 'brNext', text: '下一頁 ›', onclick: () => this.turn(1) }))),
+      h('div', { class: 'br-cover', 'aria-hidden': 'true' },
+        h('div', { class: 'face front' }, h('div', {}, h('div', { class: 'ct', text: b.title }), h('div', { class: 'cs', text: b.sub }))),
+        h('div', { class: 'face back' })));
+    const top = h('div', { class: 'br-top' },
+      h('div', {}, h('p', { class: 'eyebrow', text: '從書架抽出來的書' }), h('h2', { id: 'brTitle', style: { margin: 0, fontSize: '1.3rem' }, text: b.title })),
+      h('div', { class: 'row', style: { gap: '6px' } },
+        isTheme ? h('button', { class: 'btn sm ghost', type: 'button', text: '重新命名', onclick: () => this.rename() }) : null,
+        isTheme ? h('button', { class: 'btn sm ghost', type: 'button', text: '刪除這本書', onclick: () => this.removeBook() }) : null,
+        h('button', { class: 'btn sm br-close', type: 'button', text: '放回書架', onclick: () => this.close() })));
+    ov.append(h('div', { class: 'br-backdrop', onclick: () => this.close() }), h('div', { class: 'br-wrap' }, top, bookEl));
+    ov.addEventListener('keydown', (e) => this.onKey(e));
+    return ov;
+  },
+  onKey(e) {
+    if (Dialog.el.open) return;
+    if (e.key === 'Escape') { e.preventDefault(); this.close(); return; }
+    const typing = /INPUT|TEXTAREA|SELECT/.test(e.target.tagName);
+    if (!typing && e.key === 'ArrowRight') { e.preventDefault(); this.turn(1); }
+    if (!typing && e.key === 'ArrowLeft') { e.preventDefault(); this.turn(-1); }
+    if (e.key === 'Tab') {
+      const f = [...this.cur.el.querySelectorAll('button, [href], input, textarea, select, [tabindex="0"]')].filter(x => !x.disabled && x.offsetParent !== null);
+      if (!f.length) return;
+      const i = f.indexOf(document.activeElement);
+      if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); }
+      else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
+    }
+  },
+  renderPage(focus = true) {
+    const cur = this.cur; if (!cur) return;
+    const { b } = cur, ov = cur.el;
+    const n = Math.max(1, b.pages.length);
+    cur.page = Math.min(Math.max(0, cur.page), n - 1);
+    const box = clear(ov.querySelector('#brPage'));
+    if (!b.pages.length) {
+      const [text, label, fn] = b.empty || ['這本書還是空的。'];
+      put(box, h('p', { class: 'eyebrow', text: '空白的第一頁' }), h('h3', { text: '還沒有內容' }), h('p', { class: 'br-text', text }), label ? this.actions([[label, fn, 'primary']]) : null);
+    } else box.appendChild(b.pages[cur.page].build());
+    box.scrollTop = 0;
+    ov.querySelector('#brPg').textContent = `第 ${cur.page + 1} / ${n} 頁`;
+    ov.querySelector('#brPrev').disabled = cur.page === 0;
+    ov.querySelector('#brNext').disabled = cur.page >= n - 1;
+    for (const t of ov.querySelectorAll('.br-toc button')) t.setAttribute('aria-current', String(Number(t.dataset.page) === cur.page));
+    if (focus) box.focus({ preventScroll: true });
+  },
+  go(i) { this.turnTo(i); },
+  /** 上一頁／下一頁；翻頁動畫還沒結束時，以「正要翻到的那一頁」為基準 */
+  turn(dir) { const cur = this.cur; if (!cur) return; const base = cur.pendingTarget ?? (cur.flipping ? cur.flipTarget : cur.page); this.turnTo(base + Math.sign(dir)); },
+  async turnTo(target) {
+    const cur = this.cur; if (!cur) return;
+    if (target < 0 || target >= cur.b.pages.length) return;
+    // 翻頁動畫中再按（或點目錄），動畫結束後接著翻到那一頁
+    if (cur.flipping) { cur.pendingTarget = target; return; }
+    if (target === cur.page) return;
+    const pageEl = cur.el.querySelector('#brPage');
+    if (motionReduced()) { cur.page = target; this.renderPage(); return; }
+    cur.flipping = true; cur.flipTarget = target;
+    const fwd = target > cur.page;
+    await pageEl.animate([{ transform: 'perspective(1400px) rotateY(0deg)', opacity: 1 }, { transform: `perspective(1400px) rotateY(${fwd ? -70 : 70}deg)`, opacity: 0 }], { duration: 200, easing: 'ease-in', fill: 'forwards' }).finished.catch(() => {});
+    cur.page = target; this.renderPage();
+    await pageEl.animate([{ transform: `perspective(1400px) rotateY(${fwd ? 70 : -70}deg)`, opacity: 0 }, { transform: 'perspective(1400px) rotateY(0deg)', opacity: 1 }], { duration: 240, easing: 'ease-out', fill: 'forwards' }).finished.catch(() => {});
+    pageEl.getAnimations().forEach(a => a.cancel());
+    cur.flipping = false;
+    if (cur.pendingTarget != null) { const t = Math.min(Math.max(0, cur.pendingTarget), cur.b.pages.length - 1); cur.pendingTarget = null; if (t !== cur.page) this.turnTo(t); }
+  },
+  /** 資料變動（移出、回信、重新命名）後重建目前這本書 */
+  refresh() {
+    if (Archive.tab === 'shelves') this.render();
+    const cur = this.cur; if (!cur) return;
+    const b = this.bookById(cur.id);
+    if (!b) { this.close(true); return; }
+    const page = cur.page;
+    const fresh = this.build(b);
+    cur.b = b;
+    cur.el.replaceWith(fresh); cur.el = fresh;
+    fresh.querySelector('.br-cover').hidden = true;
+    cur.page = page; this.renderPage(false);
+    const spine = this.spineEl(cur.id); if (spine) { spine.classList.add('pulled'); cur.spine = spine; }
+    if (!Dialog.el.open) fresh.querySelector('.br-close').focus();
+  },
+  async rename() {
+    const sh = this.cur && this.cur.b.shelf; if (!sh) return;
+    const n = await Shelves.nameDialog(sh.name);
+    if (n) { sh.name = n.slice(0, 20); if (Shelves.persist()) toast('已重新命名', 'ok'); }
+  },
+  async removeBook() {
+    const sh = this.cur && this.cur.b.shelf; if (!sh) return;
+    const ok = await Dialog.confirm({ title: `刪除「${sh.name}」這本書？`, message: '書裡的項目只是書籤，原本的日記、作品和短句不會被刪除。', ok: '刪除', danger: true });
+    if (!ok) return;
+    Shelves.list = Shelves.list.filter(x => x !== sh);
+    if (Shelves.persist()) toast(`已把「${sh.name}」從書架拿掉`, 'ok');
+    this.close(true);
+  },
+  async close(instant = false) {
+    const cur = this.cur; if (!cur || cur.closing) return;
+    cur.closing = true;
+    const ov = cur.el, cover = ov.querySelector('.br-cover');
+    const finish = () => {
+      ov.remove(); document.documentElement.style.overflow = '';
+      if (this.cur === cur) this.cur = null;
+      if (Archive.tab === 'shelves') this.render();
+      const sp = this.spineEl(cur.id);
+      if (sp) { sp.classList.remove('pulled'); if (!instant) sp.focus({ preventScroll: true }); }
+    };
+    const spine = this.spineEl(cur.id);
+    if (instant || motionReduced() || !spine || cur.busy) { finish(); return; }
+    cover.hidden = false;
+    ov.querySelector('.br-page-l').animate([{ opacity: 1 }, { opacity: 0 }], { duration: 600, fill: 'forwards' });
+    await cover.animate([{ transform: 'rotateY(-180deg)', opacity: 0 }, { transform: 'rotateY(-165deg)', opacity: 1, offset: 0.2 }, { transform: 'rotateY(0deg)', opacity: 1 }], { duration: 650, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' }).finished.catch(() => {});
+    const cr = cover.getBoundingClientRect(), sr = spine.getBoundingClientRect();
+    const fly = this.flyBook(cur.b, spine, cr);
+    fly.cover.style.opacity = '1';
+    Object.assign(fly.el.style, { left: `${cr.left}px`, top: `${cr.top}px`, width: `${cr.width}px`, height: `${cr.height}px` });
+    ov.querySelector('.br-book').style.opacity = '0';
+    ov.querySelector('.br-backdrop').animate([{ opacity: 1 }, { opacity: 0 }], { duration: 650, fill: 'forwards' });
+    ov.querySelector('.br-top').animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, fill: 'forwards' });
+    fly.cover.animate([{ opacity: 1 }, { opacity: 0, offset: 0.65 }, { opacity: 0 }], { duration: 700, fill: 'forwards' });
+    await fly.el.animate([
+      { left: `${cr.left}px`, top: `${cr.top}px`, width: `${cr.width}px`, height: `${cr.height}px` },
+      { left: `${sr.left}px`, top: `${sr.top - 36}px`, width: `${sr.width}px`, height: `${sr.height}px`, offset: 0.78 },
+      { left: `${sr.left}px`, top: `${sr.top}px`, width: `${sr.width}px`, height: `${sr.height}px` }
+    ], { duration: 700, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' }).finished.catch(() => {});
+    fly.el.remove();
+    finish();
+  }
+};
+
+/* =========================================================================
    17. 首頁、時光盒分頁與設定
    ========================================================================= */
 const Home = {
@@ -5539,7 +6340,7 @@ function boot() {
   const steps = [
     ['作品', () => Works.init()], ['日記', () => Diary.init()], ['語錄', () => Quotes.init()], ['色彩', () => Palette.init()],
     ['工作室', () => Studio.init()], ['信件', () => Letters.init()], ['片刻', () => Moment.init()], ['心緒探索', () => Reflect.init()],
-    ['時光盒', () => Archive.init()], ['雲端海洋', () => Ocean.init()], ['設定', () => Settings.init()], ['首頁', () => Home.init()], ['天氣', () => Weather.init()], ['書架', () => Shelves.init()], ['心情天氣', () => MoodWeather.init()], ['回望', () => JourneyView.init()],
+    ['時光盒', () => Archive.init()], ['雲端海洋', () => Ocean.init()], ['設定', () => Settings.init()], ['首頁', () => Home.init()], ['天氣', () => Weather.init()], ['書架', () => Shelves.init()], ['立體書架', () => Bookcase.init()], ['心情天氣', () => MoodWeather.init()], ['回望', () => JourneyView.init()],
     ['隨機生成', () => RandomBottle.init()], ['聲景', () => Soundscape.init()], ['每日一瓶', () => OceanDaily.init()], ['首頁旅程', () => HomeJourney.init()], ['備份提醒', () => Backup.render()],
     ['快速創作', () => QuickMode.init()], ['離開提醒', () => LeaveGuard.init()], ['繼續編輯', () => ContinueCard.render()], ['備份狀態', () => BackupStatus.render()]
   ];

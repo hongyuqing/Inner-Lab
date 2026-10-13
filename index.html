@@ -274,6 +274,19 @@ dialog::backdrop { background: rgba(6, 10, 24, 0.72); backdrop-filter: blur(3px)
 .hero-clock { position: absolute; top: clamp(16px, 3vw, 30px); right: clamp(16px, 3vw, 30px); text-align: right; background: rgba(14, 23, 48, 0.5); border: 1px solid var(--line); border-radius: 14px; padding: 10px 14px; backdrop-filter: blur(6px); }
 .hero-clock .time { font-size: 1.6rem; font-variant-numeric: tabular-nums; font-weight: 500; line-height: 1.2; }
 .hero-clock .date { font-size: 0.86rem; color: var(--muted); }
+.hero-wx { font-size: 0.8rem; color: var(--mist); margin-top: 4px; max-width: 220px; }
+/* 首頁天氣場景的動態：雨、雪、霧、雲、遠方閃電；減少動態效果時會被下方規則停住 */
+.wx-rain { animation: wxFall 0.9s linear infinite; }
+.wx-rain.slow { animation-duration: 1.5s; }
+.wx-snow { animation: wxFall 14s linear infinite; }
+.wx-snow.far { animation-duration: 22s; }
+@keyframes wxFall { from { transform: translateY(0); } to { transform: translateY(800px); } }
+.wx-cloud { animation: wxCloud 70s linear infinite alternate; }
+.wx-cloud.b { animation-duration: 95s; animation-direction: alternate-reverse; }
+@keyframes wxCloud { from { transform: translateX(-60px); } to { transform: translateX(60px); } }
+.wx-fog { animation: wxCloud 40s ease-in-out infinite alternate; }
+.wx-flash { animation: wxFlash 9s linear infinite; opacity: 0; }
+@keyframes wxFlash { 0%, 90%, 92.5%, 100% { opacity: 0; } 91%, 93.2% { opacity: 1; } }
 .floaty { animation: floaty 7s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
 @keyframes floaty { 0%,100% { transform: translateY(0) rotate(-6deg); } 50% { transform: translateY(-14px) rotate(-3deg); } }
 .wave-drift { animation: drift 16s linear infinite; }
@@ -650,6 +663,7 @@ html.reduce-motion *, html.reduce-motion *::before, html.reduce-motion *::after 
     <div class="hero-clock" aria-live="off">
       <div class="time" id="clockTime">--:--</div>
       <div class="date" id="clockDate"></div>
+      <div class="hero-wx" id="heroWx" hidden></div>
     </div>
     <div class="hero-content">
       <p class="eyebrow" id="greeting">歡迎回來</p>
@@ -1173,6 +1187,13 @@ html.reduce-motion *, html.reduce-motion *::before, html.reduce-motion *::after 
           <option value="off">完全關閉</option>
         </select>
       </div>
+      <div class="field">
+        <label for="sHeroWeather">首頁場景</label>
+        <select id="sHeroWeather">
+          <option value="on">跟著所選城市的即時天氣變換</option>
+          <option value="off">固定顯示月夜海洋</option>
+        </select>
+      </div>
       <p class="tiny muted">減少動態效果時，星塵會停在原地不動；選「完全關閉」則不畫任何星塵。聲景預設靜音，右上角可以隨時停止。</p>
       <h3 style="margin-top:8px">匿名代號</h3>
       <p class="small muted">公開漂流瓶時會顯示這個代號，不會使用你的真實姓名。</p>
@@ -1428,7 +1449,8 @@ const Dialog = {
   el: null, body: null, resolver: null,
   init() {
     this.el = $('#dlg'); this.body = $('#dlgBody');
-    this.el.addEventListener('close', () => { if (this.resolver) { const r = this.resolver; this.resolver = null; r(this.el.returnValue === 'ok' ? true : (this._value ?? false)); } this._value = undefined; this.el.classList.remove('wide'); });
+    // close 事件是非同步送達的：若這段時間內已經開了下一個對話框（例如「放進雲端海洋」接著開確認框），就不要把新的那個當成已取消
+    this.el.addEventListener('close', () => { if (this.el.open) return; if (this.resolver) { const r = this.resolver; this.resolver = null; r(this.el.returnValue === 'ok' ? true : (this._value ?? false)); } this._value = undefined; this.el.classList.remove('wide'); });
     this.el.addEventListener('click', (e) => { if (e.target === this.el) this.close('cancel'); });
   },
   /** 開啟對話框；build(body, close) 建立內容，回傳 Promise */
@@ -1518,7 +1540,8 @@ const DEFAULT_SETTINGS = {
   lastBackupAt: null,     // 最後一次匯出備份的時間
   backupSnoozeUntil: null,
   dailyBottle: null,      // { date, cloudId }：每日一瓶
-  soundVolume: 0.5, stardust: 'on'
+  soundVolume: 0.5, stardust: 'on',
+  heroWeather: 'on'       // 首頁場景跟著即時天氣變換
 };
 let settings = {};
 function loadSettings() {
@@ -3531,8 +3554,9 @@ const Weather = {
       const w = await WeatherAPI.current(city.latitude, city.longitude);
       clear(body);
       const [desc, kind] = WMO[w.code] || ['天氣狀態未知', 'cloud'];
-      this.last = { desc, temp: Math.round(w.temp), city: city.name, kind };
+      this.last = { desc, temp: Math.round(w.temp), city: city.name, kind, isDay: w.isDay };
       if (typeof MoodWeather !== 'undefined') MoodWeather.renderPreview();
+      if (typeof Home !== 'undefined') Home.renderHero();
       const extra = [Number.isFinite(w.apparent) ? `體感 ${Math.round(w.apparent)}°C` : '', Number.isFinite(w.humidity) ? `濕度 ${Math.round(w.humidity)}%` : '', Number.isFinite(w.wind) ? `風速 ${Math.round(w.wind)} km/h` : ''].filter(Boolean).join(' · ');
       body.append(...[
         h('div', { class: 'weather-main', style: { marginTop: '6px' } }, weatherIcon(kind, w.isDay),
@@ -3543,6 +3567,7 @@ const Weather = {
     } catch (e) {
       this.last = null;
       if (typeof MoodWeather !== 'undefined') MoodWeather.renderPreview();
+      if (typeof Home !== 'undefined') Home.renderHero();
       clear(body).appendChild(h('div', { class: 'state error', style: { padding: '18px' } },
         h('p', { text: `暫時無法取得天氣資料（${e.message}）。不會顯示估計或範例數值。` }),
         h('div', { class: 'row' }, h('button', { class: 'btn sm', type: 'button', text: '重新載入', onclick: () => this.load() }), h('button', { class: 'btn sm ghost', type: 'button', text: '更換城市', onclick: () => { $('#weatherSearch').hidden = false; $('#cityInput').focus(); } }))));
@@ -5109,6 +5134,88 @@ const ImportCheck = {
 };
 
 /* =========================================================================
+   21. 首頁天氣場景：依所選城市的即時天氣（Open-Meteo）換首頁背景
+   只用實際取得的天氣；取得失敗或關閉此設定時顯示預設月夜海洋，並如實標示。
+   ========================================================================= */
+const HeroWeather = {
+  /** 依目前天氣決定底圖與疊加效果；key 相同就不重畫 */
+  plan() {
+    const w = settings.heroWeather === 'off' ? null : Weather.last;
+    if (!w) return { key: 'default', kind: 'default', scene: 'moonlit-ocean', w: null };
+    const day = w.isDay !== false;
+    const kind = ['clear', 'partly', 'cloud', 'fog', 'rain', 'storm', 'snow'].includes(w.kind) ? w.kind : 'cloud';
+    const scene = {
+      clear: day ? 'dawn-sea' : 'moonlit-ocean',
+      partly: day ? 'dawn-sea' : 'moonlit-ocean',
+      cloud: day ? 'misty-coast' : 'moonlit-ocean',
+      fog: 'misty-coast',
+      rain: day ? 'misty-coast' : 'moonlit-ocean',
+      storm: 'galaxy-sea',
+      snow: day ? 'misty-coast' : 'moonlit-ocean'
+    }[kind];
+    return { key: `${kind}-${day ? 'd' : 'n'}`, kind, day, scene, w };
+  },
+  cloud(x, y, sc, fill, op) {
+    return s('g', { transform: `translate(${x} ${y}) scale(${sc})`, fill, 'fill-opacity': op },
+      s('ellipse', { cx: 0, cy: 0, rx: 120, ry: 34 }), s('ellipse', { cx: -50, cy: -18, rx: 60, ry: 36 }), s('ellipse', { cx: 30, cy: -30, rx: 70, ry: 46 }), s('ellipse', { cx: 90, cy: -8, rx: 50, ry: 28 }));
+  },
+  /** 底圖之上、瓶子之下：雲、霧、天色 */
+  overlay(svg, plan, p) {
+    const W = CANVAS_W, H = CANVAS_H, add = (el) => { svg.appendChild(el); return el; };
+    const { kind, day } = plan;
+    const dim = { default: 0.25, clear: day ? 0.08 : 0.2, partly: day ? 0.12 : 0.22, cloud: day ? 0.2 : 0.38, fog: day ? 0.18 : 0.5, rain: day ? 0.42 : 0.42, storm: 0.5, snow: day ? 0.22 : 0.32 }[kind];
+    add(s('rect', { width: W, height: H, fill: kind === 'storm' ? '#0A0F22' : '#0E1730', 'fill-opacity': dim }));
+    const cloudFill = day ? '#F7F4EE' : '#8C94C8';
+    if (kind === 'partly') {
+      const g = add(s('g', { class: 'wx-cloud' })); g.append(this.cloud(260, 190, 1, cloudFill, day ? 0.75 : 0.35), this.cloud(980, 150, 0.8, cloudFill, day ? 0.6 : 0.3));
+    }
+    if (kind === 'cloud' || kind === 'rain' || kind === 'storm' || kind === 'snow') {
+      const f = kind === 'storm' ? '#2A3358' : day ? (kind === 'snow' ? '#E6E8F2' : '#9AA6BC') : '#3A4670';
+      const op = kind === 'cloud' ? 0.8 : 0.9;
+      const a = add(s('g', { class: 'wx-cloud' })); a.append(this.cloud(160, 150, 1.5, f, op), this.cloud(640, 120, 1.8, f, op), this.cloud(1080, 160, 1.5, f, op));
+      const b = add(s('g', { class: 'wx-cloud b' })); b.append(this.cloud(330, 230, 1.3, f, op * 0.85), this.cloud(880, 250, 1.1, f, op * 0.8));
+    }
+    if (kind === 'storm') add(s('rect', { class: 'wx-flash', width: W, height: 420, fill: '#C8C7E8', 'fill-opacity': 0.16 }));
+    if (kind === 'fog') {
+      defsOf(svg).appendChild(lin(p + 'wxfog', 1, 0, [[0, '#F7F4EE', 0], [0.5, '#F7F4EE', day ? 0.55 : 0.28], [1, '#F7F4EE', 0]]));
+      const g = add(s('g', { class: 'wx-fog' }));
+      for (const [y, h] of [[300, 90], [450, 120], [600, 110]]) g.appendChild(s('rect', { x: -200, y, width: W + 400, height: h, rx: h / 2, fill: `url(#${p}wxfog)` }));
+    }
+  },
+  /** 瓶子之前：雨絲、雪花，以及讓下方文字看得清楚的漸層 */
+  front(svg, plan, p) {
+    const W = CANVAS_W, H = CANVAS_H, add = (el) => { svg.appendChild(el); return el; };
+    const rnd = seeded(plan.key.length * 131 + 7);
+    const tile = (cls, draw) => { const g = add(s('g', { class: cls })); for (const dy of [0, H]) draw(g, dy); return g; };
+    if (plan.kind === 'rain' || plan.kind === 'storm') {
+      const n = plan.kind === 'storm' ? 110 : 75;
+      const pts = Array.from({ length: n }, () => [rnd() * (W + 200) - 100, rnd() * H, 18 + rnd() * 26]);
+      for (const [cls, half] of [['wx-rain slow', 0], ['wx-rain', 1]])
+        tile(cls, (g, dy) => pts.forEach(([x, y, l], i) => { if (i % 2 === half) g.appendChild(s('path', { d: `M${round1(x)} ${round1(y + dy - H)}l-6 ${round1(l)}`, stroke: '#B8D8E8', 'stroke-opacity': half ? 0.5 : 0.3, 'stroke-width': half ? 1.6 : 1.1, 'stroke-linecap': 'round' })); }));
+    }
+    if (plan.kind === 'snow') {
+      const pts = Array.from({ length: 90 }, () => [rnd() * W, rnd() * H, 1.5 + rnd() * 3.5]);
+      for (const [cls, half] of [['wx-snow far', 0], ['wx-snow', 1]])
+        tile(cls, (g, dy) => pts.forEach(([x, y, r], i) => { if (i % 2 === half) g.appendChild(s('circle', { cx: round1(x), cy: round1(y + dy - H), r: round1(half ? r : r * 0.6), fill: '#F7F4EE', 'fill-opacity': half ? 0.85 : 0.5 })); }));
+    }
+    defsOf(svg).appendChild(lin(p + 'wxscrim', 0, 1, [[0, '#0E1730', 0], [0.45, '#0E1730', 0], [1, '#0E1730', plan.day && plan.kind !== 'storm' ? 0.72 : 0.5]]));
+    add(s('rect', { width: W, height: H, fill: `url(#${p}wxscrim)` }));
+    // 白天天空較亮：左側（文字所在處）再加一層淡淡的暗色，讓白字保持清楚
+    if (plan.day && plan.kind !== 'storm') {
+      defsOf(svg).appendChild(lin(p + 'wxleft', 1, 0, [[0, '#0E1730', 0.62], [0.55, '#0E1730', 0.25], [0.85, '#0E1730', 0]]));
+      add(s('rect', { width: W, height: H, fill: `url(#${p}wxleft)` }));
+    }
+  },
+  caption(plan) {
+    const el = $('#heroWx'); if (!el) return;
+    if (settings.heroWeather === 'off') { el.hidden = true; el.textContent = ''; return; }
+    el.hidden = false;
+    el.textContent = plan.w ? `${plan.w.city} · ${plan.w.desc} ${plan.w.temp}°C` : (Weather.loading ? '正在取得天氣…' : '天氣暫時取不到，先顯示月夜海洋');
+  }
+};
+function defsOf(svg) { return svg.querySelector('defs') || svg.insertBefore(s('defs'), svg.firstChild); }
+
+/* =========================================================================
    17. 首頁、時光盒分頁與設定
    ========================================================================= */
 const Home = {
@@ -5134,15 +5241,20 @@ const Home = {
     $('#greeting').textContent = hr < 5 ? '夜深了，記得讓自己休息' : hr < 11 ? '早安，今天也慢慢來' : hr < 14 ? '午安，記得吃飯' : hr < 18 ? '午後好，喝口水吧' : '晚安，今天辛苦了';
   },
   renderHero() {
-    const box = clear($('#heroScene'));
+    const box = $('#heroScene'); if (!box) return;
+    const plan = HeroWeather.plan();
+    if (box.dataset.key === plan.key) return;   // 同一種天氣不重畫，避免動畫跳動
+    clear(box); box.dataset.key = plan.key; box.dataset.weather = plan.kind;
     const p = nextPrefix();
     const svg = s('svg', { viewBox: `0 0 ${CANVAS_W} ${CANVAS_H}`, preserveAspectRatio: 'xMidYMid slice' });
-    svg.appendChild(renderScene('moonlit-ocean', p, { animate: true }));
-    svg.appendChild(s('rect', { width: CANVAS_W, height: CANVAS_H, fill: '#0E1730', 'fill-opacity': 0.25 }));
+    svg.appendChild(renderScene(plan.scene, p, { animate: true }));
+    HeroWeather.overlay(svg, plan, p);
     const bottle = makeElement('bottle', 'starry', { x: 0, y: 0, width: 150, height: 300 });
     const g = s('g', { transform: 'translate(930 520)' }, s('g', { class: 'floaty' }, s('g', { transform: `scale(${150 / 120} ${300 / 240})` }, drawAsset(bottle, p + 'hb-'))));
     svg.appendChild(g);
+    HeroWeather.front(svg, plan, p);
     box.appendChild(svg);
+    HeroWeather.caption(plan);
   },
   renderPalette() {
     const box = $('#homePalette'); if (!box) return;
@@ -5204,6 +5316,8 @@ const Settings = {
   init() {
     $('#sMotion').value = settings.motion;
     $('#sMotion').addEventListener('change', (e) => { settings.motion = e.target.value; saveSettings(); applyMotion(); toast('已更新動畫設定', 'ok'); });
+    $('#sHeroWeather').value = settings.heroWeather === 'off' ? 'off' : 'on';
+    $('#sHeroWeather').addEventListener('change', (e) => { settings.heroWeather = e.target.value; saveSettings(); Home.renderHero(); toast(settings.heroWeather === 'off' ? '首頁固定顯示月夜海洋' : '首頁場景會跟著天氣變換', 'ok'); });
     $('#sStardust').value = settings.stardust === 'off' ? 'off' : 'on';
     $('#sStardust').addEventListener('change', (e) => { settings.stardust = e.target.value; saveSettings(); Stardust.restart(); toast(settings.stardust === 'off' ? '已關閉背景星塵' : '已顯示背景星塵', 'ok'); });
     $('#sNickNew').addEventListener('click', () => { settings.nickname = makeNickname(); saveSettings(); this.render(); toast('已更換匿名代號（之前發布的作品不會改變）', 'ok'); });

@@ -743,6 +743,294 @@ dialog.letter[open] .dlg-body { animation: unroll .7s cubic-bezier(.2,.7,.2,1) b
 @keyframes viewIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 .view:not([hidden]) { animation: viewIn .5s cubic-bezier(.2,.7,.2,1); }
 
+/* =========================================================
+   Inner Lab 2.0
+   ========================================================= */
+/* ---------- 首頁：三個入口、小儀式、第一次造訪 ---------- */
+.hero-more { margin-top: 10px; color: var(--muted); }
+.linkish { background: none; border: 0; padding: 4px 2px; color: var(--moon); font: inherit; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; min-height: 32px; }
+.linkish:hover { color: var(--gold); }
+.nav-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--danger); margin-left: 6px; vertical-align: middle; box-shadow: 0 0 8px var(--danger); }
+.ritual { margin: 18px 0; display: grid; grid-template-columns: minmax(200px, 1fr) 2fr; gap: 18px; align-items: center; background: linear-gradient(120deg, rgba(41,59,99,.7), rgba(62,100,137,.35)); }
+.ritual-head h3 { margin: 4px 0; }
+.ritual-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1.3fr 1.5fr auto; gap: 12px; align-items: end; }
+.ritual-steps li { display: flex; gap: 10px; align-items: flex-end; min-width: 0; }
+.rs-n { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--line-strong); font-size: .8rem; color: var(--gold); margin-bottom: 9px; }
+.ritual-steps li.ok .rs-n { background: var(--gold); color: var(--deep); }
+.ritual-card { background: rgba(247,244,238,.08); border: 1px solid rgba(233,216,166,.4); border-radius: 12px; padding: 8px 12px; min-width: 0; }
+.ritual-card p { margin: 2px 0; font-family: var(--font-display); font-size: 1.05rem; }
+.ritual-card .linkish { padding: 0; min-height: 0; }
+.ritual > .tiny { grid-column: 2; margin: -8px 0 0; }
+.ritual-done p { margin: 0 0 6px; }
+.ritual-saved { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.home-more-bar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; padding: 14px 18px; border: 1px dashed var(--line-strong); border-radius: var(--radius); margin-bottom: 18px; }
+.home-more-bar p { margin: 0; }
+@media (max-width: 860px) {
+  .ritual { grid-template-columns: 1fr; }
+  .ritual > .tiny { grid-column: 1; margin: 0; }
+  .ritual-steps { grid-template-columns: 1fr; }
+  .ritual-steps li:last-child .btn { width: 100%; }
+}
+
+/* ---------- 日記本 ---------- */
+.daily-prompt { margin-bottom: 14px; background: linear-gradient(120deg, rgba(233,216,166,.12), rgba(41,59,99,.5)); }
+.dp-q { font-family: var(--font-display); font-size: 1.35rem; margin: 4px 0 10px; }
+.daily-done { margin: 0 0 10px; }
+#diaryBook { margin-top: 14px; }
+.dbook.closed { display: grid; justify-items: center; padding: 16px 0 8px; }
+.dbook-cover { position: relative; width: min(320px, 78vw); aspect-ratio: 3 / 4; border: 0; border-radius: 6px 16px 16px 6px; cursor: pointer; color: #F7F4EE; display: grid; align-content: center; justify-items: center; gap: 10px; padding: 24px;
+  background: radial-gradient(circle at 70% 22%, rgba(233,216,166,.35), transparent 28%), linear-gradient(135deg, #3B4F82, #22345C 60%, #17243F);
+  box-shadow: inset 10px 0 0 rgba(14,23,48,.55), inset 12px 0 18px rgba(0,0,0,.35), 0 18px 40px rgba(0,0,0,.45); transition: transform .3s ease, box-shadow .3s ease; }
+.dbook-cover:hover, .dbook-cover:focus-visible { transform: translateY(-4px) rotate(-1deg); box-shadow: inset 10px 0 0 rgba(14,23,48,.55), inset 12px 0 18px rgba(0,0,0,.35), 0 26px 50px rgba(0,0,0,.5), 0 0 0 2px rgba(233,216,166,.4); }
+.dbc-band { position: absolute; right: 26px; top: 0; bottom: 0; width: 12px; background: rgba(233,216,166,.55); }
+.dbc-title { font-family: var(--font-display); font-size: 2rem; letter-spacing: .1em; }
+.dbc-sub { font-size: .85rem; color: var(--moon); text-align: center; }
+.dbc-hint { font-size: .78rem; color: var(--gold); border: 1px solid rgba(233,216,166,.5); border-radius: 999px; padding: 2px 12px; }
+.dbook.open { background: linear-gradient(180deg, #2A3A62, #1E2C4E); border-radius: 18px; padding: 14px; box-shadow: 0 18px 40px rgba(0,0,0,.35); }
+.dbook-spread { position: relative; display: grid; grid-template-columns: minmax(200px, 30%) 1fr; gap: 0; perspective: 1600px; }
+.dbook-spread.single { grid-template-columns: 1fr; }
+.dbook-page { background: #F6F0E2; color: #2B2F45; padding: 20px 24px; min-height: 420px; position: relative;
+  background-image: repeating-linear-gradient(180deg, transparent 0 31px, rgba(74,90,140,.12) 31px 32px); }
+.dbook-page.left { border-radius: 10px 0 0 10px; box-shadow: inset -14px 0 18px -12px rgba(0,0,0,.35); display: flex; flex-direction: column; gap: 10px; max-height: 560px; }
+.dbook-page.right { border-radius: 0 10px 10px 0; box-shadow: inset 14px 0 18px -12px rgba(0,0,0,.3); backface-visibility: hidden; outline: none; }
+.dbook-spread.single .dbook-page.right { border-radius: 10px; }
+.dbook-page h3, .dbook-page h4 { color: #22304F; }
+.dbook-page .eyebrow { color: #5A6487; }
+.dbook-page .muted, .dbook-page .tiny.muted { color: #5C5F75; }
+.dbook-page .badge { background: rgba(41,59,99,.08); color: #22304F; border-color: rgba(41,59,99,.25); }
+.dbook-page .btn { background: rgba(41,59,99,.08); color: #22304F; border-color: rgba(41,59,99,.3); }
+.dbook-page .btn.primary { background: #293B63; color: #F7F4EE; border-color: #293B63; }
+.dbook-page .btn.danger { color: #9A3B32; border-color: rgba(154,59,50,.4); background: transparent; }
+.dbook-page .btn:disabled { opacity: .45; }
+.dbook-page input { background: #FFFDF7; color: #22304F; border-color: rgba(41,59,99,.3); }
+.dbook-page .recent-item { background: rgba(41,59,99,.08); color: #22304F; }
+.dbook-page .reply-box, .dbook-page .replies { color: #2B2F45; }
+.dbook-mode { margin: 0 0 6px; color: #7A6A4F; letter-spacing: .05em; }
+.dbook-h { font-size: 1.5rem; margin: 6px 0 10px; }
+.dbook-text { font-family: var(--font-display); font-size: 1.15rem; line-height: 2; white-space: pre-wrap; overflow-wrap: anywhere; margin: 0 0 12px; }
+.dbook-actions { margin-top: 14px; gap: 6px; }
+.dbook-foot { margin-top: 12px; }
+.dbook-jump { margin: 0; }
+.dbook-jump label { color: #22304F; }
+.dbook-toc { list-style: none; margin: 0; padding: 0; overflow: auto; flex: 1; }
+.toc-month { font-size: .75rem; color: #7A6A4F; margin: 10px 0 4px; letter-spacing: .08em; }
+.toc-item { width: 100%; display: grid; grid-template-columns: 44px 10px 1fr; gap: 8px; align-items: center; text-align: left; background: none; border: 0; border-radius: 8px; padding: 7px 8px; color: #2B2F45; font: inherit; font-size: .9rem; cursor: pointer; min-height: 40px; }
+.toc-item:hover { background: rgba(41,59,99,.08); }
+.toc-item[aria-current="page"] { background: #293B63; color: #F7F4EE; }
+.toc-date { font-variant-numeric: tabular-nums; color: inherit; opacity: .8; }
+.toc-dot { width: 10px; height: 10px; border-radius: 50%; }
+.toc-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dbook-nav { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: center; margin-top: 12px; }
+.dbook-nav #dbNew { margin-left: auto; }
+.dbook-status { text-align: right; color: var(--muted); margin: 8px 4px 0; }
+.dbook-flap { position: absolute; top: 0; right: 0; bottom: 0; width: 70%; border-radius: 0 16px 16px 0; transform-origin: left center; z-index: 5; display: grid; place-items: center; color: #F7F4EE; backface-visibility: hidden;
+  background: radial-gradient(circle at 70% 22%, rgba(233,216,166,.35), transparent 28%), linear-gradient(135deg, #3B4F82, #22345C 60%, #17243F); box-shadow: 0 10px 30px rgba(0,0,0,.4); }
+.dbook-page.page-new { animation: pageNew .8s cubic-bezier(.2,.7,.2,1); }
+@keyframes pageNew { from { transform: translateX(40px) rotateY(-24deg); opacity: 0; box-shadow: 0 0 0 3px rgba(233,216,166,.8); } to { transform: none; opacity: 1; } }
+.save-line { font-size: .82rem; color: var(--moon); margin: 0; min-height: 1.4em; }
+.draft-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+.draft-bar p { margin: 0; }
+@media (max-width: 760px) {
+  .dbook.open { padding: 8px; }
+  .dbook-spread { grid-template-columns: 1fr; }
+  .dbook-page.left { border-radius: 10px 10px 0 0; max-height: 230px; min-height: 0; box-shadow: inset 0 -14px 18px -12px rgba(0,0,0,.3); }
+  .dbook-page.right { border-radius: 0 0 10px 10px; min-height: 320px; padding: 16px; }
+  .dbook-nav #dbNew { margin-left: 0; width: 100%; }
+  .dbook-flap { width: 100%; }
+}
+
+/* ---------- 我的海域 ---------- */
+.my-sea { height: clamp(380px, 56vh, 540px); margin-bottom: 14px; }
+.sea-bottle.mine-sea .sb-bob { position: relative; }
+.sea-bottle .sb-flag { position: absolute; left: 50%; top: -2%; width: 9px; height: 9px; margin-left: -4.5px; border-radius: 50%; background: var(--mist); box-shadow: 0 0 6px var(--mist); pointer-events: none; }
+.sea-bottle.sent .sb-flag { background: var(--gold); box-shadow: 0 0 8px var(--gold); }
+.sea-bottle.treasured .sb-flag { background: #F0A9A0; box-shadow: 0 0 8px #F0A9A0; }
+.badge.priv { background: rgba(200,199,232,.14); color: var(--mist); border-color: rgba(200,199,232,.4); }
+.badge.pub { background: rgba(233,216,166,.16); color: var(--gold); border-color: rgba(233,216,166,.5); }
+.badge.ready { background: rgba(169,220,196,.16); color: var(--ok); border-color: rgba(169,220,196,.5); }
+.badge.sys { background: rgba(184,216,232,.12); color: var(--moon); border-color: rgba(184,216,232,.45); }
+.paper-scroll { background: linear-gradient(180deg, #F6EEDB, #EFE3C6); color: #3A3550; border-radius: 6px; padding: 4px; margin: 12px 0 6px; box-shadow: 0 6px 18px rgba(0,0,0,.25); transform-origin: top center; }
+.paper-scroll .reader-msg { background: transparent; border: 0; color: #3A3550; }
+.paper-scroll .br-quote { color: #5A4A30; padding: 0 16px 10px; margin: 0; }
+dialog.letter[open] .paper-scroll { animation: paperUnroll .9s .25s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes paperUnroll { from { clip-path: inset(0 0 100% 0); transform: scaleY(.6); } to { clip-path: inset(0 0 0 0); transform: none; } }
+.dlg-actions.wrap { justify-content: flex-start; }
+
+/* ---------- 封瓶、寄出、封信 ---------- */
+.seal-anim { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; align-content: center; gap: 8px; pointer-events: none; background: radial-gradient(circle, rgba(14,23,48,.55), transparent 65%); animation: sealFade 2.2s ease forwards; }
+.seal-stage { width: 200px; height: 240px; }
+.seal-anim.letter .seal-stage { width: 240px; height: 170px; }
+.seal-svg { width: 100%; height: 100%; overflow: visible; }
+.seal-msg { margin: 0; font-family: var(--font-display); font-size: 1.25rem; color: var(--paper); text-shadow: 0 2px 10px rgba(0,0,0,.6); }
+.seal-roll { animation: sealRoll .7s cubic-bezier(.4,0,.2,1) both; }
+.seal-wax { transform-box: fill-box; transform-origin: center; animation: waxStamp .4s .75s cubic-bezier(.3,1.6,.5,1) both; }
+.seal-flap { transform-box: fill-box; transform-origin: top center; animation: flapClose .5s .2s ease both; }
+.seal-anim.sent .seal-stage { animation: bottleAway 2.1s ease both; }
+.seal-wave { animation: drift 3s linear infinite; }
+@keyframes sealFade { 0% { opacity: 0; } 12% { opacity: 1; } 78% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes sealRoll { from { transform: translateY(-50px); opacity: 0; } 30% { opacity: 1; } to { transform: translateY(46px); opacity: 0; } }
+@keyframes waxStamp { from { transform: scale(2.2); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes flapClose { from { transform: scaleY(-1); } to { transform: scaleY(1); } }
+@keyframes bottleAway { 0%, 55% { transform: none; } 100% { transform: translate(160px, -40px) rotate(18deg) scale(.6); opacity: .2; } }
+
+/* ---------- 郵箱 ---------- */
+.mailbox-panel { display: flex; gap: 16px; align-items: center; }
+.mailbox { flex: none; width: 120px; height: 128px; border: 0; background: none; padding: 0; cursor: pointer; border-radius: 16px; }
+.mailbox:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+.mb-svg { width: 100%; height: 100%; overflow: visible; }
+.mb-flag { transform-box: fill-box; transform-origin: 100% 100%; transform: rotate(-90deg); transition: transform .5s ease; }
+.mb-flag.up { transform: none; }
+.mailbox.has-mail .mb-svg { filter: drop-shadow(0 0 14px rgba(233,216,166,.55)); }
+.mailbox.alert .mb-body { transform-box: fill-box; transform-origin: 50% 100%; animation: mbShake 3.2s ease-in-out infinite; }
+.mb-peek { animation: mbPeek 2.4s ease-in-out infinite; }
+@keyframes mbShake { 0%, 70%, 100% { transform: none; } 74% { transform: rotate(-4deg); } 78% { transform: rotate(4deg); } 82% { transform: rotate(-3deg); } 86% { transform: rotate(2deg); } 90% { transform: none; } }
+@keyframes mbPeek { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+.mb-info { min-width: 0; flex: 1; }
+.mb-info h3 { margin: 0 0 8px; }
+.mb-counts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 6px; }
+.mb-count { border: 1px solid var(--line); border-radius: 12px; padding: 8px; text-align: center; display: grid; gap: 2px; }
+.mb-count strong { font-size: 1.4rem; font-family: var(--font-display); }
+.mb-count span { font-size: .75rem; color: var(--muted); }
+.mb-count.ready strong { color: var(--ok); }
+.env-group { display: grid; gap: 10px; }
+.env-h { margin: 6px 0 0; font-size: 1rem; color: var(--muted); }
+.envelopes { display: grid; gap: 12px; }
+.letter-card.env { display: grid; grid-template-columns: 96px 1fr; gap: 6px 14px; align-items: center; }
+.letter-card.env > .row { grid-column: 1 / -1; }
+.env-meta { display: grid; gap: 4px; justify-items: start; min-width: 0; }
+.env-title { font-family: var(--font-display); font-size: 1.15rem; }
+.env-meta p { margin: 0; }
+.env-art { position: relative; width: 96px; height: 64px; }
+.env-back { position: absolute; inset: 0; background: #F1E6CC; border-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,.3); }
+.env-back::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top right, transparent 49%, rgba(201,180,138,.8) 50%, transparent 51%), linear-gradient(to top left, transparent 49%, rgba(201,180,138,.8) 50%, transparent 51%); clip-path: polygon(0 100%, 50% 45%, 100% 100%); }
+.env-flap { position: absolute; left: 0; right: 0; top: 0; height: 60%; background: #E5D2AC; clip-path: polygon(0 0, 100% 0, 50% 100%); transform-origin: top center; transition: transform .4s ease; }
+.env-seal { position: absolute; left: 50%; top: 52%; width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%; background: #8E5E6E; box-shadow: 0 0 0 2px rgba(142,94,110,.35); }
+.env-paper { position: absolute; left: 10%; right: 10%; top: 10%; height: 70%; background: #FFFDF5; border-radius: 2px; transition: transform .4s ease; }
+.env.sealed .env-art { filter: saturate(.6) brightness(.85); }
+.env.sealed .env-seal::after { content: ''; position: absolute; inset: 5px; border: 1.5px solid #F1E6CC; border-radius: 50%; }
+.env.ready { border-color: rgba(233,216,166,.6); box-shadow: 0 0 0 1px rgba(233,216,166,.3), 0 0 22px rgba(233,216,166,.22); }
+.env.ready .env-art { animation: envGlow 2.6s ease-in-out infinite; }
+.env.ready .env-paper { transform: translateY(-10px); }
+.env.ready:hover .env-paper { transform: translateY(-16px); }
+.env.read .env-flap { transform: scaleY(-1); }
+.env.read .env-seal { opacity: .35; }
+.env.system .env-back { background: #DDE6F0; }
+.env.system .env-flap { background: #C8D6E6; }
+.env.system .env-seal { background: #3E6489; }
+@keyframes envGlow { 0%, 100% { filter: drop-shadow(0 0 0 rgba(233,216,166,0)); transform: rotate(0); } 50% { filter: drop-shadow(0 0 12px rgba(233,216,166,.8)); transform: rotate(-2deg); } }
+.mail-notice { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+.mail-notice p { margin: 0; }
+.letter-paper { background: linear-gradient(180deg, #FBF6EA, #F1E6CC); color: #3A3550; border-color: rgba(201,180,138,.6); }
+.letter-open { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; background: rgba(8,12,26,.55); pointer-events: none; }
+.lo-env { position: relative; width: min(300px, 76vw); aspect-ratio: 3 / 2; }
+.lo-back { position: absolute; inset: 0; background: #F1E6CC; border-radius: 8px; box-shadow: 0 20px 50px rgba(0,0,0,.5); z-index: 2; }
+.lo-back::after { content: ''; position: absolute; inset: 0; background: #EADCB9; clip-path: polygon(0 100%, 50% 48%, 100% 100%); border-radius: 0 0 8px 8px; }
+.lo-flap { position: absolute; left: 0; right: 0; top: 0; height: 58%; background: #E5D2AC; clip-path: polygon(0 0, 100% 0, 50% 100%); transform-origin: top center; z-index: 4; transition: transform .38s ease, z-index 0s .19s; }
+.lo-seal { position: absolute; left: 50%; top: 50%; width: 40px; height: 40px; margin: -20px 0 0 -20px; z-index: 5; }
+.lo-seal i { position: absolute; top: 0; width: 20px; height: 40px; background: #8E5E6E; transition: transform .4s ease, opacity .4s ease; }
+.lo-seal i:first-child { left: 0; border-radius: 20px 0 0 20px; }
+.lo-seal i:last-child { right: 0; border-radius: 0 20px 20px 0; }
+.lo-paper { position: absolute; left: 8%; right: 8%; top: 6%; height: 84%; background: #FFFDF5; border-radius: 4px; z-index: 1; display: grid; place-items: center; font-family: var(--font-display); color: #3A3550; padding: 10px; text-align: center; transition: transform .5s cubic-bezier(.2,.7,.2,1); }
+.letter-open.torn .lo-seal i:first-child { transform: translate(-14px, 6px) rotate(-24deg); opacity: 0; }
+.letter-open.torn .lo-seal i:last-child { transform: translate(14px, 6px) rotate(24deg); opacity: 0; }
+.letter-open.flap .lo-flap { transform: scaleY(-1); z-index: 0; }
+.letter-open.out .lo-paper { transform: translateY(-70%) scale(1.25); z-index: 6; box-shadow: 0 16px 40px rgba(0,0,0,.4); }
+@media (max-width: 640px) {
+  .mailbox-panel { flex-direction: column; align-items: stretch; }
+  .mailbox { align-self: center; }
+  .letter-card.env { grid-template-columns: 72px 1fr; }
+  .env-art { width: 72px; height: 48px; }
+}
+
+/* ---------- 調色實驗室 ---------- */
+.pal-lab { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+.role-dot { display: inline-block; width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(247,244,238,.6); margin-right: 6px; vertical-align: -2px; }
+.pal-swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 8px; }
+.pal-sw { width: 100%; aspect-ratio: 1; min-height: 44px; border-radius: 12px; border: 2px solid rgba(247,244,238,.25); cursor: pointer; transition: transform .15s ease, border-color .15s ease; }
+.pal-sw:hover { transform: scale(1.08); }
+.pal-sw[aria-pressed="true"] { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(233,216,166,.45); transform: scale(1.06); }
+#palCustom { width: 52px; height: 40px; padding: 2px; }
+.pal-preview { border-radius: 16px; overflow: hidden; border: 1px solid var(--line); aspect-ratio: 5 / 3; }
+.pal-preview svg { width: 100%; height: 100%; display: block; }
+.pal-preview .pv-bg, .pal-preview path, .pal-preview g { transition: fill .3s ease; }
+.pal-sets { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.pal-set { display: grid; grid-template-columns: 96px 1fr; gap: 12px; align-items: center; border: 1px solid var(--line); border-radius: 14px; padding: 10px; }
+.pal-set-art { border-radius: 10px; overflow: hidden; aspect-ratio: 5 / 3; }
+.pal-set-art svg { width: 100%; height: 100%; display: block; }
+.pal-set-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 760px) { .pal-lab { grid-template-columns: 1fr; } .pal-set { grid-template-columns: 80px 1fr; } }
+
+/* ---------- 雲端海洋的天氣 ---------- */
+.sea-front { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 8; pointer-events: none; }
+.sea-front .wx-rain { animation-name: seaFall; }
+.sea-front .wx-snow { animation-name: seaFall; }
+@keyframes seaFall { from { transform: translateY(0); } to { transform: translateY(600px); } }
+.sea-sparkle { transform-box: fill-box; transform-origin: center; animation: sparkle 4s ease-in-out infinite; }
+@keyframes sparkle { 0%, 100% { opacity: 0; transform: scale(.4); } 50% { opacity: .9; transform: scale(1); } }
+.sea-rdrop { transform-box: fill-box; transform-origin: center; animation: rdrop 2.4s ease-out infinite; opacity: 0; }
+@keyframes rdrop { 0% { transform: scale(.2); opacity: .8; } 100% { transform: scale(1.8); opacity: 0; } }
+.sea.sea-wx-rain .sb-art, .sea.sea-wx-storm .sb-art { position: relative; }
+.sea.sea-wx-rain .sb-art::after, .sea.sea-wx-storm .sb-art::after { content: ''; position: absolute; left: 22%; top: 30%; width: 14%; height: 40%; border-radius: 50%; background: linear-gradient(180deg, rgba(255,255,255,.75), transparent); animation: glint 3.6s ease-in-out infinite; pointer-events: none; }
+@keyframes glint { 0%, 100% { opacity: .15; } 50% { opacity: .8; } }
+.sea-wxbar { position: absolute; top: 12px; left: 12px; right: 12px; z-index: 9; display: flex; flex-wrap: wrap; gap: 6px; pointer-events: none; }
+.wx-chip { font-size: .78rem; padding: 4px 10px; border-radius: 999px; background: rgba(14,23,48,.62); border: 1px solid var(--line); color: var(--paper); backdrop-filter: blur(4px); }
+.wx-chip.mine { border-color: rgba(200,199,232,.5); color: var(--mist); }
+button.wx-chip { pointer-events: auto; cursor: pointer; font: inherit; font-size: .78rem; min-height: 32px; }
+button.wx-chip:hover { border-color: var(--mist); }
+
+/* ---------- 心緒卡牌 ---------- */
+.mcard { --cw: 150px; position: relative; width: var(--cw); aspect-ratio: 2 / 3; border: 0; padding: 0; background: none; perspective: 1000px; cursor: pointer; border-radius: 14px; }
+.mcard-inner { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform .7s cubic-bezier(.3,.7,.2,1); }
+.mcard.flipped .mcard-inner { transform: rotateY(180deg); }
+.mcard.static .mcard-inner { transition: none; }
+.mcard-face { position: absolute; inset: 0; border-radius: 14px; backface-visibility: hidden; -webkit-backface-visibility: hidden; overflow: hidden; box-shadow: 0 10px 24px rgba(0,0,0,.4); }
+.mcard-back { background: radial-gradient(circle at 50% 30%, #2E4374, #1E2E55 60%, #142041); border: 1px solid rgba(233,216,166,.45); }
+.mcard-pattern { width: 100%; height: 100%; display: block; }
+.mcard-front { transform: rotateY(180deg); background: linear-gradient(180deg, #FBF6EA, #EFE5CE); color: #2B2F45; display: grid; grid-template-rows: auto 1fr auto; padding: 14px 12px; text-align: center; border: 1px solid rgba(201,180,138,.8); }
+.mcard.mini .mcard-front, .mcard.static .mcard-front { transform: rotateY(180deg); }
+.mf-cat { font-size: .72rem; color: #7A6A4F; letter-spacing: .05em; }
+.mf-text { margin: 0; align-self: center; font-family: var(--font-display); font-size: 1.05rem; line-height: 1.6; }
+.mf-foot { font-size: .64rem; color: #8A8478; }
+.mcard-front.cat-now { border-top: 6px solid #5C6F94; }
+.mcard-front.cat-say { border-top: 6px solid #8E5E6E; }
+.mcard-front.cat-act { border-top: 6px solid #3F6E73; }
+.mcard:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+.card-setup { display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; align-items: center; }
+.deck { position: relative; height: 240px; display: grid; place-items: center; }
+.deck .deck-card { position: absolute; --cw: 140px; cursor: default; }
+.deck .d0 { transform: rotate(-6deg) translate(-10px, 4px); } .deck .d1 { transform: rotate(-2deg) translate(-4px, 2px); } .deck .d2 { transform: rotate(1deg); } .deck .d3 { transform: rotate(4deg) translate(5px, -2px); } .deck .d4 { transform: rotate(7deg) translate(10px, -4px); }
+.deck.shuffling .d0 { animation: shufA .55s ease-in-out 2; } .deck.shuffling .d1 { animation: shufB .55s ease-in-out .08s 2; } .deck.shuffling .d2 { animation: shufA .55s ease-in-out .16s 2; } .deck.shuffling .d3 { animation: shufB .55s ease-in-out .24s 2; } .deck.shuffling .d4 { animation: shufA .55s ease-in-out .32s 2; }
+@keyframes shufA { 0%, 100% { transform: none; } 50% { transform: translateX(-90px) rotate(-12deg); } }
+@keyframes shufB { 0%, 100% { transform: none; } 50% { transform: translateX(90px) rotate(12deg); } }
+.card-pick, .card-reveal, .card-end { margin-bottom: 4px; }
+.fan { display: flex; justify-content: center; align-items: flex-end; padding: 36px 10px 26px; min-height: 280px; }
+.fan .fan-card { --cw: 140px; margin: 0 -26px; transform: rotate(var(--rot)) translateY(var(--lift)); transform-origin: 50% 120%; transition: transform .3s ease, opacity .5s ease, margin .3s ease; animation: fanIn .5s var(--fi) ease both; }
+.fan .fan-card:hover, .fan .fan-card:focus-visible { transform: rotate(var(--rot)) translateY(calc(var(--lift) - 22px)); z-index: 3; }
+.fan .fan-card.flipped { transform: rotate(0) translateY(-26px) scale(1.08); z-index: 4; margin: 0 6px; cursor: default; }
+.fan .fan-card.gone { opacity: .15; pointer-events: none; }
+@keyframes fanIn { from { opacity: 0; transform: translateY(60px) rotate(0); } }
+.reveal-list { display: grid; gap: 18px; grid-template-columns: 1fr; margin: 14px 0; }
+.reveal-list.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.reveal-card { display: grid; gap: 10px; justify-items: center; align-content: start; }
+.reveal-card .mcard { --cw: 190px; cursor: default; }
+.reveal-card .field { width: 100%; }
+.reveal-card .row { justify-content: center; }
+.saved-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+.saved-card { display: grid; grid-template-columns: 100px 1fr; gap: 12px; align-items: start; border: 1px solid var(--line); border-radius: 14px; padding: 10px; }
+.saved-card .mcard { --cw: 100px; cursor: default; }
+.saved-card .mf-text { font-size: .78rem; }
+.saved-card p { margin: 0; }
+@media (max-width: 860px) {
+  .card-setup { grid-template-columns: 1fr; }
+  .reveal-list.three { grid-template-columns: 1fr; }
+  .fan { flex-wrap: wrap; gap: 10px; padding: 16px 0; min-height: 0; }
+  .fan .fan-card { --cw: 96px; margin: 0; transform: none; transform-origin: center; }
+  .fan .fan-card:hover, .fan .fan-card:focus-visible { transform: translateY(-6px); }
+  .fan .fan-card.flipped { transform: scale(1.04); margin: 0; }
+  .fan .fan-card .mf-text { font-size: .72rem; line-height: 1.45; }
+  .fan .fan-card .mf-cat, .fan .fan-card .mf-foot { font-size: .58rem; }
+}
+
 /* ---------- 減少動態效果 ---------- */
 @media (prefers-reduced-motion: reduce) {
   html:not(.motion-on) *, html:not(.motion-on) *::before, html:not(.motion-on) *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
@@ -781,12 +1069,13 @@ html.reduce-motion *, html.reduce-motion *::before, html.reduce-motion *::after 
   </div>
   <nav class="nav" id="mainNav" aria-label="主要導覽">
     <button type="button" class="nav-top" data-go="home">首頁</button>
-    <div class="nav-group" data-routes="studio palette reflect moment">
+    <div class="nav-group" data-routes="studio palette reflect moment cards">
       <button type="button" class="nav-group-btn" id="ngb-create" aria-expanded="false" aria-controls="ng-create"><span>創作與安放</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
       <div class="nav-menu" id="ng-create" role="group" aria-labelledby="ngb-create" hidden>
         <button type="button" class="nav-item" data-go="studio"><strong>漂流瓶工作室</strong><small>用瓶子、紙條與星光表達此刻</small></button>
         <button type="button" class="nav-item" data-action="random"><strong>替我開啟一段心緒</strong><small>隨機組合一個瓶子，再慢慢修改</small></button>
-        <button type="button" class="nav-item" data-action="moodcard"><strong>一鍵心緒卡</strong><small>選心情、強度和一句話就完成</small></button>
+        <button type="button" class="nav-item" data-go="cards"><strong>心緒卡牌</strong><small>洗牌、抽一張，給自己一個問題</small></button>
+        <button type="button" class="nav-item" data-action="moodcard"><strong>此刻的心情天氣</strong><small>選心裡的天氣、情緒和一句話</small></button>
         <button type="button" class="nav-item" data-go="palette"><strong>今日色彩</strong><small>把心情變成五個顏色</small></button>
         <button type="button" class="nav-item" data-go="reflect"><strong>心緒探索</strong><small>七個溫柔的問題，可以隨時跳過</small></button>
         <button type="button" class="nav-item" data-go="moment"><strong>片刻</strong><small>呼吸、短句與三分鐘書寫</small></button>
@@ -800,10 +1089,11 @@ html.reduce-motion *, html.reduce-motion *::before, html.reduce-motion *::after 
       </div>
     </div>
     <div class="nav-group" data-routes="archive journey">
-      <button type="button" class="nav-group-btn" id="ngb-look" aria-expanded="false" aria-controls="ng-look"><span>回望與收藏</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+      <button type="button" class="nav-group-btn" id="ngb-look" aria-expanded="false" aria-controls="ng-look"><span>回望與收藏</span><span class="nav-dot" id="navMailDotGroup" hidden title="郵箱裡有可以開封的信"></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
       <div class="nav-menu" id="ng-look" role="group" aria-labelledby="ngb-look" hidden>
         <button type="button" class="nav-item" data-go="archive" data-tab="diary"><strong>我的時光盒</strong><small>日記、回信與片刻紀錄</small></button>
         <button type="button" class="nav-item" data-go="archive" data-tab="works"><strong>我的漂流瓶</strong><small>作品與它們的生命旅程</small></button>
+        <button type="button" class="nav-item" data-go="archive" data-tab="letters"><strong>郵箱</strong><small>寫給未來的信與今日來信<span class="nav-dot" id="navMailDot" hidden aria-label="有可以開封的信"></span></small></button>
         <button type="button" class="nav-item" data-go="journey" data-tab="stars"><strong>情緒星圖</strong><small>在星空裡找回過去的紀錄</small></button>
         <button type="button" class="nav-item" data-go="journey" data-tab="year"><strong>情緒年度誌</strong><small>整理一段時間的回憶</small></button>
         <button type="button" class="nav-item" data-go="archive" data-tab="shelves"><strong>主題書架</strong><small>收好想留下的東西</small></button>
@@ -833,20 +1123,27 @@ html.reduce-motion *, html.reduce-motion *::before, html.reduce-motion *::after 
       <h1 id="homeTitle">每一種情緒，<br>都值得被安放。<span>A little space for everything you feel.</span></h1>
       <p class="hero-line">你不必整理好自己，才可以來這裡。</p>
       <div class="hero-actions">
-        <button class="btn primary" type="button" data-go="studio" data-new-bottle="1">製作我的漂流瓶</button>
-        <button class="btn" type="button" data-go="ocean">撿起一份心事</button>
-        <button class="btn ghost" type="button" id="heroRandom">替我開啟一段心緒</button>
+        <button class="btn primary" type="button" id="qsWrite">寫下此刻</button>
+        <button class="btn" type="button" data-go="cards">抽一張心緒卡</button>
+        <button class="btn" type="button" data-go="ocean">探索漂流瓶</button>
       </div>
+      <p class="hero-more small">或者 <button class="linkish" type="button" data-go="studio" data-new-bottle="1">做一個漂流瓶</button>・<button class="linkish" type="button" id="heroRandom">替我開啟一段心緒</button></p>
     </div>
   </div>
 
   <div id="continueCard"></div>
+  <section class="panel ritual" id="ritualCard" aria-labelledby="ritualTitle"></section>
+  <div class="home-more-bar" id="homeMoreBar" hidden>
+    <p class="small muted">第一次來？先從上面三個開始就好。其他功能都還在這裡。</p>
+    <button class="btn" type="button" id="homeMoreBtn" aria-expanded="false" aria-controls="homeMore">看看全部功能</button>
+  </div>
+  <div id="homeMore">
   <ol class="journey-strip" id="homeJourney" aria-label="Inner Lab 的旅程"></ol>
 
   <div class="home-grid">
     <section class="panel w-12" id="moodWeatherCard" aria-labelledby="mwTitle">
       <div class="row" style="justify-content:space-between">
-        <div><p class="eyebrow">01 感受此刻</p><h3 id="mwTitle">此刻的心情｜一鍵心緒卡</h3><p class="small muted">今天不想寫日記也沒關係。選心裡的天氣、情緒、強度和一句話，就是一張卡。外面的天氣和心裡的天氣可以不一樣。</p></div>
+        <div><p class="eyebrow">01 感受此刻</p><h3 id="mwTitle">此刻的心情天氣</h3><p class="small muted">今天不想寫日記也沒關係。選心裡的天氣、情緒、強度和一句話，就是一張卡。外面的天氣和心裡的天氣可以不一樣。</p></div>
       </div>
       <div class="mw-grid">
         <div class="stack">
@@ -944,6 +1241,7 @@ html.reduce-motion *, html.reduce-motion *::before, html.reduce-motion *::after 
 
 
   </div>
+</div><!-- /homeMore -->
 </section>
 
 <!-- ===================== 漂流瓶工作室 ===================== -->
@@ -1112,16 +1410,23 @@ html.reduce-motion *, html.reduce-motion *::before, html.reduce-motion *::after 
   <div class="tabs" role="tablist" aria-label="時光盒分類">
     <button type="button" role="tab" id="tab-diary" aria-controls="arch-diary" aria-selected="true" data-atab="diary">日記</button>
     <button type="button" role="tab" id="tab-works" aria-controls="arch-works" aria-selected="false" data-atab="works">我的漂流瓶</button>
-    <button type="button" role="tab" id="tab-letters" aria-controls="arch-letters" aria-selected="false" data-atab="letters">未來信件</button>
+    <button type="button" role="tab" id="tab-letters" aria-controls="arch-letters" aria-selected="false" data-atab="letters">郵箱</button>
     <button type="button" role="tab" id="tab-favs" aria-controls="arch-favs" aria-selected="false" data-atab="favs">收藏與色盤</button>
     <button type="button" role="tab" id="tab-shelves" aria-controls="arch-shelves" aria-selected="false" data-atab="shelves">主題書架</button>
   </div>
 
   <div role="tabpanel" id="arch-diary" aria-labelledby="tab-diary">
     <div id="backupNoticeArchive"></div>
+    <div id="dailyPrompt"></div>
     <div class="row" style="justify-content:space-between;margin-bottom:12px">
       <p class="muted small" id="diaryCount"></p>
-      <button class="btn primary" type="button" id="newDiaryBtn">新增日記</button>
+      <div class="row">
+        <div class="mode-switch" role="group" aria-label="日記的顯示方式">
+          <button class="btn sm" type="button" id="diaryViewBook" aria-pressed="true">日記本</button>
+          <button class="btn sm" type="button" id="diaryViewCards" aria-pressed="false">卡片</button>
+        </div>
+        <button class="btn primary" type="button" id="newDiaryBtn">新增日記</button>
+      </div>
     </div>
     <div class="filters panel" role="search" aria-label="搜尋與篩選日記">
       <div class="field"><label for="fKeyword">關鍵字</label><input type="search" id="fKeyword" maxlength="50" placeholder="標題、內容或標籤"></div>
@@ -1131,14 +1436,23 @@ html.reduce-motion *, html.reduce-motion *::before, html.reduce-motion *::after 
       <div class="field"><label for="fMood">情緒</label><select id="fMood"></select></div>
       <div class="field"><button class="btn ghost" type="button" id="fClear">清除篩選</button></div>
     </div>
+    <div id="diaryBook"></div>
     <div id="diaryList" class="timeline"></div>
   </div>
 
   <div role="tabpanel" id="arch-works" aria-labelledby="tab-works" hidden>
     <div class="row" style="justify-content:space-between;margin-bottom:12px">
       <p class="muted small" id="worksCount"></p>
-      <button class="btn primary" type="button" data-go="studio" data-new-bottle="1">製作新的漂流瓶</button>
+      <div class="row">
+        <div class="mode-switch" role="group" aria-label="我的漂流瓶的顯示方式">
+          <button class="btn sm" type="button" id="worksViewSea" aria-pressed="true">海域</button>
+          <button class="btn sm" type="button" id="worksViewCards" aria-pressed="false">卡片</button>
+        </div>
+        <button class="btn primary" type="button" data-go="studio" data-new-bottle="1">製作新的漂流瓶</button>
+      </div>
     </div>
+    <div class="chips" id="worksFilter" role="group" aria-label="依狀態篩選漂流瓶" style="margin-bottom:12px"></div>
+    <div id="worksSea"></div>
     <div id="worksList" class="grid-3"></div>
   </div>
 
@@ -1154,14 +1468,17 @@ html.reduce-motion *, html.reduce-motion *::before, html.reduce-motion *::after 
           <div class="field-hint"><span></span><span id="lCount">0 / 2000</span></div>
         </div>
         <div class="field"><label for="lDate">預計閱讀日期</label><input type="date" id="lDate"></div>
-        <p class="tiny muted">提醒只會在你之後再次打開這個網站時出現。靜態網站無法在瀏覽器關閉時寄信或推播。</p>
+        <p class="tiny muted">信會封存到你選的日期，之前無法開封。提醒只會在你之後再次打開這個網站時出現；靜態網站無法在瀏覽器關閉時寄信或推播。</p>
         <div class="row">
           <button class="btn primary" type="submit">封存信件</button>
           <button class="btn ghost" type="button" id="lCancel" hidden>取消編輯</button>
           <button class="btn ghost" type="button" id="lExport">匯出信件 JSON</button>
         </div>
       </form>
-      <div id="letterList" class="stack"></div>
+      <div class="stack">
+        <div id="mailbox"></div>
+        <div id="letterList" class="stack"></div>
+      </div>
     </div>
   </div>
 
@@ -1264,6 +1581,23 @@ html.reduce-motion *, html.reduce-motion *::before, html.reduce-motion *::after 
       <button class="btn" type="button" id="pToDiary">存入日記</button>
     </div>
   </div>
+  <div class="panel stack" id="palLab" aria-labelledby="palLabTitle" style="margin-top:18px"></div>
+</section>
+
+<!-- ===================== 心緒卡牌 ===================== -->
+<section class="view" id="view-cards" data-view="cards" aria-labelledby="cardsTitle" hidden>
+  <div class="view-head">
+    <div>
+      <p class="eyebrow">Mood Cards</p>
+      <h2 id="cardsTitle">心緒卡牌</h2>
+    </div>
+    <p class="small">洗牌、自己選一張，翻開看看今天的問題。卡牌只是反思與創作的靈感，不是診斷、占卜或預言，也不代表你的情緒。</p>
+  </div>
+  <div id="cardTable"></div>
+  <div class="panel stack" style="margin-top:18px" aria-labelledby="savedCardsTitle">
+    <h3 id="savedCardsTitle">收藏的心緒卡</h3>
+    <div id="savedCards" class="saved-cards"></div>
+  </div>
 </section>
 
 <!-- ===================== 片刻 ===================== -->
@@ -1363,10 +1697,16 @@ html.reduce-motion *, html.reduce-motion *::before, html.reduce-motion *::after 
       <div class="field">
         <label for="sHeroWeather">首頁場景</label>
         <select id="sHeroWeather">
-          <option value="on">跟著所選城市的即時天氣變換</option>
+          <option value="on">首頁與雲端海洋跟著所選城市的即時天氣變換</option>
           <option value="off">固定顯示月夜海洋</option>
         </select>
       </div>
+      <h3 style="margin-top:8px">提醒</h3>
+      <p class="small muted">所有提醒都只在你打開網站時出現，可以隨時關掉。沒有連續簽到或天數統計。</p>
+      <label class="check" for="sRemLetters"><input type="checkbox" id="sRemLetters"> 有信到了開封日時提醒我</label>
+      <label class="check" for="sRemBackup"><input type="checkbox" id="sRemBackup"> 太久沒備份時提醒我</label>
+      <label class="check" for="sRemPrompt"><input type="checkbox" id="sRemPrompt"> 在日記顯示每日書寫引導</label>
+      <label class="check" for="sRemSystem"><input type="checkbox" id="sRemSystem"> 在郵箱放一封系統提供的「今日來信」</label>
       <p class="tiny muted">減少動態效果時，星塵會停在原地不動；選「完全關閉」則不畫任何星塵。聲景預設靜音，右上角可以隨時停止。</p>
       <h3 style="margin-top:8px">匿名代號</h3>
       <p class="small muted">公開漂流瓶時會顯示這個代號，不會使用你的真實姓名。</p>
@@ -1473,7 +1813,11 @@ const KEYS = {
   autosave: 'innerlab.studio.autosave.v1',
   reactions: 'innerlab.reactions.v1',
   shelves: 'innerlab.shelves.v1',
-  moodweather: 'innerlab.moodweather.v1'
+  moodweather: 'innerlab.moodweather.v1',
+  cards: 'innerlab.cards.v1',
+  diaryDraft: 'innerlab.diaryDraft.v1',
+  view: 'innerlab.view.v1',
+  welcome: 'innerlab.welcome.v1'
 };
 
 const LIMITS = {
@@ -1716,7 +2060,8 @@ const DEFAULT_SETTINGS = {
   dailyBottle: null,      // { date, cloudId }：每日一瓶
   soundVolume: 0.5, stardust: 'on',
   heroWeather: 'on',      // 首頁場景跟著即時天氣變換
-  oceanView: 'sea'        // 雲端海洋：sea 海面／list 清單
+  oceanView: 'sea',       // 雲端海洋：sea 海面／list 清單
+  reminders: { letters: true, backup: true, prompt: true, system: true }   // 所有提醒都可關閉
 };
 let settings = {};
 function loadSettings() {
@@ -1725,6 +2070,7 @@ function loadSettings() {
   if (!['system', 'reduce', 'full'].includes(settings.motion)) settings.motion = 'system';
   if (typeof settings.published !== 'object' || !settings.published) settings.published = {};
   if (!Array.isArray(settings.publishLog)) settings.publishLog = [];
+  settings.reminders = Object.assign({}, DEFAULT_SETTINGS.reminders, settings.reminders && typeof settings.reminders === 'object' ? settings.reminders : {});
   if (!settings.nickname || typeof settings.nickname !== 'string') settings.nickname = makeNickname();
 }
 function saveSettings() { return Store.save(KEYS.settings, settings); }
@@ -1738,7 +2084,7 @@ function makeNickname() {
 /* =========================================================================
    4. 畫面導覽（hash 路由，適用 GitHub Pages 子路徑）
    ========================================================================= */
-const ROUTES = ['home', 'studio', 'ocean', 'archive', 'journey', 'reflect', 'palette', 'moment', 'settings'];
+const ROUTES = ['home', 'studio', 'ocean', 'archive', 'journey', 'reflect', 'palette', 'moment', 'cards', 'settings'];
 const Router = {
   current: null,
   handlers: {},
@@ -1772,7 +2118,7 @@ const Router = {
     for (const g of $$('.nav-group')) g.classList.toggle('active', g.dataset.routes.split(' ').includes(name));
   }
 };
-const ROUTE_TITLES = { studio: '漂流瓶工作室', ocean: '雲端海洋', archive: '我的時光盒', journey: '回望', reflect: '心緒探索', palette: '今日色彩', moment: '片刻', settings: '設定與資料' };
+const ROUTE_TITLES = { studio: '漂流瓶工作室', ocean: '雲端海洋', archive: '我的時光盒', journey: '回望', reflect: '心緒探索', palette: '今日色彩', moment: '片刻', cards: '心緒卡牌', settings: '設定與資料' };
 const NAV_MOBILE = window.matchMedia('(max-width: 860px)');
 /** 手機版的選單把三個群組全部展開；桌面版則是收合的下拉選單 */
 function syncNavMode() {
@@ -3439,13 +3785,16 @@ function hslToHex(hh, ss, ll) {
   return '#' + [f(0), f(8), f(4)].map(x => Math.round(x * 255).toString(16).padStart(2, '0')).join('').toUpperCase();
 }
 const Palette = {
-  state: { today: null, history: [] },
+  state: { today: null, history: [], sets: [] },
   mood: 'calm', intensity: 3, seed: 0, colors: [],
   init() {
     const raw = Store.load(KEYS.palette, {});
     const valid = (p) => p && Array.isArray(p.colors) && p.colors.every(isHex) && p.colors.length >= 4;
     this.state.today = raw && valid(raw.today) ? raw.today : null;
     this.state.history = (raw && Array.isArray(raw.history) ? raw.history : []).filter(valid).slice(0, 60);
+    // 2.0：自己命名的配色組（背景／瓶身／紙條），舊資料沒有這個欄位時是空陣列
+    this.state.sets = (raw && Array.isArray(raw.sets) ? raw.sets : []).filter(x => x && isHex(x.bg) && isHex(x.bottle) && isHex(x.paper)).slice(0, 40)
+      .map(x => ({ id: typeof x.id === 'string' ? x.id.slice(0, 80) : uid('set'), name: str(x.name, 20) || '未命名配色', bg: x.bg.toUpperCase(), bottle: x.bottle.toUpperCase(), paper: x.paper.toUpperCase(), createdAt: str(x.createdAt, 40) }));
     if (this.state.today && this.state.today.date === todayStr()) {
       this.mood = isMood(this.state.today.mood) ? this.state.today.mood : 'calm';
       this.intensity = clamp(num(this.state.today.intensity, 3), 1, 5);
@@ -4957,9 +5306,10 @@ const Shelves = {
   },
   sanitize(x) {
     if (!x || typeof x !== 'object') return null;
-    const items = (Array.isArray(x.items) ? x.items : []).slice(0, 300).filter(i => i && ['quote', 'bottle', 'diary', 'ocean'].includes(i.kind) && typeof i.ref === 'string').map(i => ({
+    const items = (Array.isArray(x.items) ? x.items : []).slice(0, 300).filter(i => i && ['quote', 'bottle', 'diary', 'ocean', 'letter'].includes(i.kind) && typeof i.ref === 'string').map(i => ({
       id: typeof i.id === 'string' ? i.id.slice(0, 80) : uid('item'), kind: i.kind, ref: i.ref.slice(0, 200), addedAt: typeof i.addedAt === 'string' ? i.addedAt : new Date().toISOString(),
-      snapshot: i.kind === 'ocean' && i.snapshot && typeof i.snapshot === 'object' ? { doc: sanitizeDoc(i.snapshot.doc), nickname: str(i.snapshot.nickname, 40), demo: i.snapshot.demo === true, createdAt: str(i.snapshot.createdAt, 40) } : null }));
+      snapshot: i.kind === 'ocean' && i.snapshot && typeof i.snapshot === 'object' ? { doc: sanitizeDoc(i.snapshot.doc), nickname: str(i.snapshot.nickname, 40), demo: i.snapshot.demo === true, createdAt: str(i.snapshot.createdAt, 40) }
+        : i.kind === 'letter' && i.snapshot && typeof i.snapshot === 'object' ? { title: str(i.snapshot.title, LIMITS.letterTitle), content: str(i.snapshot.content, LIMITS.letterContent), system: i.snapshot.system === true, date: str(i.snapshot.date, 40) } : null }));
     return { id: typeof x.id === 'string' ? x.id.slice(0, 80) : uid('shelf'), name: str(x.name, 20) || '未命名書架', items };
   },
   persist() { return Store.save(KEYS.shelves, this.list); },
@@ -5319,7 +5669,7 @@ const ImportCheck = {
     const d = parsed.data;
     const arr = (x) => (Array.isArray(x) ? x : []);
     const n = { diaries: arr(d.diaries).map(sanitizeDiary).filter(Boolean).length, bottles: arr(d.bottles).map(sanitizeDoc).filter(Boolean).length, letters: arr(d.letters).length, shelves: arr(d.shelves).length };
-    const bad = ['diaries', 'bottles', 'letters', 'shelves', 'moodWeather'].filter(k => d[k] !== undefined && !Array.isArray(d[k]));
+    const bad = ['diaries', 'bottles', 'letters', 'shelves', 'moodWeather', 'cards'].filter(k => d[k] !== undefined && !Array.isArray(d[k]));
     const notes = [];
     if (Number(parsed.schemaVersion) > SCHEMA_VERSION) notes.push(`這份備份來自較新的版本（資料版本 ${parsed.schemaVersion}），部分內容可能無法讀取。`);
     if (!parsed.schemaVersion) notes.push('這份備份沒有標示版本，會盡量讀取可辨識的內容。');
@@ -5438,7 +5788,8 @@ const OceanSea = {
     const hr = Math.round(m / 60); if (hr < 24) return `${hr} 小時前`;
     const d = Math.round(hr / 24); return d < 30 ? `${d} 天前` : `${fmtDate(iso)} `;
   },
-  find(id) { return id ? document.querySelector(`#oceanList .sea-bottle[data-id="${CSS.escape(id)}"]`) : null; },
+  /** 找畫面上（沒有被隱藏的）那個瓶子；雲端海洋和「我的漂流瓶」海域共用 */
+  find(id) { return id ? $$(`.sea-bottle[data-id="${CSS.escape(id)}"]`).find(n => !n.closest('[hidden]')) || null : null; },
 
   /** 背景：夜空、月亮、星點、月光倒影 */
   background(p) {
@@ -5712,8 +6063,7 @@ const Bookcase = {
         h('p', { class: 'eyebrow', text: `寄給未來的信・寫於 ${fmtDate(l.createdAt)}` }),
         h('h3', { text: l.title || '給未來的自己' }),
         due ? h('p', { class: 'tiny muted', text: `${fmtDate(l.openDate)} 可以打開` }) : h('span', { class: 'badge demo', text: `封存到 ${fmtDate(l.openDate)}` }),
-        due ? h('p', { class: 'br-text', text: l.content }) : h('p', { class: 'br-text', text: '這封信還在封存中，到了那天才會打開。書裡只放信封，不會偷看內容。' }),
-        due ? null : this.actions([['提早打開', () => Letters.read(l, { early: true })]]));
+        due ? h('p', { class: 'br-text', text: l.content }) : h('p', { class: 'br-text', text: '這封信還在封存中，到了那天才能打開。書裡只放信封，不會偷看內容。' }));
     });
   },
   replyPage(d, r) {
@@ -6017,6 +6367,1121 @@ const Bookcase = {
 };
 
 /* =========================================================================
+   24. Inner Lab 2.0：日記本、我的海域、郵箱、心緒卡牌、調色實驗室、海洋天氣、首頁小儀式
+   全部建立在既有資料上：日記、作品、信件、色盤與書架的資料格式都沒有改，
+   只新增 innerlab.cards.v1（收藏的卡片）與幾個介面偏好（日記草稿、顯示方式、首次造訪）。
+   ========================================================================= */
+const V2 = {
+  view: { diary: 'book', works: 'sea' },
+  init() {
+    const v = Store.load(KEYS.view, {});
+    if (v && typeof v === 'object') {
+      if (['book', 'cards'].includes(v.diary)) this.view.diary = v.diary;
+      if (['sea', 'cards'].includes(v.works)) this.view.works = v.works;
+    }
+    const parts = [['日記本', DiaryBook], ['我的海域', MySea], ['郵箱', Mailbox], ['調色實驗室', PalLab], ['心緒卡牌', CardDeck], ['海洋天氣', OceanWx], ['首頁', HomeV2], ['提醒', Reminders]];
+    for (const [name, m] of parts) { try { m.init(); } catch (e) { reportError(e, `「${name}」載入失敗`); } }
+  },
+  /** Home 定義在之後的區塊，開機第一步才替換它的兩個方法 */
+  install() {
+    Home.renderLetterNotice = v2LetterNotice;
+    const renderHero = Home.renderHero;
+    Home.renderHero = function () { renderHero.call(this); setTimeout(() => { try { OceanWx.refresh(); } catch (e) { console.error('[OceanWx]', e); } }, 0); };
+    // 第一次來時首頁的其他功能是收起來的；從選單跳到心情天氣卡時先展開
+    const moodcard = NavActions.moodcard;
+    NavActions.moodcard = () => { if ($('#homeMore').hidden) { HomeV2.expanded = true; HomeV2.render(); } moodcard(); };
+  },
+  setView(k, v) { this.view[k] = v; if (Store.available) Store.save(KEYS.view, this.view); }
+};
+
+/* ---------- 24.1 日記本：封面、目錄、翻頁；閱讀與編輯分開 ---------- */
+const DAILY_PROMPTS = [
+  '今天最想記住的是什麼？', '今天有哪一個瞬間，讓你稍微放鬆了一點？', '如果今天有顏色，會是什麼顏色？', '今天有誰、或什麼東西，陪了你一下？',
+  '今天身體想告訴你什麼？', '有什麼事今天先放著也沒關係？', '今天做到的一件小事是什麼？', '此刻最想對自己說的一句話是？',
+  '今天看到或聽到的哪句話，留在心裡？', '如果把今天寄給一年後的自己，你想附上什麼？', '今天有哪個地方讓你覺得安心？', '今天有沒有一個念頭一直在腦中繞？',
+  '明天想用什麼方式對自己溫柔一點？', '今天最想感謝的是什麼？'
+];
+const DailyPrompt = {
+  offset: 0,
+  text() { return DAILY_PROMPTS[(dayIndex() + this.offset) % DAILY_PROMPTS.length]; },
+  answeredToday() { return Diary.list.some(d => d.date === todayStr() && d.tags.includes('每日引導')); },
+  render() {
+    const box = $('#dailyPrompt'); if (!box) return; clear(box);
+    if (!settings.reminders.prompt || settings.promptSkip === todayStr()) return;
+    if (this.answeredToday()) { box.appendChild(h('p', { class: 'small muted daily-done', text: '今天的書寫引導已經回答過了。' })); return; }
+    box.appendChild(h('section', { class: 'panel daily-prompt', 'aria-labelledby': 'dpQ' },
+      h('p', { class: 'eyebrow', text: '今天的書寫引導・可以回答，也可以跳過' }),
+      h('p', { class: 'dp-q', id: 'dpQ', text: this.text() }),
+      h('div', { class: 'row' },
+        h('button', { class: 'btn sm primary', type: 'button', id: 'dpAnswer', text: '回答這一題', onclick: () => Diary.openEditor({ title: this.text(), tags: ['每日引導'] }) }),
+        h('button', { class: 'btn sm', type: 'button', id: 'dpNext', text: '換一題', onclick: () => { this.offset++; this.render(); $('#dpNext').focus(); } }),
+        h('button', { class: 'btn sm ghost', type: 'button', id: 'dpSkip', text: '今天跳過', onclick: () => { settings.promptSkip = todayStr(); saveSettings(); this.render(); toast('今天不再顯示書寫引導。也可以在設定裡完全關掉。'); } }))));
+  }
+};
+
+const DiaryBook = {
+  opened: false, cur: null, flash: null, turning: false, pending: null, items: [], lastSaved: null,
+  init() {
+    for (const [id, v] of [['#diaryViewBook', 'book'], ['#diaryViewCards', 'cards']]) $(id).addEventListener('click', () => { V2.setView('diary', v); Diary.render(); });
+  },
+  filtering() { return ['#fKeyword', '#fFrom', '#fTo', '#fMonth', '#fMood'].some(id => $(id).value); },
+  /** 從其他地方（首頁、星圖）打開日記本的某一頁 */
+  goTo(id) {
+    this.cur = id; this.opened = true;
+    Router.go('archive'); Archive.show('diary');
+    setTimeout(() => { const p = $('#dbPage'); if (p) p.focus({ preventScroll: false }); }, 60);
+  },
+  render(filtered) {
+    const box = clear($('#diaryBook'));
+    this.items = filtered.slice().sort((a, b) => (a.date + a.createdAt).localeCompare(b.date + b.createdAt));
+    const filtering = this.filtering();
+    if (!this.opened && !filtering) return this.renderCover(box);
+    if (!this.items.length) {
+      box.appendChild(h('div', { class: 'dbook open' }, h('div', { class: 'dbook-spread single' }, h('div', { class: 'dbook-page right blank' },
+        h('p', { class: 'dbook-text', text: Diary.list.length ? '沒有符合搜尋條件的日記。換個關鍵字、日期或情緒，或清除篩選。' : '這是日記本的第一頁，還是空白的。' }),
+        h('div', { class: 'row' }, Diary.list.length ? h('button', { class: 'btn sm', type: 'button', text: '清除篩選', onclick: () => $('#fClear').click() }) : null,
+          h('button', { class: 'btn sm primary', type: 'button', text: '寫新的一頁', onclick: () => Diary.openEditor() }))))));
+      return;
+    }
+    if (!this.items.some(d => d.id === this.cur)) this.cur = this.items[this.items.length - 1].id;
+    const book = h('div', { class: 'dbook open', role: 'region', 'aria-label': `日記本，${filtering ? `符合條件 ${this.items.length} 篇` : `共 ${this.items.length} 篇`}` });
+    const jump = h('input', { type: 'date', id: 'dbJump', 'aria-label': '翻到某一天' });
+    jump.addEventListener('change', () => this.jumpTo(jump.value));
+    const toc = h('ol', { class: 'dbook-toc', id: 'dbToc' });
+    let month = '';
+    this.items.forEach((d, i) => {
+      const m = d.date.slice(0, 7);
+      if (m !== month) { month = m; toc.appendChild(h('li', { class: 'toc-month', 'aria-hidden': 'true', text: `${m.slice(0, 4)} 年 ${Number(m.slice(5))} 月` })); }
+      toc.appendChild(h('li', {}, h('button', { class: 'toc-item', type: 'button', 'data-id': d.id, onclick: () => this.turnTo(i) },
+        h('span', { class: 'toc-date', text: `${Number(d.date.slice(5, 7))}/${Number(d.date.slice(8))}` }),
+        h('span', { class: 'toc-dot', 'aria-hidden': 'true', style: { background: moodColor(d.mood) } }),
+        h('span', { class: 'toc-title', text: d.title || (d.content || '').slice(0, 16) || '這一天' }),
+        h('span', { class: 'sr-only', text: `，${fmtDate(d.date)}，${moodLabel(d.mood)}` }))));
+    });
+    const page = h('article', { class: 'dbook-page right', id: 'dbPage', tabindex: '-1', 'aria-live': 'polite' });
+    const counter = h('span', { class: 'small muted', id: 'dbCount' });
+    book.append(
+      h('div', { class: 'dbook-spread' },
+        h('nav', { class: 'dbook-page left', 'aria-label': '日記目錄' },
+          h('div', { class: 'row', style: { justifyContent: 'space-between' } }, h('h3', { text: '目錄' }), filtering ? null : h('button', { class: 'btn sm ghost', type: 'button', text: '闔上日記本', onclick: () => { this.opened = false; Diary.render(); } })),
+          h('div', { class: 'field dbook-jump' }, h('label', { for: 'dbJump', text: '翻到某一天' }), jump),
+          toc),
+        page),
+      h('div', { class: 'dbook-nav' },
+        h('button', { class: 'btn sm', type: 'button', id: 'dbPrev', 'aria-label': '上一頁', text: '‹ 上一頁', onclick: () => this.turn(-1) }),
+        counter,
+        h('button', { class: 'btn sm', type: 'button', id: 'dbNext', 'aria-label': '下一頁', text: '下一頁 ›', onclick: () => this.turn(1) }),
+        h('button', { class: 'btn sm primary', type: 'button', id: 'dbNew', text: '寫新的一頁', onclick: () => Diary.openEditor() })),
+      h('p', { class: 'dbook-status tiny', id: 'dbStatus', role: 'status', text: this.lastSaved ? `已儲存 ${fmtTime(this.lastSaved)}・日記只存在這個瀏覽器` : '所有日記都已存在這個瀏覽器，不會自動上傳' }));
+    book.addEventListener('keydown', (e) => {
+      if (e.target.closest('input, textarea, select')) return;
+      if (e.key === 'ArrowRight') { e.preventDefault(); this.turn(1); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); this.turn(-1); }
+    });
+    box.appendChild(book);
+    if (this.opening) { this.opening = false; this.playCover(book); }
+    this.fill();
+  },
+  renderCover(box) {
+    const n = Diary.list.length;
+    const cover = h('button', { class: 'dbook-cover', type: 'button', id: 'dbCover', 'aria-label': `翻開日記本，共 ${n} 篇` },
+      h('span', { class: 'dbc-band', 'aria-hidden': 'true' }),
+      h('span', { class: 'dbc-title', text: '我的日記本' }),
+      h('span', { class: 'dbc-sub', text: n ? `${n} 篇・從 ${fmtDate(Diary.list.reduce((a, d) => d.date < a ? d.date : a, Diary.list[0].date))} 開始` : '還是空白的，等你寫第一頁' }),
+      h('span', { class: 'dbc-hint', text: '點一下翻開' }));
+    cover.addEventListener('click', () => { this.opened = true; this.opening = !motionReduced(); Diary.render(); const p = $('#dbPage'); if (p) p.focus({ preventScroll: true }); });
+    box.appendChild(h('div', { class: 'dbook closed' }, cover,
+      h('div', { class: 'row', style: { justifyContent: 'center', marginTop: '12px' } }, h('button', { class: 'btn primary', type: 'button', text: n ? '寫新的一頁' : '寫下第一頁', onclick: () => Diary.openEditor() }))));
+  },
+  playCover(book) {
+    const flap = h('div', { class: 'dbook-flap', 'aria-hidden': 'true' }, h('span', { class: 'dbc-title', text: '我的日記本' }));
+    book.querySelector('.dbook-spread').appendChild(flap);
+    const a = flap.animate([{ transform: 'perspective(1600px) rotateY(0deg)' }, { transform: 'perspective(1600px) rotateY(-178deg)', opacity: 0.2 }], { duration: 760, easing: 'cubic-bezier(.45,.05,.25,1)', fill: 'forwards' });
+    a.onfinish = () => flap.remove(); setTimeout(() => flap.remove(), 1200);
+  },
+  idx() { return Math.max(0, this.items.findIndex(d => d.id === this.cur)); },
+  fill() {
+    const page = $('#dbPage'); if (!page) return;
+    const i = this.idx(), d = this.items[i];
+    clear(page);
+    const linked = d.linkedBottleId ? Works.get(d.linkedBottleId) : null;
+    const kindLabel = { reflection: '反思卡', moment: '片刻', weather: '心情天氣' }[d.kind];
+    put(page,
+      h('p', { class: 'dbook-mode tiny', text: '閱讀模式・按「編輯這一頁」才會修改' }),
+      h('p', { class: 'eyebrow', text: `${fmtDate(d.date)}・${moodLabel(d.mood)}・強度 ${d.intensity} / 5` }),
+      kindLabel ? h('span', { class: 'badge', text: kindLabel }) : null,
+      h('h3', { class: 'dbook-h', text: d.title || '這一天' }),
+      h('p', { class: 'dbook-text', text: d.content || '（這一頁只有標題）' }),
+      d.tags.length ? h('div', { class: 'row', style: { gap: '6px' } }, d.tags.map(t => h('span', { class: 'badge', text: '#' + t }))) : null,
+      d.palette.length ? h('div', { class: 'mini-palette', role: 'img', 'aria-label': `附上的色盤：${d.palette.join('、')}` }, d.palette.map(c => h('span', { style: { background: c } }))) : null,
+      d.replies.length ? PastMe.renderReplies(d) : null,
+      linked ? h('button', { class: 'recent-item', type: 'button', onclick: () => openWorkInStudio(linked.id), 'aria-label': `打開附上的漂流瓶：${linked.title}` }, h('span', { class: 'thumb' }, renderDoc(linked)), h('span', { class: 'meta' }, h('strong', { text: linked.title || '未命名漂流瓶' }), h('span', { class: 'tiny muted', text: '附上的漂流瓶' }))) : null,
+      h('div', { class: 'row dbook-actions' },
+        h('button', { class: 'btn sm primary', type: 'button', text: '編輯這一頁', onclick: () => Diary.openEditor(d) }),
+        h('button', { class: 'btn sm', type: 'button', text: '回信給當時的自己', onclick: () => PastMe.open(d.id) }),
+        h('button', { class: 'btn sm', type: 'button', text: '加入書架', onclick: () => Shelves.addFlow({ kind: 'diary', ref: d.id }) }),
+        h('button', { class: 'btn sm danger', type: 'button', text: '刪除', onclick: () => Diary.remove(d.id) })),
+      h('p', { class: 'tiny muted dbook-foot', text: `第 ${i + 1} 頁・最後修改 ${fmtDateTime(d.updatedAt)}` }));
+    if (this.flash === d.id) { this.flash = null; if (!motionReduced()) { page.classList.remove('page-new'); void page.offsetWidth; page.classList.add('page-new'); } }
+    $('#dbCount').textContent = `${i + 1} / ${this.items.length}`;
+    $('#dbPrev').disabled = i === 0; $('#dbNext').disabled = i === this.items.length - 1;
+    for (const b of $$('#dbToc .toc-item')) { if (b.dataset.id === d.id) { b.setAttribute('aria-current', 'page'); b.scrollIntoView({ block: 'nearest' }); } else b.removeAttribute('aria-current'); }
+  },
+  turn(dir) { const target = (this.pending ?? this.idx()) + dir; if (target >= 0 && target < this.items.length) this.turnTo(target); },
+  async turnTo(target) {
+    if (this.turning) { this.pending = target; return; }
+    const from = this.idx(); if (target === from || !this.items[target]) return;
+    const page = $('#dbPage'); const dir = target > from ? 1 : -1;
+    this.cur = this.items[target].id;
+    if (motionReduced() || !page.animate) { this.fill(); return; }
+    this.turning = true;
+    page.style.transformOrigin = dir > 0 ? 'left center' : 'right center';
+    try {
+      await page.animate([{ transform: 'perspective(1400px) rotateY(0deg)', opacity: 1 }, { transform: `perspective(1400px) rotateY(${-dir * 82}deg)`, opacity: 0.25 }], { duration: 210, easing: 'ease-in' }).finished;
+      this.fill();
+      page.style.transformOrigin = dir > 0 ? 'right center' : 'left center';
+      await page.animate([{ transform: `perspective(1400px) rotateY(${dir * 70}deg)`, opacity: 0.25 }, { transform: 'perspective(1400px) rotateY(0deg)', opacity: 1 }], { duration: 260, easing: 'ease-out' }).finished;
+    } catch (_) { this.fill(); }
+    this.turning = false;
+    if (this.pending !== null) { const p = this.pending; this.pending = null; if (p !== this.idx()) this.turnTo(p); }
+  },
+  jumpTo(v) {
+    if (!isDateStr(v)) return;
+    const i = this.items.findIndex(d => d.date >= v);
+    if (i < 0 || this.items[i].date !== v) { toast(i < 0 ? '那天之後還沒有日記' : `那天沒有日記，翻到最近的 ${fmtDate(this.items[i].date)}`); }
+    if (i >= 0) this.turnTo(i);
+  }
+};
+
+const _diaryRender = Diary.render;
+Diary.renderCards = _diaryRender;
+Diary.render = function () {
+  _diaryRender.call(this);
+  const book = V2.view.diary === 'book';
+  $('#diaryViewBook').setAttribute('aria-pressed', String(book)); $('#diaryViewCards').setAttribute('aria-pressed', String(!book));
+  $('#diaryList').hidden = book; $('#diaryBook').hidden = !book;
+  if (book) DiaryBook.render(this.filtered());
+  DailyPrompt.render();
+};
+const _diarySave = Diary.save;
+Diary.save = function (entry) {
+  const isNew = !this.list.some(d => d.id === entry.id);
+  const ok = _diarySave.call(this, entry);
+  if (ok) {
+    const saved = this.list.find(d => d.id === (entry.id || '')) || (isNew ? this.list[0] : null);
+    DiaryBook.lastSaved = new Date();
+    if (saved) { DiaryBook.cur = saved.id; if (isNew) { DiaryBook.flash = saved.id; DiaryBook.opened = true; } }
+    if (typeof HomeV2 !== 'undefined') setTimeout(() => HomeV2.render(), 0);
+  }
+  return ok;
+};
+
+/** 日記編輯器：加上保存狀態與自動草稿（只存在這個瀏覽器） */
+const _openEditor = Diary.openEditor;
+Diary.openEditor = function (prefill = {}) {
+  const r = _openEditor.call(this, prefill);
+  try { DiaryDraft.attach(prefill); } catch (e) { console.error('[DiaryDraft]', e); }
+  return r;
+};
+const DiaryDraft = {
+  attach(prefill) {
+    const form = $('#dlgBody form'), content = $('#dContent'), title = $('#dTitle');
+    if (!form || !content || !title) return;
+    const editingId = prefill && prefill.id && Diary.list.some(x => x.id === prefill.id) ? prefill.id : null;
+    const status = h('p', { class: 'save-line', id: 'dSaveStatus', role: 'status', 'aria-live': 'polite', text: editingId ? '編輯模式・修改後按「儲存日記」才會更新這一頁' : '新的一頁・還沒存進日記本' });
+    form.insertBefore(status, form.querySelector('.dlg-actions'));
+    const draft = Store.load(KEYS.diaryDraft, null);
+    if (draft && typeof draft === 'object' && (draft.forId || null) === editingId && (str(draft.content, LIMITS.diaryContent).trim() || str(draft.title, 60).trim()) && draft.content !== content.value) {
+      const bar = h('div', { class: 'notice draft-bar', id: 'dDraftBar' },
+        h('p', { class: 'small', text: `有一份 ${fmtDateTime(draft.at)} 還沒儲存的草稿。` }),
+        h('div', { class: 'row' },
+          h('button', { class: 'btn sm primary', type: 'button', text: '接續草稿', onclick: () => { title.value = str(draft.title, LIMITS.diaryTitle); content.value = str(draft.content, LIMITS.diaryContent); content.dispatchEvent(new Event('input')); bar.remove(); content.focus(); status.textContent = '已接續草稿，記得按「儲存日記」'; } }),
+          h('button', { class: 'btn sm ghost', type: 'button', text: '捨棄草稿', onclick: () => { Store.remove(KEYS.diaryDraft); bar.remove(); status.textContent = '已捨棄草稿'; } })));
+      form.insertBefore(bar, form.children[2] || null);
+    }
+    let timer = 0, dirty = false, submitted = false;
+    const flush = () => {
+      clearTimeout(timer); timer = 0;
+      if (!dirty || !Store.available) return;
+      Store.save(KEYS.diaryDraft, { forId: editingId, title: title.value, content: content.value, at: new Date().toISOString() });
+      status.textContent = `草稿已自動保留（${fmtTime(new Date())}）・按「儲存日記」才會放進日記本`;
+    };
+    const onInput = () => { dirty = true; status.textContent = '正在輸入…'; clearTimeout(timer); timer = setTimeout(flush, 600); };
+    title.addEventListener('input', onInput); content.addEventListener('input', onInput);
+    form.addEventListener('submit', () => { if (!Dialog.el.open) { submitted = true; clearTimeout(timer); Store.remove(KEYS.diaryDraft); } });
+    const onClose = () => {
+      Dialog.el.removeEventListener('close', onClose);
+      if (submitted) return;
+      if (timer) flush();
+      if (dirty && (content.value.trim() || title.value.trim())) toast('還沒儲存的內容已保留成草稿，下次寫日記時可以接續');
+    };
+    Dialog.el.addEventListener('close', onClose);
+  }
+};
+
+/* ---------- 24.2 我的漂流瓶：自己的海域與分類 ---------- */
+const WORK_CATS = [['all', '全部'], ['draft', '草稿'], ['treasured', '私人珍藏'], ['sent', '已寄出'], ['collected', '已收藏']];
+const MySea = {
+  cat: 'all',
+  init() {
+    for (const [id, v] of [['#worksViewSea', 'sea'], ['#worksViewCards', 'cards']]) $(id).addEventListener('click', () => { V2.setView('works', v); Works.render(); });
+    if (window.ResizeObserver) { let last = 0; new ResizeObserver(() => { const w = $('#worksSea').clientWidth; if (w && Math.abs(w - last) > 40 && Archive.tab === 'works' && V2.view.works === 'sea') { last = w; this.render(); } }).observe($('#worksSea')); }
+  },
+  status(w) {
+    return { sent: !!settings.published[w.id], treasured: !!w.treasured, collected: Shelves.list.some(sh => sh.items.some(i => i.kind === 'bottle' && i.ref === w.id)) };
+  },
+  cats(w) { const st = this.status(w); const out = []; if (st.sent) out.push('sent'); if (st.treasured) out.push('treasured'); if (st.collected) out.push('collected'); if (!out.length) out.push('draft'); return out; },
+  matches(w) { return this.cat === 'all' || this.cats(w).includes(this.cat); },
+  renderFilter() {
+    const box = clear($('#worksFilter'));
+    for (const [id, label] of WORK_CATS) {
+      const n = id === 'all' ? Works.list.length : Works.list.filter(w => this.cats(w).includes(id)).length;
+      box.appendChild(h('button', { class: 'chip', type: 'button', 'data-cat': id, 'aria-pressed': String(this.cat === id), text: `${label} ${n}`, onclick: () => { this.cat = id; Works.render(); } }));
+    }
+  },
+  render() {
+    const box = clear($('#worksSea'));
+    const items = Works.list.filter(w => this.matches(w));
+    const p = nextPrefix();
+    const sea = h('div', { class: 'sea my-sea', role: 'region', 'aria-label': items.length ? `我的海域，漂著 ${items.length} 個自己的漂流瓶。按一個瓶子就能打開。` : '我的海域，目前沒有瓶子' });
+    sea.appendChild(OceanWx.base(p));
+    const width = box.clientWidth || Math.min(window.innerWidth, 1320) - 32;
+    const { placed, hidden } = OceanSea.layout(items, width);
+    const layers = { far: h('div', { class: 'sea-layer far' }), mid: h('div', { class: 'sea-layer mid' }), near: h('div', { class: 'sea-layer near' }) };
+    placed.sort((a, b) => ['far', 'mid', 'near'].indexOf(a.layer) - ['far', 'mid', 'near'].indexOf(b.layer) || a.x - b.x);
+    placed.forEach((pl, i) => { const n = this.node(pl, p, i); n.classList.add('appear'); n.style.setProperty('--ad', `${Math.min(i, 20) * 0.05}s`); layers[pl.layer].appendChild(n); });
+    sea.append(layers.far, OceanSea.wave('w-far', 45.6, 8, '#1B2C55', 0.55, 26, 3), layers.mid, OceanSea.wave('w-mid', 61.6, 12, '#14244A', 0.6, 20, 5), layers.near, OceanSea.wave('w-near', 80, 20, '#0D1A38', 0.66, 15, 7));
+    if (!items.length) {
+      sea.append(h('div', { class: 'sea-waiting', 'aria-hidden': 'true' }, OceanSea.bottleArt({ id: 'waiting', title: '' }, `${p}w-`)),
+        h('div', { class: 'sea-empty' }, h('div', { class: 'box' },
+          h('p', { style: { fontFamily: 'var(--font-display)', fontSize: '1.2rem', margin: 0 }, text: Works.list.length ? `「${WORK_CATS.find(c => c[0] === this.cat)[1]}」目前是空的` : '你的海域還很安靜' }),
+          h('p', { class: 'small muted', style: { margin: 0 }, text: Works.list.length ? '換一個分類看看。' : '做好的漂流瓶都會漂在這裡，只有你看得到。' }),
+          h('div', { class: 'row', style: { justifyContent: 'center' } },
+            Works.list.length ? h('button', { class: 'btn', type: 'button', text: '看全部', onclick: () => { this.cat = 'all'; Works.render(); } }) : null,
+            h('button', { class: 'btn primary', type: 'button', text: '製作新的漂流瓶', onclick: () => Router.go('studio') })))));
+    } else {
+      sea.appendChild(h('div', { class: 'sea-hud' },
+        h('span', { class: 'sea-hint', text: hidden.length ? `海面上先漂著 ${placed.length} 個，另外 ${hidden.length} 個請切換到「卡片」檢視` : (window.matchMedia('(hover: none)').matches ? '點一個瓶子，打開裡面的紙條' : '滑鼠移到瓶子上看名字，點一下打開') }),
+        h('span', { class: 'row', style: { gap: '6px' } }, h('span', { class: 'badge priv', text: '私人：只在這個瀏覽器' }), h('span', { class: 'badge pub', text: '已公開：在雲端海洋' }))));
+    }
+    box.appendChild(sea);
+  },
+  node(pl, p, i) {
+    const w = pl.d, st = this.status(w);
+    const size = 0.82 + (hashStr(w.id + 's') % 30) / 100;
+    const btn = h('button', { class: 'sea-bottle mine-sea' + (st.sent ? ' sent' : '') + (st.treasured ? ' treasured' : ''), type: 'button', 'data-id': w.id, 'data-layer': pl.layer,
+      'aria-label': `打開「${w.title || '未命名漂流瓶'}」，${moodLabel(w.mood)}，${st.sent ? '已公開到雲端海洋' : '私人，只在這個瀏覽器'}${st.treasured ? '，私人珍藏' : ''}` },
+      h('span', { class: 'sb-ripple' }),
+      h('span', { class: 'sb-drift' }, h('span', { class: 'sb-bob' }, h('span', { class: 'sb-art' }, OceanSea.bottleArt(w, `${p}m${i}-`)), st.sent || st.treasured ? h('span', { class: 'sb-flag', 'aria-hidden': 'true' }) : null)),
+      h('span', { class: 'sea-tip', 'aria-hidden': 'true' }, w.title || '未命名漂流瓶', h('small', { text: `${moodLabel(w.mood)}・${st.sent ? '已公開' : '私人'}${st.treasured ? '・珍藏' : ''}` })));
+    const vars = { '--x': `${round1(pl.x)}%`, '--y': `${round1(pl.y)}%`, '--w': `${round1(pl.w * size)}px`, '--tilt': `${pl.tilt}deg`, '--amp': `${pl.amp}px`, '--sway': `${pl.sway}deg`, '--bd': `${round1(pl.bd * (0.85 + size * 0.3))}s`, '--d1': `${pl.d1}s`, '--dd': `${pl.dd}s`, '--d2': `${pl.d2}s`, '--dx': `${pl.dx}px`, '--mc': moodColor(w.mood) };
+    for (const [k, v] of Object.entries(vars)) btn.style.setProperty(k, v);
+    btn.addEventListener('click', () => this.open(w, btn));
+    return btn;
+  },
+  async open(w, el) {
+    if (OceanSea.busy) return;
+    const fly = OceanSea.flyOut(el);
+    if (fly.delay) await sleep(fly.delay);
+    this.reveal(w, fly);
+  },
+  reveal(w, fly = { back() {} }) {
+    const st = this.status(w);
+    const closed = Dialog.open((body, done) => {
+      const after = (fn) => { done(false); setTimeout(fn, 0); };
+      put(body,
+        h('div', { class: 'dlg-head' }, h('div', {}, h('p', { class: 'eyebrow', text: `${fmtDate(w.date)}・${moodLabel(w.mood)}` }), h('h3', { id: 'dlgTitle', text: w.title || '未命名漂流瓶' })),
+          h('span', { class: st.sent ? 'badge pub' : 'badge priv', text: st.sent ? '已公開到雲端海洋' : '私人・只在這個瀏覽器' })),
+        h('div', { class: 'preview-stage' }, renderDoc(w)),
+        h('div', { class: 'paper-scroll' }, h('p', { class: 'reader-msg', text: w.message || '（瓶子裡還沒有寫心事）' }), w.note ? h('p', { class: 'br-quote', text: `「${w.note}」` }) : null),
+        h('p', { class: 'tiny muted', text: `${st.treasured ? '私人珍藏・' : ''}${st.collected ? '收在書架上・' : ''}最後修改 ${fmtDateTime(w.updatedAt)}` }),
+        h('div', { class: 'dlg-actions wrap' },
+          h('button', { class: 'btn ghost', type: 'button', text: '放回海裡', onclick: () => done(false) }),
+          h('button', { class: 'btn', type: 'button', text: '繼續編輯', onclick: () => after(() => openWorkInStudio(w.id)) }),
+          h('button', { class: 'btn', type: 'button', text: '下載 PNG', onclick: (e) => exportAndDownload(w, e.currentTarget) }),
+          h('button', { class: 'btn', type: 'button', text: '生命旅程', onclick: () => after(() => Journey.open(w.id)) }),
+          h('button', { class: 'btn', type: 'button', text: '加入書架', onclick: () => after(async () => { await Shelves.addFlow({ kind: 'bottle', ref: w.id }); if (Archive.tab === 'works') Works.render(); }) }),
+          h('button', { class: 'btn', type: 'button', id: 'mwTreasure', text: st.treasured ? '取消私人珍藏' : '設為私人珍藏', onclick: () => {
+            w.treasured = !w.treasured; if (Studio.doc.id === w.id) Studio.doc.treasured = w.treasured;
+            if (Works.persist()) toast(w.treasured ? '已放進私人珍藏（仍然只在這個瀏覽器）' : '已取消私人珍藏', 'ok');
+            done(false); Works.render(); } }),
+          st.sent ? null : h('button', { class: 'btn', type: 'button', text: '放進雲端海洋…', onclick: () => after(() => Cloud.publishFlow(w)) }),
+          h('button', { class: 'btn danger', type: 'button', text: '刪除', onclick: () => after(() => Works.remove(w.id)) })));
+    }, { wide: true });
+    Dialog.el.classList.add('letter'); Dialog.body.scrollTop = 0;
+    closed.then(() => fly.back());
+  }
+};
+const _worksRender = Works.render;
+Works.render = function () {
+  _worksRender.call(this);
+  const sea = V2.view.works === 'sea';
+  $('#worksViewSea').setAttribute('aria-pressed', String(sea)); $('#worksViewCards').setAttribute('aria-pressed', String(!sea));
+  const box = $('#worksList');
+  let shown = 0;
+  if (this.list.length) [...box.children].forEach((el, i) => { const w = this.list[i]; if (!w) return; const ok = MySea.matches(w); el.hidden = !ok; if (ok) shown++; });
+  if (this.list.length && !shown) box.appendChild(h('div', { class: 'state', style: { gridColumn: '1/-1' } }, h('p', { text: '這個分類目前是空的。' })));
+  if (MySea.cat !== 'all') $('#worksCount').textContent = `「${WORK_CATS.find(c => c[0] === MySea.cat)[1]}」${shown} 個，共 ${this.list.length} 個作品`;
+  box.hidden = sea; $('#worksSea').hidden = !sea;
+  MySea.renderFilter();
+  if (sea) MySea.render();
+};
+
+/* ---------- 24.3 封瓶、寄出、封信的小動畫 ---------- */
+const SealAnim = {
+  play(kind) {
+    if (motionReduced()) return;
+    const p = nextPrefix();
+    let art;
+    if (kind === 'letter') {
+      art = s('svg', { viewBox: '0 0 240 170', class: 'seal-svg' },
+        s('rect', { x: 20, y: 30, width: 200, height: 120, rx: 8, fill: '#F1E6CC', stroke: '#C9B48A' }),
+        s('path', { d: 'M20 150 L120 92 L220 150', fill: 'none', stroke: '#C9B48A', 'stroke-width': 2 }),
+        s('path', { class: 'seal-flap', d: 'M20 32 L120 100 L220 32 Z', fill: '#E5D2AC', stroke: '#C9B48A' }),
+        s('g', { class: 'seal-wax' }, s('circle', { cx: 120, cy: 100, r: 17, fill: '#8E5E6E' }), s('path', { d: 'M112 100l5 5 11-12', stroke: '#F1E6CC', 'stroke-width': 3, fill: 'none', 'stroke-linecap': 'round' })));
+    } else {
+      const bottle = makeElement('bottle', kind === 'sent' ? 'lightblue' : 'starry', { x: 0, y: 0, width: 120, height: 240 });
+      art = s('svg', { viewBox: '0 0 240 300', class: 'seal-svg' },
+        s('g', { class: 'seal-roll' }, s('rect', { x: 108, y: 0, width: 24, height: 54, rx: 10, fill: '#F1E6CC', stroke: '#C9B48A' }), s('path', { d: 'M112 12h16M112 22h16M112 32h12', stroke: '#B8A27A', 'stroke-width': 1.5 })),
+        s('g', { transform: 'translate(120 168) scale(.9)' }, drawAsset(bottle, p)),
+        s('g', { class: 'seal-wax' }, s('circle', { cx: 120, cy: 64, r: 13, fill: '#8E5E6E' }), s('circle', { cx: 120, cy: 64, r: 7, fill: 'none', stroke: '#F1E6CC', 'stroke-width': 1.5 })),
+        kind === 'sent' ? s('path', { class: 'seal-wave', d: 'M0 285 q30 -14 60 0 t60 0 t60 0 t60 0', fill: 'none', stroke: '#B8D8E8', 'stroke-width': 3, 'stroke-linecap': 'round' }) : null);
+    }
+    const msg = { keep: '瓶口封好了，收進你的海域', sent: '瓶子出發了，漂向雲端海洋', letter: '信封好了，等那天再打開' }[kind];
+    const ov = h('div', { class: `seal-anim ${kind}`, 'aria-hidden': 'true' }, h('div', { class: 'seal-stage' }, art), h('p', { class: 'seal-msg', text: msg }));
+    document.body.appendChild(ov);
+    setTimeout(() => ov.remove(), 2300);
+  }
+};
+const _finish = Studio.finish;
+Studio.finish = function () {
+  const r = _finish.call(this);
+  const keep = $$('#dlgBody .choice').find(b => /留給自己/.test(b.textContent));
+  if (keep) {
+    // 先標記為「私人珍藏」再讓原本的流程儲存；儲存成功才播放封瓶動畫
+    keep.addEventListener('click', () => { this.doc.treasured = true; }, true);
+    keep.addEventListener('click', () => {
+      if (!Works.get(this.doc.id)) return;
+      SealAnim.play('keep');
+      toast('漂流瓶封好了，收進「我的漂流瓶」的私人珍藏', 'ok', { label: '去我的海域', fn: () => { Router.go('archive'); Archive.show('works'); } });
+      if (Archive.tab === 'works') Works.render();
+    });
+  }
+  return r;
+};
+const _publishFlow = Cloud.publishFlow;
+Cloud.publishFlow = async function (doc) {
+  const before = settings.published[doc.id];
+  const r = await _publishFlow.call(this, doc);
+  if (settings.published[doc.id] && settings.published[doc.id] !== before) SealAnim.play('sent');
+  return r;
+};
+
+/* ---------- 24.4 郵箱：寫給未來的信、到期提醒、拆信 ---------- */
+const SYSTEM_LETTERS = [
+  { title: '今天也辛苦了', content: '不管今天過得怎麼樣，你都走到了這裡。\n\n有些日子不需要很精彩，只要好好結束就可以。今晚記得早點休息。' },
+  { title: '給正在忙的你', content: '如果事情很多，先選一件最小的開始就好。\n\n做完一件，就給自己一點點肯定。剩下的，明天的你也會幫忙。' },
+  { title: '慢一點也沒關係', content: '走得慢，不代表走錯路。\n\n今天如果只想安靜地待著，那也是一種前進。' },
+  { title: '關於想念', content: '想念一個人、一個地方或一段時光，代表它曾經很重要。\n\n可以把想念寫下來，放進漂流瓶，或只是讓它安靜地待一會兒。' },
+  { title: '一杯水的時間', content: '讀完這封信，去倒一杯水吧。\n\n慢慢喝完，就當作是今天給自己的一個小小照顧。' },
+  { title: '給有點累的日子', content: '累的時候，不需要先找到理由才休息。\n\n把今天沒做完的事放在旁邊，它們會等你。' },
+  { title: '你不需要每天都很好', content: '有好的日子，也有普通和難的日子，它們都算數。\n\n這裡會一直在，等你想寫的時候再來。' },
+  { title: '記得小小的好事', content: '今天有沒有一件很小、但讓你覺得還不錯的事？\n\n一句話、一頓飯、一段路都可以。把它記下來，它就不會被忘記。' },
+  { title: '給明天的你', content: '明天不需要一下子變得完美。\n\n帶著今天學到的一點點，繼續往前就好。' },
+  { title: '天氣與心情', content: '外面的天氣和心裡的天氣，可以不一樣。\n\n晴天也可以覺得低落，雨天也可以覺得安心。你的感受不需要配合天氣。' }
+];
+const Mailbox = {
+  init() { /* 畫面由 Letters.render 產生 */ },
+  state(l) { return l.openDate > todayStr() ? 'sealed' : (l.openedAt ? 'read' : 'ready'); },
+  counts() { const c = { sealed: 0, ready: 0, read: 0 }; for (const l of Letters.list) c[this.state(l)]++; return c; },
+  sysLetter() {
+    if (!settings.reminders.system) return null;
+    const base = SYSTEM_LETTERS[dayIndex() % SYSTEM_LETTERS.length];
+    return { id: 'sys-' + todayStr(), system: true, title: base.title, content: base.content, openDate: todayStr(), createdAt: todayStr(), openedAt: settings.sysLetterRead === todayStr() ? todayStr() : null };
+  },
+  svg(has) {
+    return s('svg', { viewBox: '0 0 160 170', 'aria-hidden': 'true', class: 'mb-svg' },
+      s('rect', { x: 72, y: 96, width: 14, height: 70, rx: 3, fill: '#55536D' }),
+      s('g', { class: 'mb-body' },
+        s('path', { d: 'M20 50 a40 40 0 0 1 80 0 v54 h-80z', fill: '#3E6489' }),
+        s('path', { d: 'M100 50 a40 40 0 0 0 -40 -40 h60 a40 40 0 0 1 40 40 v54 h-60z', fill: '#35558A' }),
+        s('rect', { x: 34, y: 54, width: 52, height: 8, rx: 4, fill: '#0E1730' }),
+        has ? s('g', { class: 'mb-peek' }, s('rect', { x: 40, y: 40, width: 40, height: 22, rx: 2, fill: '#F1E6CC' }), s('path', { d: 'M40 40 l20 12 20 -12', fill: 'none', stroke: '#C9B48A', 'stroke-width': 1.5 }), s('circle', { cx: 60, cy: 54, r: 4, fill: '#8E5E6E' })) : null),
+      s('g', { class: 'mb-flag' + (has ? ' up' : '') }, s('rect', { x: 142, y: 56, width: 4, height: 40, fill: '#B8D8E8' }), s('rect', { x: 128, y: 56, width: 18, height: 12, rx: 2, fill: has ? '#F0A9A0' : '#8E8CA8' })));
+  },
+  renderBox() {
+    const box = $('#mailbox'); if (!box) return; clear(box);
+    const c = this.counts(); const sys = this.sysLetter(); const sysNew = !!(sys && !sys.openedAt);
+    const ready = c.ready + (sysNew ? 1 : 0);
+    const alert = ready > 0 && settings.reminders.letters;
+    const mb = h('button', { class: `mailbox${ready ? ' has-mail' : ''}${alert ? ' alert' : ''}`, type: 'button', id: 'mailboxBtn',
+      'aria-label': `郵箱：${c.ready} 封今天可以打開、${c.sealed} 封封存中、${c.read} 封已讀${sysNew ? '，還有一封系統提供的今日來信' : ''}。按一下查看信件。`,
+      onclick: () => { const t = $('#letterList .env.ready button.primary') || $('#letterList .letter-card button'); const list = $('#letterList'); list.scrollIntoView({ behavior: motionReduced() ? 'auto' : 'smooth', block: 'start' }); if (t) t.focus({ preventScroll: true }); } }, this.svg(ready > 0));
+    box.appendChild(h('section', { class: 'panel mailbox-panel', 'aria-labelledby': 'mbTitle' }, mb,
+      h('div', { class: 'mb-info' },
+        h('h3', { id: 'mbTitle', text: '郵箱' }),
+        h('div', { class: 'mb-counts' }, [['sealed', '封存中'], ['ready', '今天可以打開'], ['read', '已讀']].map(([k, label]) => h('div', { class: `mb-count ${k}`, 'data-count': k }, h('strong', { text: String(c[k]) }), h('span', { text: label })))),
+        sysNew ? h('p', { class: 'tiny', text: '＋ 一封系統提供的「今日來信」' }) : null,
+        h('p', { class: 'tiny muted', text: '提醒只會在你打開網站時出現。靜態網站無法在關閉瀏覽器時寄信或推播。' }))));
+  },
+  envelope(l) {
+    const st = l.system ? (l.openedAt ? 'read' : 'ready') : this.state(l);
+    const days = Math.round((new Date(l.openDate + 'T00:00:00') - new Date(todayStr() + 'T00:00:00')) / 864e5);
+    const card = h('article', { class: `panel letter-card env ${st}${l.system ? ' system' : ''}`, 'data-id': l.id, 'data-state': st });
+    put(card,
+      h('div', { class: 'env-art', 'aria-hidden': 'true' }, h('span', { class: 'env-paper' }), h('span', { class: 'env-back' }), h('span', { class: 'env-flap' }), h('span', { class: 'env-seal' })),
+      h('div', { class: 'env-meta' },
+        h('strong', { class: 'env-title', text: l.title || '給未來的自己' }),
+        l.system ? h('span', { class: 'badge sys', text: '系統提供・不是真實的人寄來的信' }) : null,
+        h('p', { class: 'tiny muted', text: l.system ? 'Inner Lab 每天輪替的一段話' : `寫於 ${fmtDate(l.createdAt)}` }),
+        st === 'sealed' ? h('span', { class: 'badge demo', text: `封存到 ${fmtDate(l.openDate)}・還有 ${days} 天` })
+          : st === 'ready' ? h('span', { class: 'badge ready', text: '今天可以打開了' })
+            : h('span', { class: 'badge', text: l.system ? '今天讀過了' : `已讀・${fmtDate(l.openedAt)}` })),
+      h('div', { class: 'row', style: { gap: '6px' } },
+        st === 'sealed' ? h('button', { class: 'btn sm', type: 'button', disabled: true, text: `封存中，${fmtDate(l.openDate)} 才能打開` })
+          : h('button', { class: 'btn sm primary', type: 'button', text: st === 'ready' ? '拆開這封信' : '重新閱讀', onclick: () => this.open(l, card) }),
+        !l.system && st !== 'sealed' ? h('button', { class: 'btn sm', type: 'button', text: '編輯', onclick: () => Letters.edit(l) }) : null,
+        !l.system ? h('button', { class: 'btn sm danger', type: 'button', text: '刪除', onclick: () => Letters.remove(l) }) : null));
+    return card;
+  },
+  async open(l, card) {
+    if (!l.system && !Letters.isDue(l)) { toast(`這封信封存到 ${fmtDate(l.openDate)}，到了那天才能打開`); return; }
+    const first = l.system ? settings.sysLetterRead !== todayStr() : !l.openedAt;
+    if (first) await this.animate(card, l);
+    if (l.system) { settings.sysLetterRead = todayStr(); saveSettings(); l.openedAt = todayStr(); }
+    else if (!l.openedAt) { l.openedAt = new Date().toISOString(); Letters.persist(); }
+    this.reader(l);
+    if (Archive.tab === 'letters') Letters.render();
+    Home.renderLetterNotice();
+  },
+  /** 拆信：信封飛到中央、撕開封蠟、掀開信封、抽出信紙 */
+  async animate(card, l) {
+    if (motionReduced()) return;
+    const ov = h('div', { class: 'letter-open', 'aria-hidden': 'true' },
+      h('div', { class: 'lo-env' }, h('div', { class: 'lo-paper' }, h('span', { text: l.title || '給未來的自己' })), h('div', { class: 'lo-back' }), h('div', { class: 'lo-flap' }), h('div', { class: 'lo-seal' }, h('i'), h('i'))));
+    document.body.appendChild(ov);
+    const env = ov.firstChild;
+    const r = card && card.isConnected ? card.querySelector('.env-art').getBoundingClientRect() : null;
+    if (r && r.width) {
+      const er = env.getBoundingClientRect();
+      const dx = (r.left + r.width / 2) - (er.left + er.width / 2), dy = (r.top + r.height / 2) - (er.top + er.height / 2);
+      await env.animate([{ transform: `translate(${dx}px, ${dy}px) scale(${r.width / er.width})`, opacity: 0.6 }, { transform: 'none', opacity: 1 }], { duration: 420, easing: 'cubic-bezier(.3,.7,.2,1)' }).finished.catch(() => {});
+    }
+    ov.classList.add('torn'); await sleep(420);
+    ov.classList.add('flap'); await sleep(380);
+    ov.classList.add('out'); await sleep(520);
+    ov.remove();
+  },
+  reader(l) {
+    Dialog.open((body, done) => {
+      const after = (fn) => { done(false); setTimeout(fn, 0); };
+      put(body,
+        h('p', { class: 'eyebrow', text: l.system ? '今日來信・系統提供' : `寫於 ${fmtDate(l.createdAt)}・${fmtDate(l.openDate)} 開封` }),
+        h('h3', { id: 'dlgTitle', text: l.title || '給未來的自己' }),
+        l.system ? h('p', { class: 'notice small', text: '這封信是 Inner Lab 預先寫好、每天輪替的內容，不是真實的人寫給你的，也不是針對你個人的判斷。' }) : null,
+        h('div', { class: 'reader-msg letter-paper', text: l.content }),
+        h('div', { class: 'dlg-actions wrap' },
+          h('button', { class: 'btn', type: 'button', text: '回覆自己', onclick: () => after(() => this.replyTo(l)) }),
+          h('button', { class: 'btn', type: 'button', text: '收藏', onclick: () => after(() => Shelves.addFlow({ kind: 'letter', ref: l.system ? `sys:${todayStr()}` : l.id, snapshot: { title: l.title || '', content: l.content, system: !!l.system, date: l.openDate } })) }),
+          h('button', { class: 'btn', type: 'button', text: '轉成漂流瓶', onclick: () => after(() => RandomBottle.start({ message: l.content.slice(0, LIMITS.message), note: (l.title || '').slice(0, LIMITS.note) || undefined })) }),
+          h('button', { class: 'btn primary', type: 'button', text: '放回郵箱', onclick: () => done(true) })));
+    });
+    Dialog.el.classList.add('letter');
+  },
+  replyTo(l) {
+    Router.go('archive'); Archive.show('letters'); Letters.resetForm();
+    $('#lTitle').value = `回覆：${l.title || '給未來的自己'}`.slice(0, LIMITS.letterTitle);
+    $('#lContent').value = l.system ? '讀到今天的來信之後，我想對未來的自己說：\n' : `讀到 ${fmtDate(l.createdAt)} 寫的信之後，我想說：\n`;
+    $('#lCount').textContent = `${$('#lContent').value.length} / ${LIMITS.letterContent}`;
+    $('#lDate').value = todayStr(new Date(Date.now() + 30 * 864e5));
+    $('#lContent').focus();
+    toast('寫一封回信給未來的自己，選好開封日期再封存');
+  }
+};
+Letters.render = function () {
+  Mailbox.renderBox();
+  const box = clear($('#letterList'));
+  const sys = Mailbox.sysLetter();
+  if (!this.list.length && !sys) { box.appendChild(h('div', { class: 'state' }, h('p', { text: '郵箱還是空的。寫一封給未來的自己吧，到了那天打開網站時會看到提醒。' }))); return; }
+  const groups = { ready: [], sealed: [], read: [] };
+  for (const l of this.list) groups[Mailbox.state(l)].push(l);
+  groups.ready.sort((a, b) => a.openDate.localeCompare(b.openDate));
+  groups.sealed.sort((a, b) => a.openDate.localeCompare(b.openDate));
+  groups.read.sort((a, b) => String(b.openedAt).localeCompare(String(a.openedAt)));
+  if (sys) (sys.openedAt ? groups.read : groups.ready).unshift(sys);
+  for (const [k, label] of [['ready', '今天可以打開'], ['sealed', '封存中'], ['read', '已讀']]) {
+    if (!groups[k].length) continue;
+    box.appendChild(h('section', { class: 'env-group', 'aria-label': label }, h('h4', { class: 'env-h', text: `${label}（${groups[k].length}）` }), h('div', { class: 'envelopes' }, groups[k].map(l => Mailbox.envelope(l)))));
+  }
+  Reminders.sync();
+};
+/** 沒到開封日的信不能打開（2.0 起取消「提早打開」） */
+Letters.read = function (l) { return Mailbox.open(l, null); };
+Letters.submit = async function () {
+  const title = $('#lTitle').value.trim(), content = $('#lContent').value, date = $('#lDate').value, id = $('#lId').value;
+  if (!content.trim()) { $('#lContent').setAttribute('aria-invalid', 'true'); $('#lContent').focus(); toast('信件內容不能是空的', 'err'); return; }
+  if (!isDateStr(date)) { $('#lDate').setAttribute('aria-invalid', 'true'); toast('請選擇預計閱讀日期', 'err'); return; }
+  const prevDate = id ? (this.list.find(x => x.id === id) || {}).openDate : null;
+  if (date < todayStr() && date !== prevDate) { $('#lDate').setAttribute('aria-invalid', 'true'); toast('開封日期不能早於今天', 'err'); return; }
+  $('#lContent').removeAttribute('aria-invalid'); $('#lDate').removeAttribute('aria-invalid');
+  const sealing = !id || date > todayStr();
+  if (sealing) {
+    const ok = await Dialog.confirm({ title: '確認封存這封信？', ok: '封存',
+      message: [`這封信會封存到 ${fmtDate(date)}${date === todayStr() ? '（就是今天，封存後馬上可以打開）' : ''}。`, '到那天之前無法打開，也不能修改內容。提醒只會在你之後打開這個網站時出現。'] });
+    if (!ok) return;
+  }
+  const now = new Date().toISOString();
+  if (id) {
+    const l = this.list.find(x => x.id === id); if (!l) return;
+    Object.assign(l, { title, content, openDate: date, updatedAt: now });
+    if (date > todayStr()) l.openedAt = null;
+  } else this.list.unshift({ id: uid('letter'), title, content, openDate: date, createdAt: now, updatedAt: now, openedAt: null });
+  if (this.persist()) {
+    toast(id && !sealing ? '已更新信件' : `信封好了，封存到 ${fmtDate(date)}。那天之後打開網站時會提醒你`, 'ok');
+    if (sealing) SealAnim.play('letter');
+    this.resetForm(); this.render(); Home.renderLetterNotice();
+  }
+};
+const v2LetterNotice = function () {
+  const box = $('#letterNotice'); if (!box) return;
+  clear(box); Reminders.sync();
+  if (!settings.reminders.letters || settings.letterSnooze === todayStr()) return;
+  const due = Letters.due(); if (!due.length) return;
+  box.appendChild(h('div', { class: 'notice mail-notice', role: 'status' },
+    h('p', { text: `郵箱裡有 ${due.length} 封寫給你的信，今天可以打開了。` }),
+    h('div', { class: 'row' },
+      h('button', { class: 'btn sm primary', type: 'button', text: '去郵箱', onclick: () => { Router.go('archive'); Archive.show('letters'); } }),
+      h('button', { class: 'btn sm ghost', type: 'button', text: '今天先不提醒', onclick: () => { settings.letterSnooze = todayStr(); saveSettings(); Home.renderLetterNotice(); } }))));
+};
+
+/* ---------- 24.5 提醒設定：全部可關閉，沒有連續天數 ---------- */
+const Reminders = {
+  MAP: [['#sRemLetters', 'letters'], ['#sRemBackup', 'backup'], ['#sRemPrompt', 'prompt'], ['#sRemSystem', 'system']],
+  init() {
+    for (const [id, k] of this.MAP) {
+      const el = $(id); if (!el) continue;
+      el.checked = settings.reminders[k] !== false;
+      el.addEventListener('change', () => { settings.reminders[k] = el.checked; saveSettings(); this.apply(); toast(el.checked ? '已開啟這個提醒' : '已關閉這個提醒', 'ok'); });
+    }
+    this.sync();
+    // 進入網站時檢查有沒有到期的信（只在不是首頁時提示，首頁已經有通知）
+    const due = Letters.due().length;
+    const hash = location.hash.slice(1);
+    if (due && settings.reminders.letters && settings.letterSnooze !== todayStr() && hash && hash !== 'home' && !(hash === 'archive'))
+      setTimeout(() => toast(`郵箱裡有 ${due} 封信今天可以打開了`, '', { label: '去郵箱', fn: () => { Router.go('archive'); Archive.show('letters'); } }), 600);
+  },
+  apply() { Home.renderLetterNotice(); Backup.render(); DailyPrompt.render(); if (Archive.tab === 'letters') Letters.render(); this.sync(); },
+  sync() { const on = !!(settings.reminders.letters && Letters.due().length); for (const id of ['#navMailDot', '#navMailDotGroup']) { const dot = $(id); if (dot) dot.hidden = !on; } }
+};
+const _backupDue = Backup.due;
+Backup.due = function () { return settings.reminders && settings.reminders.backup === false ? null : _backupDue.call(this); };
+
+/* ---------- 24.6 調色實驗室：點色塊即時預覽，存成配色組 ---------- */
+const PALETTE_EXTRA = ['#17243F', '#22345C', '#2E3B6E', '#3E6489', '#8FB3CC', '#B8D8E8', '#DDEFF7', '#C8C7E8', '#8E5E6E', '#E8D6CC', '#E9D8A6', '#F1E6CC', '#F7F4EE', '#3F6E73', '#6B7A5A'];
+const PAL_ROLES = [['bg', '背景'], ['bottle', '瓶身'], ['paper', '紙條']];
+const PalLab = {
+  role: 'bg', sel: { bg: '#22345C', bottle: '#9FD3E6', paper: '#F1E6CC' },
+  init() { if ($('#palLab')) this.render(); },
+  swatches() { return [...new Set([...(Palette.colors || []), ...PALETTE_EXTRA].map(c => c.toUpperCase()))]; },
+  render() {
+    const box = clear($('#palLab'));
+    const roles = h('div', { class: 'chips', role: 'radiogroup', 'aria-labelledby': 'palRoleLabel', id: 'palRoles' });
+    for (const [id, label] of PAL_ROLES) {
+      const dot = h('span', { class: 'role-dot', 'aria-hidden': 'true' }); dot.style.background = this.sel[id];
+      roles.appendChild(h('button', { class: 'chip', type: 'button', role: 'radio', 'data-role': id, 'aria-checked': String(this.role === id), onclick: () => { this.role = id; this.sync(); } }, dot, label));
+    }
+    const grid = h('div', { class: 'pal-swatches', id: 'palSwatches', role: 'group', 'aria-label': '色塊' });
+    for (const c of this.swatches()) grid.appendChild(h('button', { class: 'pal-sw', type: 'button', 'data-hex': c, 'aria-label': `色塊 ${c}`, style: { background: c }, onclick: () => this.pick(c) }));
+    const custom = h('input', { type: 'color', id: 'palCustom', 'aria-label': '自訂顏色' });
+    custom.addEventListener('input', () => this.pick(custom.value.toUpperCase()));
+    const name = h('input', { type: 'text', id: 'palSetName', maxlength: 20, placeholder: '例如：雨後的海' });
+    const target = h('select', { id: 'palTarget' }, h('option', { value: '', text: '工作室裡正在編輯的漂流瓶' }), Works.list.map(w => h('option', { value: w.id, text: w.title || '未命名漂流瓶' })));
+    put(box,
+      h('div', {}, h('p', { class: 'eyebrow', text: 'Palette Lab' }), h('h3', { id: 'palLabTitle', text: '調色實驗室' }),
+        h('p', { class: 'small muted', text: '先選要調整的部分，再點一個色塊，右邊的預覽會立刻改變。存成配色組後，可以套用到任何一個漂流瓶。' })),
+      h('div', { class: 'pal-lab' },
+        h('div', { class: 'stack' },
+          h('div', {}, h('p', { class: 'small', id: 'palRoleLabel', text: '要調整的部分' }), roles),
+          h('div', {}, h('p', { class: 'small', id: 'palSwLabel', text: '點一個色塊（上排是今日色盤）' }), grid),
+          h('div', { class: 'row' }, h('label', { for: 'palCustom', class: 'small', style: { margin: 0 }, text: '或自訂顏色' }), custom, h('span', { class: 'tiny muted', id: 'palHex' }))),
+        h('div', { class: 'stack' },
+          h('div', { class: 'pal-preview', id: 'palPreview', role: 'img' }),
+          h('div', { class: 'grid-2', style: { gap: '10px' } },
+            h('div', { class: 'field' }, h('label', { for: 'palSetName', text: '為這組配色取個名字' }), name),
+            h('div', { class: 'field' }, h('label', { for: 'palTarget', text: '要套用到哪個漂流瓶' }), target)),
+          h('div', { class: 'row' },
+            h('button', { class: 'btn primary', type: 'button', id: 'palSave', text: '儲存配色組', onclick: () => this.saveSet(name.value.trim()) }),
+            h('button', { class: 'btn', type: 'button', id: 'palApply', text: '套用到漂流瓶', onclick: () => this.apply({ name: name.value.trim() || '目前的配色', bg: this.sel.bg, bottle: this.sel.bottle, paper: this.sel.paper }) })),
+          h('p', { class: 'tiny muted', text: '背景色會以色調疊在場景上；瓶身與紙條會換成選的顏色。' }))),
+      h('div', {}, h('h4', { text: '我的配色組' }), h('div', { id: 'palSets', class: 'pal-sets' })));
+    this.sync(); this.renderSets();
+  },
+  pick(c) { if (!isHex(c)) return; this.sel[this.role] = c.toUpperCase(); this.sync(); },
+  sync() {
+    for (const b of $$('#palRoles .chip')) { b.setAttribute('aria-checked', String(b.dataset.role === this.role)); b.querySelector('.role-dot').style.background = this.sel[b.dataset.role]; }
+    for (const b of $$('#palSwatches .pal-sw')) b.setAttribute('aria-pressed', String(b.dataset.hex === this.sel[this.role]));
+    const cu = $('#palCustom'); if (cu) cu.value = this.sel[this.role].toLowerCase();
+    const hx = $('#palHex'); if (hx) hx.textContent = `${PAL_ROLES.find(r => r[0] === this.role)[1]}：${this.sel[this.role]}`;
+    const pv = $('#palPreview'); if (!pv) return;
+    clear(pv).appendChild(this.previewSvg(this.sel));
+    pv.setAttribute('aria-label', `預覽：背景 ${this.sel.bg}、瓶身 ${this.sel.bottle}、紙條 ${this.sel.paper}`);
+    pv.dataset.bg = this.sel.bg; pv.dataset.bottle = this.sel.bottle; pv.dataset.paper = this.sel.paper;
+  },
+  previewSvg(set, small = false) {
+    const p = nextPrefix();
+    const svg = s('svg', { viewBox: '0 0 600 360', 'aria-hidden': 'true', preserveAspectRatio: 'xMidYMid slice' });
+    svg.append(s('rect', { class: 'pv-bg', width: 600, height: 360, fill: set.bg }));
+    if (!small) { const g = s('g'); stars(g, seeded(11), 40, 0, 0, 600, 200, 1.2, 0.8); svg.appendChild(g); }
+    svg.append(s('path', { d: 'M0 270 q75 -18 150 0 t150 0 t150 0 t150 0 V360 H0Z', fill: '#0E1730', 'fill-opacity': 0.35 }));
+    svg.append(s('g', { class: 'pv-bottle', transform: 'translate(200 190) rotate(-8) scale(.62)' }, drawAsset(makeElement('bottle', 'lightblue', { color: set.bottle }), p + 'pb-')));
+    const paper = s('g', { class: 'pv-paper', transform: 'translate(410 180) rotate(4) scale(.95)' }, drawAsset(makeElement('paper', 'cream', { color: set.paper }), p + 'pp-'));
+    paper.append(s('path', { d: 'M-70 -30h140M-70 -6h140M-70 18h100', stroke: '#3A3550', 'stroke-opacity': 0.35, 'stroke-width': 3, 'stroke-linecap': 'round' }));
+    svg.append(paper);
+    return svg;
+  },
+  persist() { return Palette.persist(); },
+  saveSet(name) {
+    const set = { id: uid('set'), name: (name || `配色 ${Palette.state.sets.length + 1}`).slice(0, 20), bg: this.sel.bg, bottle: this.sel.bottle, paper: this.sel.paper, createdAt: new Date().toISOString() };
+    Palette.state.sets.unshift(set); Palette.state.sets = Palette.state.sets.slice(0, 40);
+    if (this.persist()) { toast(`已儲存配色組「${set.name}」`, 'ok'); $('#palSetName').value = ''; this.renderSets(); }
+  },
+  renderSets() {
+    const box = $('#palSets'); if (!box) return; clear(box);
+    if (!Palette.state.sets.length) { box.appendChild(h('p', { class: 'small muted', text: '還沒有配色組。調好喜歡的顏色後，按「儲存配色組」。' })); return; }
+    for (const set of Palette.state.sets) {
+      box.appendChild(h('div', { class: 'pal-set', 'data-id': set.id },
+        h('div', { class: 'pal-set-art' }, this.previewSvg(set, true)),
+        h('div', { class: 'stack', style: { gap: '6px', minWidth: 0 } },
+          h('strong', { class: 'pal-set-name', text: set.name }),
+          h('div', { class: 'swatch-row', style: { height: '18px', width: '120px' }, role: 'img', 'aria-label': `背景 ${set.bg}、瓶身 ${set.bottle}、紙條 ${set.paper}` }, [set.bg, set.bottle, set.paper].map(c => h('span', { style: { background: c } }))),
+          h('div', { class: 'row', style: { gap: '4px' } },
+            h('button', { class: 'btn sm', type: 'button', text: '載入預覽', onclick: () => { this.sel = { bg: set.bg, bottle: set.bottle, paper: set.paper }; this.sync(); toast(`已載入「${set.name}」`); } }),
+            h('button', { class: 'btn sm primary', type: 'button', text: '套用到漂流瓶', onclick: () => this.apply(set) }),
+            h('button', { class: 'btn sm ghost', type: 'button', text: '重新命名', onclick: () => this.rename(set) }),
+            h('button', { class: 'btn sm danger', type: 'button', text: '刪除', onclick: async () => { if (await Dialog.confirm({ title: `刪除配色組「${set.name}」？`, message: '已經套用過的漂流瓶不會改變。', ok: '刪除', danger: true })) { Palette.state.sets = Palette.state.sets.filter(x => x !== set); this.persist(); this.renderSets(); toast('已刪除配色組'); } } })))));
+    }
+  },
+  async rename(set) {
+    const input = h('input', { type: 'text', id: 'palRename', maxlength: 20, value: set.name });
+    const v = await Dialog.open((body, done) => {
+      const form = h('form', { class: 'stack' }, h('h3', { id: 'dlgTitle', text: '重新命名配色組' }), h('div', { class: 'field' }, h('label', { for: 'palRename', text: '名字（最多 20 字）' }), input),
+        h('div', { class: 'dlg-actions' }, h('button', { class: 'btn ghost', type: 'button', text: '取消', onclick: () => done(false) }), h('button', { class: 'btn primary', type: 'submit', text: '確定' })));
+      form.addEventListener('submit', (e) => { e.preventDefault(); const n = input.value.trim(); if (!n) { input.setAttribute('aria-invalid', 'true'); toast('請輸入名字', 'err'); return; } done(n); });
+      body.appendChild(form);
+    });
+    if (!v) return;
+    set.name = String(v).slice(0, 20); if (this.persist()) toast('已重新命名', 'ok'); this.renderSets();
+  },
+  async apply(set) {
+    const targetId = ($('#palTarget') || {}).value;
+    if (targetId && Studio.doc.id !== targetId) { await openWorkInStudio(targetId); if (Studio.doc.id !== targetId) return; }
+    const d = Studio.doc;
+    d.canvas.background = set.bg; d.canvas.tintAmount = Math.max(d.canvas.tintAmount, 40);
+    let nb = 0, np = 0;
+    for (const e of d.elements) { if (e.type === 'bottle') { e.color = set.bottle; nb++; } else if (e.type === 'paper') { e.color = set.paper; np++; } }
+    Studio.render(); Studio.syncFields(); Studio.commit();
+    toast(`已套用「${set.name}」：背景${nb ? `、${nb} 個瓶身` : ''}${np ? `、${np} 張紙條` : ''}`, 'ok');
+    Router.go('studio');
+  }
+};
+const _palRender = Palette.render;
+Palette.render = function () { _palRender.call(this); if ($('#palSwatches')) { const keep = PalLab.sel; PalLab.render(); PalLab.sel = keep; PalLab.sync(); } };
+
+/* ---------- 24.7 雲端海洋跟著外面的天氣變換（只用實際取得的天氣） ---------- */
+const OceanWx = {
+  base: null,
+  init() { /* 背景在 OceanSea.render 時決定 */ },
+  plan() { return HeroWeather.plan(); },
+  background(p) {
+    const plan = this.plan();
+    const night = plan.kind !== 'default' && !plan.day;
+    if (plan.kind === 'default' || (night && plan.kind === 'clear')) return this.base(p);
+    const W = 1200, H = 600, HZ = H * 0.47;
+    const pal = {
+      clear: [['#5E9BCB', '#A9D2EA', '#F2E3C0'], ['#3C86B4', '#22618C', '#0F3557']],
+      partly: night ? null : [['#6E9FC6', '#B3D2E4', '#EDE1C6'], ['#40809F', '#245A7E', '#103252']],
+      cloud: night ? [['#151C2E', '#2A3450', '#3A4560'], ['#2B3A50', '#1A2638', '#0B111E']] : [['#6F7E96', '#93A0B3', '#B4BDC9'], ['#4F6278', '#2E3D52', '#18222F']],
+      fog: night ? [['#232A3E', '#3C4560', '#545D78'], ['#3A475C', '#253246', '#111A28']] : [['#8C97A8', '#B5BDC9', '#D3D8DF'], ['#6D7C8E', '#46576B', '#243243']],
+      rain: night ? [['#0E1426', '#1E2840', '#2C3852'], ['#22324A', '#132036', '#060C18']] : [['#4A5870', '#66748B', '#7E8BA0'], ['#2F4560', '#1B2D45', '#0B1526']],
+      storm: [['#080C1A', '#151C32', '#232C46'], ['#141E33', '#0B1324', '#03060E']],
+      snow: night ? [['#1A2236', '#323D58', '#45506C'], ['#3A4B64', '#25344A', '#121C2C']] : [['#9DA9BC', '#C5CDDA', '#E1E5EC'], ['#5E7189', '#3E5068', '#1F2C3D']]
+    }[plan.kind] || null;
+    if (!pal) { const svg = this.base(p); this.clouds(svg, false, 0.35); return svg; }
+    const svg = s('svg', { class: 'sea-bg', viewBox: `0 0 ${W} ${H}`, preserveAspectRatio: 'xMidYMid slice', 'aria-hidden': 'true' });
+    const defs = s('defs');
+    defs.append(lin(p + 'sky', 0, 1, [[0, pal[0][0]], [0.6, pal[0][1]], [1, pal[0][2]]]), lin(p + 'sea', 0, 1, [[0, pal[1][0]], [0.4, pal[1][1]], [1, pal[1][2]]]),
+      rad(p + 'sun', [[0, '#FFF7DF', 0.9], [0.3, '#FFE9B0', 0.35], [1, '#FFE9B0', 0]]), lin(p + 'fog', 1, 0, [[0, '#F7F4EE', 0], [0.5, '#F7F4EE', plan.day ? 0.55 : 0.25], [1, '#F7F4EE', 0]]));
+    svg.appendChild(defs);
+    svg.appendChild(s('rect', { width: W, height: HZ, fill: `url(#${p}sky)` }));
+    if (plan.kind === 'clear' || plan.kind === 'partly') {
+      svg.append(s('circle', { cx: 870, cy: 110, r: 170, fill: `url(#${p}sun)` }), s('circle', { cx: 870, cy: 110, r: 38, fill: '#FFF4D6' }));
+    }
+    if (night && plan.kind !== 'storm') { const g = s('g'); stars(g, seeded(77), 40, 0, 0, W, HZ * 0.8, 1.2, 0.6, true); svg.appendChild(g); }
+    svg.appendChild(s('rect', { y: HZ, width: W, height: H - HZ, fill: `url(#${p}sea)` }));
+    const rnd = seeded(31);
+    if (plan.kind === 'clear' || plan.kind === 'partly') {
+      // 晴天：水面的陽光倒影與閃光
+      for (let i = 0; i < 12; i++) { const y = HZ + 6 + i * 22, w = 150 - i * 7 + rnd() * 40; svg.appendChild(s('rect', { class: 'sea-shimmer', x: round1(870 - w / 2 + (rnd() - 0.5) * 30), y: round1(y), width: round1(w), height: 3, rx: 1.5, fill: '#FFF6DA', 'fill-opacity': round1(0.7 - i * 0.04), style: `animation-delay:${round1(-rnd() * 6)}s` })); }
+      for (let i = 0; i < 26; i++) { const x = rnd() * W, y = HZ + 20 + rnd() * (H - HZ - 30), r = 1.5 + rnd() * 2.5; svg.appendChild(s('path', { class: 'sea-sparkle', d: `M${round1(x)} ${round1(y - r * 2)}L${round1(x + r * 0.5)} ${round1(y)}L${round1(x)} ${round1(y + r * 2)}L${round1(x - r * 0.5)} ${round1(y)}Z`, fill: '#FFFFFF', style: `animation-delay:${round1(-rnd() * 4)}s` })); }
+    } else {
+      for (let i = 0; i < 8; i++) { const y = HZ + 8 + i * 30, w = 260 + rnd() * 300; svg.appendChild(s('rect', { class: 'sea-shimmer', x: round1(rnd() * (W - w)), y: round1(y), width: round1(w), height: 2, rx: 1, fill: '#DDE6EE', 'fill-opacity': 0.18, style: `animation-delay:${round1(-rnd() * 6)}s` })); }
+    }
+    if (plan.kind === 'partly') this.clouds(svg, true, 0.85);
+    if (['cloud', 'rain', 'storm', 'snow'].includes(plan.kind)) this.clouds(svg, plan.day && plan.kind !== 'storm', plan.kind === 'cloud' ? 0.75 : 0.9, plan.kind);
+    if (plan.kind === 'cloud' || plan.kind === 'fog') {
+      const g = s('g', { class: 'wx-fog' });
+      for (const [y, hh] of (plan.kind === 'fog' ? [[HZ - 60, 90], [HZ + 30, 110], [HZ + 160, 120]] : [[HZ - 40, 70]])) g.appendChild(s('rect', { x: -200, y, width: W + 400, height: hh, rx: hh / 2, fill: `url(#${p}fog)` }));
+      svg.appendChild(g);
+    }
+    if (plan.kind === 'storm') svg.appendChild(s('rect', { class: 'wx-flash', width: W, height: HZ, fill: '#C8C7E8', 'fill-opacity': 0.18 }));
+    return svg;
+  },
+  clouds(svg, day, op, kind) {
+    const f = kind === 'storm' ? '#2A3358' : day ? (kind === 'rain' ? '#8A96AC' : '#F2F3F6') : '#3A4670';
+    const a = s('g', { class: 'wx-cloud' }); a.append(HeroWeather.cloud(180, 90, 1.3, f, op), HeroWeather.cloud(620, 60, 1.6, f, op), HeroWeather.cloud(1060, 100, 1.2, f, op));
+    svg.appendChild(a);
+  },
+  /** 瓶子前面的天氣：雨絲、雨滴漣漪、雪 */
+  front(plan) {
+    if (!['rain', 'storm', 'snow', 'fog'].includes(plan.kind)) return null;
+    const W = 1200, H = 600, rnd = seeded(plan.key.length * 97 + 3);
+    const svg = s('svg', { class: 'sea-front', viewBox: `0 0 ${W} ${H}`, preserveAspectRatio: 'xMidYMid slice', 'aria-hidden': 'true' });
+    if (plan.kind === 'rain' || plan.kind === 'storm') {
+      const n = plan.kind === 'storm' ? 90 : 60;
+      for (const [cls, half] of [['wx-rain slow', 0], ['wx-rain', 1]]) {
+        const g = s('g', { class: cls });
+        for (const dy of [0, H]) for (let i = 0; i < n; i++) { const x = rnd() * (W + 200) - 100, y = rnd() * H, l = 16 + rnd() * 22; if (i % 2 === half) g.appendChild(s('path', { d: `M${round1(x)} ${round1(y + dy - H)}l-5 ${round1(l)}`, stroke: '#CFE3EE', 'stroke-opacity': half ? 0.5 : 0.3, 'stroke-width': half ? 1.5 : 1, 'stroke-linecap': 'round' })); }
+        svg.appendChild(g);
+      }
+      const rg = s('g', { class: 'rain-ripples' });
+      for (let i = 0; i < 22; i++) rg.appendChild(s('ellipse', { class: 'sea-rdrop', cx: round1(rnd() * W), cy: round1(H * 0.5 + rnd() * H * 0.48), rx: 14, ry: 3.5, fill: 'none', stroke: '#DDEFF7', 'stroke-width': 1.2, style: `animation-delay:${round1(rnd() * 2.4)}s` }));
+      svg.appendChild(rg);
+    }
+    if (plan.kind === 'snow') {
+      for (const [cls, half] of [['wx-snow far', 0], ['wx-snow', 1]]) { const g = s('g', { class: cls }); for (const dy of [0, H]) for (let i = 0; i < 70; i++) { const x = rnd() * W, y = rnd() * H, r = 1.4 + rnd() * 3; if (i % 2 === half) g.appendChild(s('circle', { cx: round1(x), cy: round1(y + dy - H), r: round1(half ? r : r * 0.6), fill: '#F7F4EE', 'fill-opacity': half ? 0.85 : 0.5 })); } svg.appendChild(g); }
+    }
+    if (plan.kind === 'fog') {
+      const g = s('g', { class: 'wx-fog' }); g.appendChild(s('rect', { x: -200, y: H * 0.62, width: W + 400, height: 90, rx: 45, fill: '#E6E9EE', 'fill-opacity': plan.day ? 0.22 : 0.1 })); svg.appendChild(g);
+    }
+    return svg;
+  },
+  /** 外面的天氣與「我的心情天氣」分開顯示；心情天氣只來自使用者自己選的紀錄 */
+  bar(plan) {
+    const outer = settings.heroWeather === 'off' ? '外面的天氣：已在設定中關閉，顯示預設海面'
+      : plan.w ? `外面的天氣：${plan.w.city}・${plan.w.desc} ${plan.w.temp}°C（Open-Meteo）`
+        : (Weather.loading ? '外面的天氣：正在取得…' : '外面的天氣：暫時取不到，顯示預設海面');
+    const mine = MoodWeather.history.find(x => x.date === todayStr());
+    return h('div', { class: 'sea-wxbar' },
+      h('span', { class: 'wx-chip outer', id: 'seaOuterWx', text: outer }),
+      mine ? h('span', { class: 'wx-chip mine', id: 'seaMoodWx', text: `我的心情天氣：${INNER_WEATHER[mine.kind].label}（你自己選的）` })
+        : h('button', { class: 'wx-chip mine', type: 'button', id: 'seaMoodWx', text: '我的心情天氣：今天還沒選', onclick: () => NavActions.moodcard() }));
+  },
+  refresh() {
+    if (Router.current !== 'ocean' || OceanSea.view() !== 'sea') return;
+    const sea = $('#oceanList .sea'); if (!sea) return;
+    if (sea.dataset.key !== this.plan().key || (sea.dataset.loading === '1' && !Weather.loading)) Ocean.renderList();
+  }
+};
+OceanWx.base = OceanSea.background.bind(OceanSea);
+OceanSea.background = (p) => OceanWx.background(p);
+const _seaRender = OceanSea.render;
+OceanSea.render = function (box, items, mood) {
+  _seaRender.call(this, box, items, mood);
+  const sea = box.querySelector('.sea'); if (!sea) return;
+  const plan = OceanWx.plan();
+  sea.dataset.key = plan.key; sea.dataset.wx = plan.kind === 'default' ? 'default' : `${plan.kind}-${plan.day ? 'day' : 'night'}`;
+  if (Weather.loading) sea.dataset.loading = '1';
+  sea.classList.add('sea-wx-' + plan.kind);
+  // 白天的海比較亮：前景的波浪帶也換成和天空相配的顏色
+  const tint = plan.day ? ({ clear: ['#3A7FA6', '#2B6990', '#1D5279'], partly: ['#3A7A9C', '#2B6486', '#1D4D70'], cloud: ['#536579', '#415267', '#2F3E51'], fog: ['#6A7A8C', '#536477', '#3C4B5D'], snow: ['#5A6D86', '#465970', '#33455A'], rain: ['#2E4762', '#243A57', '#1A2C47'] })[plan.kind] : null;
+  if (tint) ['w-far', 'w-mid', 'w-near'].forEach((c, i) => { const path = sea.querySelector(`.sea-wave.${c} path`); if (path) path.setAttribute('fill', tint[i]); });
+  const front = OceanWx.front(plan);
+  if (front) sea.insertBefore(front, sea.querySelector('.sea-hud, .sea-empty'));
+  sea.appendChild(OceanWx.bar(plan));
+};
+
+/* ---------- 24.8 心緒卡牌：洗牌、選牌、翻牌，內容來自預先寫好的卡片庫 ---------- */
+const CARD_CATS = {
+  now: { label: '此刻的我', kind: '一個問題' },
+  say: { label: '我想對自己說', kind: '一句話' },
+  act: { label: '給自己的小行動', kind: '一個小行動' }
+};
+const CARD_DECK = [
+  ['now', '此刻的我，比較需要休息、陪伴，還是一點空間？'], ['now', '現在身體哪個地方最緊？試著讓它鬆一點。'], ['now', '如果此刻的心情是一種天氣，會是什麼天氣？'],
+  ['now', '今天有什麼事，比想像中好一點？'], ['now', '此刻腦中最大聲的念頭是什麼？寫下來就好。'], ['now', '現在的我，正在努力撐著什麼？'],
+  ['now', '有什麼感覺，是今天還沒承認的？'], ['now', '此刻的我，最想被誰理解？'], ['now', '如果用三個詞形容現在，會是哪三個？'],
+  ['now', '現在的你，比早上多知道了什麼？'], ['now', '此刻有什麼聲音、氣味或光線，讓你注意到？'], ['now', '這一刻，有什麼是可以先放下的？'],
+  ['say', '你不需要一次把所有事情做好。'], ['say', '慢一點也沒關係，你還在路上。'], ['say', '今天能走到這裡，已經很不容易。'],
+  ['say', '你的感受是真的，不需要先證明它合理。'], ['say', '休息不是偷懶，是讓自己走得更遠。'], ['say', '可以同時覺得難過，又慢慢變好。'],
+  ['say', '不是每個問題今天都要有答案。'], ['say', '對自己說話時，可以像對好朋友那樣。'], ['say', '有些日子只要好好過完，就很好了。'],
+  ['say', '你值得被好好對待，包括被你自己。'], ['say', '明天的事，明天的你會一起想辦法。'], ['say', '做不到的時候，也還是可以對自己溫柔。'],
+  ['act', '喝一杯溫水，慢慢喝完。'], ['act', '站起來伸展三十秒，轉轉肩膀。'], ['act', '走到窗邊，看看天空一分鐘。'],
+  ['act', '寫下一件今天完成的小事，不管多小。'], ['act', '把桌上一個小角落整理乾淨。'], ['act', '傳一則訊息給一個讓你安心的人。'],
+  ['act', '閉上眼睛，慢慢呼吸五次。'], ['act', '聽一首喜歡的歌，這段時間不做別的事。'], ['act', '把手機放下五分鐘，看看周圍。'],
+  ['act', '替自己泡一杯熱飲。'], ['act', '寫下明天想做的一件小事就好。'], ['act', '用溫水洗洗手或洗把臉。']
+].map(([cat, text], i) => ({ id: `${cat}-${String(i % 12 + 1).padStart(2, '0')}`, cat, text }));
+function cardBackSvg() {
+  const g = s('svg', { viewBox: '0 0 200 300', class: 'mcard-pattern', 'aria-hidden': 'true', preserveAspectRatio: 'none' });
+  g.append(s('rect', { x: 10, y: 10, width: 180, height: 280, rx: 12, fill: 'none', stroke: '#E9D8A6', 'stroke-opacity': 0.55, 'stroke-width': 1.5 }),
+    s('rect', { x: 18, y: 18, width: 164, height: 264, rx: 9, fill: 'none', stroke: '#E9D8A6', 'stroke-opacity': 0.25 }));
+  const st = s('g'); stars(st, seeded(5), 22, 26, 26, 174, 150, 1.4, 0.9); g.appendChild(st);
+  g.append(s('circle', { cx: 100, cy: 82, r: 26, fill: '#F2E6C4' }), s('circle', { cx: 112, cy: 74, r: 24, fill: '#22345C' }));
+  g.append(s('path', { d: 'M92 150h16v12c0 4 14 7 14 20v40c0 6-4 9-9 9h-26c-5 0-9-3-9-9v-40c0-13 14-16 14-20z', fill: '#B8D8E8', 'fill-opacity': 0.25, stroke: '#F7F4EE', 'stroke-opacity': 0.7, 'stroke-width': 1.5 }),
+    s('rect', { x: 92, y: 142, width: 16, height: 9, rx: 2, fill: '#E9D8A6' }));
+  for (const [y, o] of [[246, 0.7], [262, 0.45]]) g.appendChild(s('path', { d: `M24 ${y}q11-8 22 0t22 0 22 0 22 0 22 0 22 0 22 0`, fill: 'none', stroke: '#B8D8E8', 'stroke-opacity': o, 'stroke-width': 2, 'stroke-linecap': 'round' }));
+  return g;
+}
+const CardDeck = {
+  saved: [], stage: 'setup', cat: 'mix', count: 1, fan: [], picked: [],
+  init() {
+    const raw = Store.load(KEYS.cards, []);
+    this.saved = (Array.isArray(raw) ? raw : []).filter(x => x && typeof x === 'object' && CARD_CATS[x.cat] && typeof x.text === 'string').slice(0, 300)
+      .map(x => ({ id: typeof x.id === 'string' ? x.id.slice(0, 80) : uid('card'), cardId: str(x.cardId, 20), cat: x.cat, text: x.text.slice(0, 120), response: str(x.response, 300), savedAt: typeof x.savedAt === 'string' ? x.savedAt : new Date().toISOString() }));
+  },
+  persist() { return Store.save(KEYS.cards, this.saved); },
+  render() { this.renderTable(); this.renderSaved(); },
+  pool() { return CARD_DECK.filter(c => this.cat === 'mix' || c.cat === this.cat); },
+  front(c) {
+    return h('div', { class: `mcard-face mcard-front cat-${c.cat}` },
+      h('span', { class: 'mf-cat', text: `${CARD_CATS[c.cat].label}・${CARD_CATS[c.cat].kind}` }),
+      h('p', { class: 'mf-text', text: c.text }),
+      h('span', { class: 'mf-foot', text: 'Inner Lab 心緒卡' }));
+  },
+  back() { return h('div', { class: 'mcard-face mcard-back' }, cardBackSvg()); },
+  renderTable() {
+    const box = $('#cardTable'); if (!box) return; clear(box);
+    if (this.stage === 'setup' || this.stage === 'shuffle') return this.renderSetup(box);
+    if (this.stage === 'pick') return this.renderPick(box);
+    if (this.stage === 'reveal') return this.renderReveal(box);
+    box.appendChild(h('section', { class: 'panel card-end stack', 'aria-labelledby': 'cardEndTitle' },
+      h('h3', { id: 'cardEndTitle', text: '今天就到這裡' }),
+      h('p', { class: 'small muted', text: '卡片只是讓你停下來想一想的理由，不代表任何答案或預言。收藏的卡片在下面，也會出現在書架的「收藏的心緒卡」。' }),
+      h('div', { class: 'row' }, h('button', { class: 'btn primary', type: 'button', id: 'cardAgain', text: '再抽一次', onclick: () => { this.stage = 'setup'; this.renderTable(); } }), h('button', { class: 'btn', type: 'button', text: '回到首頁', onclick: () => Router.go('home') }))));
+  },
+  renderSetup(box) {
+    const cats = h('div', { class: 'chips', role: 'radiogroup', 'aria-labelledby': 'cardCatLabel', id: 'cardCats' });
+    for (const [id, label] of [['mix', '三種混合'], ...Object.entries(CARD_CATS).map(([k, v]) => [k, v.label])])
+      cats.appendChild(h('button', { class: 'chip', type: 'button', role: 'radio', 'data-cat': id, 'aria-checked': String(this.cat === id), text: label, onclick: () => { this.cat = id; for (const c of $$('#cardCats .chip')) c.setAttribute('aria-checked', String(c.dataset.cat === id)); } }));
+    const counts = h('div', { class: 'chips', role: 'radiogroup', 'aria-labelledby': 'cardCountLabel', id: 'cardCounts' });
+    for (const n of [1, 3]) counts.appendChild(h('button', { class: 'chip', type: 'button', role: 'radio', 'data-n': n, 'aria-checked': String(this.count === n), text: n === 1 ? '抽一張' : '抽三張', onclick: () => { this.count = n; for (const c of $$('#cardCounts .chip')) c.setAttribute('aria-checked', String(Number(c.dataset.n) === n)); } }));
+    const deck = h('div', { class: 'deck' + (this.stage === 'shuffle' ? ' shuffling' : ''), id: 'cardDeck', 'aria-hidden': 'true' }, [0, 1, 2, 3, 4].map(i => h('div', { class: `mcard deck-card d${i}` }, h('div', { class: 'mcard-inner' }, this.back()))));
+    box.appendChild(h('section', { class: 'panel card-setup', 'aria-labelledby': 'cardSetupTitle' },
+      h('div', { class: 'stack' },
+        h('p', { class: 'eyebrow', text: '抽牌前' }), h('h3', { id: 'cardSetupTitle', text: '想從哪一疊抽？' }),
+        h('div', {}, h('p', { class: 'small', id: 'cardCatLabel', text: '卡片種類' }), cats),
+        h('div', {}, h('p', { class: 'small', id: 'cardCountLabel', text: '張數' }), counts),
+        h('div', { class: 'row' }, h('button', { class: 'btn primary', type: 'button', id: 'cardShuffle', text: this.stage === 'shuffle' ? '洗牌中…' : '洗牌', disabled: this.stage === 'shuffle', onclick: () => this.shuffle() })),
+        h('p', { class: 'tiny muted', text: '卡片是預先寫好的反思問題、話語與小行動，隨機排列，不是 AI 產生，也不是占卜或診斷。' })),
+      deck));
+  },
+  async shuffle() {
+    const pool = this.pool().slice();
+    for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]]; }
+    this.fan = pool.slice(0, Math.min(7, pool.length)); this.picked = [];
+    if (!motionReduced()) { this.stage = 'shuffle'; this.renderTable(); await sleep(1150); if (this.stage !== 'shuffle') return; }
+    this.stage = 'pick'; this.renderTable();
+    const first = $('#cardFan .mcard'); if (first) first.focus();
+  },
+  renderPick(box) {
+    const need = this.count;
+    const fan = h('div', { class: 'fan', id: 'cardFan', role: 'group', 'aria-label': `面朝下的 ${this.fan.length} 張牌，選 ${need} 張` });
+    const n = this.fan.length;
+    this.fan.forEach((c, i) => {
+      const mid = (n - 1) / 2, k = i - mid;
+      const btn = h('button', { class: 'mcard fan-card', type: 'button', 'data-i': i, 'aria-label': `第 ${i + 1} 張牌，背面朝上。按下翻開` },
+        h('div', { class: 'mcard-inner' }, this.back(), this.front(c)));
+      btn.style.setProperty('--rot', `${round1(k * 6)}deg`); btn.style.setProperty('--lift', `${round1(Math.abs(k) * 7)}px`); btn.style.setProperty('--fi', `${i * 0.05}s`);
+      btn.addEventListener('click', () => this.pick(i, btn));
+      fan.appendChild(btn);
+    });
+    box.appendChild(h('section', { class: 'panel card-pick', 'aria-labelledby': 'cardPickTitle' },
+      h('div', { class: 'row', style: { justifyContent: 'space-between' } },
+        h('div', {}, h('p', { class: 'eyebrow', text: '選牌' }), h('h3', { id: 'cardPickTitle', text: need === 1 ? '憑直覺選一張' : '憑直覺選三張' })),
+        h('p', { class: 'small', id: 'cardPicked', role: 'status', text: `已選 0 / ${need}` })),
+      fan,
+      h('div', { class: 'row' }, h('button', { class: 'btn ghost sm', type: 'button', text: '重新洗牌', onclick: () => this.shuffle() }), h('button', { class: 'btn ghost sm', type: 'button', text: '不抽了', onclick: () => { this.stage = 'setup'; this.renderTable(); } }))));
+  },
+  pick(i, btn) {
+    if (this.picked.includes(i) || this.picked.length >= this.count) return;
+    this.picked.push(i);
+    btn.classList.add('flipped'); btn.setAttribute('aria-pressed', 'true');
+    const c = this.fan[i];
+    btn.setAttribute('aria-label', `已翻開：${CARD_CATS[c.cat].label}，${c.text}`);
+    $('#cardPicked').textContent = `已選 ${this.picked.length} / ${this.count}`;
+    if (this.picked.length === this.count) {
+      for (const b of $$('#cardFan .fan-card')) if (!b.classList.contains('flipped')) { b.classList.add('gone'); b.disabled = true; }
+      setTimeout(() => { if (this.stage !== 'pick') return; this.stage = 'reveal'; this.renderTable(); const f = $('#cardTable .reveal-card textarea'); if (f) f.focus({ preventScroll: true }); $('#cardTable').scrollIntoView({ behavior: motionReduced() ? 'auto' : 'smooth', block: 'start' }); }, motionReduced() ? 0 : 900);
+    }
+  },
+  renderReveal(box) {
+    const list = h('div', { class: 'reveal-list' + (this.picked.length > 1 ? ' three' : '') });
+    this.picked.forEach((i, n) => {
+      const c = this.fan[i];
+      const resp = h('textarea', { id: `cardResp${n}`, maxlength: 300, rows: 3, placeholder: '寫一句也好，不寫也可以' });
+      const keepBtn = h('button', { class: 'btn sm primary', type: 'button', text: '收藏', onclick: () => { if (this.collect(c, resp.value)) { keepBtn.disabled = true; keepBtn.textContent = '已收藏'; } } });
+      list.appendChild(h('article', { class: 'reveal-card', 'aria-label': `${CARD_CATS[c.cat].label}：${c.text}` },
+        h('div', { class: 'mcard flipped static' }, h('div', { class: 'mcard-inner' }, this.back(), this.front(c))),
+        h('div', { class: 'field' }, h('label', { for: `cardResp${n}`, text: '想回應一句嗎？（選填）' }), resp),
+        h('div', { class: 'row', style: { gap: '6px' } },
+          keepBtn,
+          h('button', { class: 'btn sm', type: 'button', text: '存進日記', onclick: () => Diary.openEditor({ title: `心緒卡・${CARD_CATS[c.cat].label}`, content: `${c.text}${resp.value.trim() ? '\n\n' + resp.value.trim() : ''}`, tags: ['心緒卡'] }) }),
+          h('button', { class: 'btn sm', type: 'button', text: '轉成漂流瓶', onclick: () => RandomBottle.start({ message: (resp.value.trim() || c.text).slice(0, LIMITS.message), note: resp.value.trim() && c.text.length <= LIMITS.note ? c.text : undefined }) }),
+          h('button', { class: 'btn sm', type: 'button', text: '下載 PNG', onclick: (e) => this.png(c, resp.value, e.currentTarget) }))));
+    });
+    box.appendChild(h('section', { class: 'panel card-reveal', 'aria-labelledby': 'cardRevealTitle' },
+      h('p', { class: 'eyebrow', text: '翻開的牌' }), h('h3', { id: 'cardRevealTitle', text: this.picked.length > 1 ? '你選的三張牌' : '你選的牌' }),
+      h('p', { class: 'small muted', text: '不用急著回答。這些只是給自己的問題和提醒，不代表你的狀態或未來。' }),
+      list,
+      h('div', { class: 'row' },
+        h('button', { class: 'btn primary', type: 'button', id: 'cardRedraw', text: '再抽一次', onclick: () => this.shuffle() }),
+        h('button', { class: 'btn', type: 'button', id: 'cardEnd', text: '結束', onclick: () => { this.stage = 'end'; this.renderTable(); } }))));
+  },
+  collect(c, response) {
+    this.saved.unshift({ id: uid('card'), cardId: c.id, cat: c.cat, text: c.text, response: String(response || '').trim().slice(0, 300), savedAt: new Date().toISOString() });
+    if (!this.persist()) { this.saved.shift(); return false; }
+    toast('已收進「收藏的心緒卡」', 'ok', { label: '到書架看看', fn: () => { Router.go('archive'); Archive.show('shelves'); } });
+    this.renderSaved(); HomeV2.render();
+    return true;
+  },
+  renderSaved() {
+    const box = $('#savedCards'); if (!box) return; clear(box);
+    if (!this.saved.length) { box.appendChild(h('p', { class: 'small muted', text: '還沒有收藏的卡片。抽一張，喜歡的話按「收藏」。' })); return; }
+    for (const x of this.saved) {
+      box.appendChild(h('article', { class: 'saved-card', 'data-id': x.id },
+        h('div', { class: 'mcard mini flipped static' }, h('div', { class: 'mcard-inner' }, this.front(x))),
+        h('div', { class: 'stack', style: { gap: '6px' } },
+          h('p', { class: 'tiny muted', text: `${CARD_CATS[x.cat].label}・${fmtDate(x.savedAt)} 收藏` }),
+          x.response ? h('p', { class: 'small', text: `我的回應：${x.response}` }) : null,
+          h('div', { class: 'row', style: { gap: '4px' } },
+            h('button', { class: 'btn sm', type: 'button', text: '下載 PNG', onclick: (e) => this.png(x, x.response, e.currentTarget) }),
+            h('button', { class: 'btn sm', type: 'button', text: '存進日記', onclick: () => Diary.openEditor({ title: `心緒卡・${CARD_CATS[x.cat].label}`, content: `${x.text}${x.response ? '\n\n' + x.response : ''}`, tags: ['心緒卡'] }) }),
+            h('button', { class: 'btn sm ghost', type: 'button', text: '移除', onclick: () => { this.saved = this.saved.filter(y => y !== x); this.persist(); this.renderSaved(); toast('已移除這張卡'); } })))));
+    }
+  },
+  async png(c, response, btn) {
+    setBusy(btn, true);
+    try {
+      const resp = String(response || '').trim();
+      await loadFontsFor(c.text + resp + CARD_CATS[c.cat].label + 'Inner Lab 心緒卡反思靈感，不是診斷或占卜');
+      const W = 900, H = 1260, pad = 110, maxW = W - pad * 2;
+      const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const ctx = cv.getContext('2d');
+      cardBackground(ctx, W, H);
+      ctx.fillStyle = '#F2E6C4'; ctx.beginPath(); ctx.arc(W / 2, 230, 56, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#1F2F55'; ctx.beginPath(); ctx.arc(W / 2 + 26, 214, 52, 0, Math.PI * 2); ctx.fill();
+      ctx.textBaseline = 'top'; ctx.textAlign = 'center'; ctx.fillStyle = '#E9D8A6'; ctx.font = `30px ${FONT_STACK}`;
+      ctx.fillText(`${CARD_CATS[c.cat].label}・${CARD_CATS[c.cat].kind}`, W / 2, 340);
+      let y = drawWrapped(ctx, c.text, W / 2, 430, maxW, 54, '#F7F4EE', { lh: 1.5, maxLines: 6, align: 'center' });
+      if (resp) { ctx.fillStyle = '#E9D8A6'; ctx.fillRect(W / 2 - 50, y + 40, 100, 3); drawWrapped(ctx, resp, W / 2, y + 80, maxW, 32, '#C8C7E8', { maxLines: 7, align: 'center' }); }
+      ctx.fillStyle = 'rgba(200,199,232,0.85)'; ctx.font = `22px ${FONT_STACK}`; ctx.textAlign = 'center';
+      ctx.fillText('Inner Lab 心緒卡・反思的靈感，不是診斷或占卜', W / 2, H - 120);
+      await canvasToDownload(cv, `心緒卡-${CARD_CATS[c.cat].label}-${todayStr()}.png`);
+      toast('卡片圖片已下載', 'ok');
+    } catch (e) { toast('卡片下載失敗：' + e.message, 'err'); }
+    finally { setBusy(btn, false); }
+  }
+};
+/* 書架上多一本「收藏的心緒卡」；主題書可以收信 */
+BOOK_TYPES.cards = { label: '收藏的心緒卡', sub: '抽到、想留下來的卡片', color: '#3B4A7A', h: 162, group: 'records', unit: '張' };
+const _books = Bookcase.books;
+Bookcase.books = function () {
+  const B = _books.call(this);
+  const list = CardDeck.saved.slice().reverse(); const pages = [];
+  for (let i = 0; i < list.length; i += 3) {
+    const chunk = list.slice(i, i + 3);
+    pages.push(this.page(`cards:${i}`, `心緒卡 ${i + 1}–${i + chunk.length}`, chunk.map(c => `${c.text} ${c.response}`).join(' '), () => put(h('div'),
+      h('p', { class: 'eyebrow', text: '收藏的心緒卡' }),
+      ...chunk.map(c => put(h('div', { style: { marginBottom: '14px' } }), h('p', { class: 'tiny muted', text: `${CARD_CATS[c.cat].label}・${fmtDate(c.savedAt)}` }), h('p', { class: 'br-quote', text: c.text }), c.response ? h('p', { class: 'br-text', text: `我的回應：${c.response}` }) : null)))));
+  }
+  const book = this.make('auto-cards', 'cards', pages, { count: CardDeck.saved.length, empty: ['還沒有收藏的心緒卡。抽一張喜歡的，按「收藏」就會收進這本書。', '去抽一張', () => { this.close(true); Router.go('cards'); }] });
+  const qi = B.findIndex(b => b.id === 'auto-quotes');
+  B.splice(qi + 1, 0, book);
+  return B;
+};
+const _themePage = Bookcase.themePage;
+Bookcase.themePage = function (sh, it) {
+  if (it.kind !== 'letter') return _themePage.call(this, sh, it);
+  const out = ['從這本書移出', () => this.removeItem(sh, it), 'danger'];
+  const l = Letters.list.find(x => x.id === it.ref); const snap = it.snapshot || {};
+  const title = (l ? l.title : snap.title) || '一封信';
+  const content = l ? (Letters.isDue(l) ? l.content : null) : snap.content;
+  return this.page(`letteritem:${it.id}`, title, [title, content || ''].join(' '), () => put(h('div'),
+    h('p', { class: 'eyebrow', text: snap.system ? '今日來信・系統提供，不是真實的人寫的' : '收藏的信' }),
+    h('h3', { text: title }),
+    h('p', { class: 'br-text', text: content || '這封信還在封存中，到了那天才能打開。' }),
+    this.actions([out])));
+};
+
+/* ---------- 24.9 首頁：三個入口、一分鐘小儀式、第一次來時先收起其他功能 ---------- */
+const Ritual = {
+  card: null, again: false,
+  doneToday() { return Diary.list.find(d => d.date === todayStr() && d.tags.includes('小儀式')) || null; },
+  render() {
+    const box = $('#ritualCard'); if (!box) return;
+    const keep = $('#ritualLine') ? $('#ritualLine').value : '';
+    clear(box);
+    const done = this.doneToday();
+    box.append(h('div', { class: 'ritual-head' }, h('p', { class: 'eyebrow', text: '一分鐘的小儀式' }), h('h3', { id: 'ritualTitle', text: '抽一張卡，寫一句，存下來' }),
+      h('p', { class: 'small muted', text: '不用想太多，也不必每天做。沒有連續天數，想來的時候再來。' })));
+    if (done && !this.again) {
+      box.append(h('div', { class: 'ritual-done', role: 'status' },
+        h('p', { text: '今天的小儀式已經完成了。' }),
+        h('p', { class: 'small muted ritual-saved', text: done.content.split('\n').filter(Boolean).join('　') }),
+        h('div', { class: 'row' },
+          h('button', { class: 'btn sm', type: 'button', text: '在日記本打開', onclick: () => DiaryBook.goTo(done.id) }),
+          h('button', { class: 'btn sm ghost', type: 'button', id: 'ritualAgain', text: '再做一次', onclick: () => { this.again = true; this.render(); } }))));
+      return;
+    }
+    const line = h('input', { type: 'text', id: 'ritualLine', maxlength: 120, placeholder: '寫一句就好（也可以不寫）', value: keep });
+    line.addEventListener('keydown', (e) => { if (e.key === 'Enter' && this.card) { e.preventDefault(); this.save(); } });
+    box.append(h('ol', { class: 'ritual-steps' },
+      h('li', { class: this.card ? 'ok' : '' }, h('span', { class: 'rs-n', text: '1' }),
+        this.card ? h('div', { class: 'ritual-card' }, h('span', { class: 'tiny muted', text: CARD_CATS[this.card.cat].label }), h('p', { id: 'ritualCardText', text: this.card.text }), h('button', { class: 'linkish small', type: 'button', text: '換一張', onclick: () => this.draw() }))
+          : h('button', { class: 'btn', type: 'button', id: 'ritualDraw', text: '抽一張卡', onclick: () => this.draw() })),
+      h('li', {}, h('span', { class: 'rs-n', text: '2' }), h('div', { class: 'field', style: { flex: 1 } }, h('label', { for: 'ritualLine', text: '寫一句' }), line)),
+      h('li', {}, h('span', { class: 'rs-n', text: '3' }), h('button', { class: 'btn primary', type: 'button', id: 'ritualSave', text: '存下來', disabled: !this.card, onclick: () => this.save() }))),
+      h('p', { class: 'tiny muted', text: '會存成一篇只在這個瀏覽器的日記。' }));
+  },
+  draw() {
+    const pool = CARD_DECK.filter(c => !this.card || c.id !== this.card.id);
+    this.card = pool[Math.floor(Math.random() * pool.length)];
+    this.render();
+    const l = $('#ritualLine'); if (l) l.focus({ preventScroll: true });
+  },
+  save() {
+    if (!this.card) return;
+    const line = ($('#ritualLine') || {}).value ? $('#ritualLine').value.trim() : '';
+    const ok = Diary.save({ date: todayStr(), title: '今天的小儀式', content: `${this.card.text}${line ? '\n\n' + line : ''}`, mood: 'other', intensity: 3, kind: 'moment', tags: ['小儀式'] });
+    if (!ok) return;
+    toast('存好了，今天的一分鐘完成了', 'ok', { label: '看看日記本', fn: () => DiaryBook.goTo(Diary.list[0].id) });
+    this.card = null; this.again = false;
+    if ($('#ritualLine')) $('#ritualLine').value = '';
+    this.render(); Home.renderRecent();
+  }
+};
+const HomeV2 = {
+  expanded: false,
+  init() {
+    $('#qsWrite').addEventListener('click', () => Diary.openEditor());
+    $('#homeMoreBtn').addEventListener('click', () => this.expand());
+    this.render();
+  },
+  hasData() { return Diary.list.length + Works.list.length + Letters.list.length + CardDeck.saved.length > 0; },
+  seen() { return !!Store.load(KEYS.welcome, null); },
+  markSeen() { if (Store.available && !this.seen()) Store.save(KEYS.welcome, { seenAt: new Date().toISOString() }); },
+  render() {
+    if (this.hasData()) this.markSeen();
+    const collapsed = !this.expanded && !this.seen() && Store.available;
+    $('#homeMore').hidden = collapsed; $('#homeMoreBar').hidden = !collapsed;
+    $('#homeMoreBtn').setAttribute('aria-expanded', String(!collapsed));
+    Ritual.render();
+  },
+  expand() {
+    this.expanded = true; this.markSeen(); this.render();
+    const j = $('#homeJourney'); if (j) j.scrollIntoView({ behavior: motionReduced() ? 'auto' : 'smooth', block: 'start' });
+  }
+};
+
+/* =========================================================================
    17. 首頁、時光盒分頁與設定
    ========================================================================= */
 const Home = {
@@ -6033,7 +7498,7 @@ const Home = {
     Quotes.syncButtons();
     this.renderPalette(); this.renderRecent(); this.renderLetterNotice();
   },
-  refresh() { this.renderRecent(); this.renderPalette(); this.renderLetterNotice(); HomeJourney.render(); Backup.render(); ContinueCard.render(); },
+  refresh() { this.renderRecent(); this.renderPalette(); this.renderLetterNotice(); HomeJourney.render(); Backup.render(); ContinueCard.render(); if (typeof HomeV2 !== 'undefined') HomeV2.render(); },
   tickClock() {
     const now = new Date();
     $('#clockTime').textContent = fmtTime(now);
@@ -6078,7 +7543,7 @@ const Home = {
     for (const it of items) {
       if (it.kind === 'work') box.appendChild(h('button', { class: 'recent-item', type: 'button', onclick: () => openWorkInStudio(it.w.id) },
         h('span', { class: 'thumb' }, renderDoc(it.w)), h('span', { class: 'meta' }, h('strong', { text: it.w.title || '未命名漂流瓶' }), h('span', { class: 'tiny muted', text: `漂流瓶 · ${fmtDateTime(it.w.updatedAt)}` }))));
-      else box.appendChild(h('button', { class: 'recent-item', type: 'button', onclick: () => { Router.go('archive'); Archive.show('diary'); } },
+      else box.appendChild(h('button', { class: 'recent-item', type: 'button', onclick: () => DiaryBook.goTo(it.d.id) },
         h('span', { class: 'thumb', style: { display: 'grid', placeItems: 'center', fontFamily: 'var(--font-display)', color: 'var(--mist)' }, text: moodLabel(it.d.mood) }),
         h('span', { class: 'meta' }, h('strong', { text: it.d.title || it.d.content.slice(0, 24) || '日記' }), h('span', { class: 'tiny muted', text: `日記 · ${fmtDate(it.d.date)}` }))));
     }
@@ -6170,7 +7635,7 @@ function exportAll() {
   const payload = {
     format: 'innerlab-backup', description: 'Inner Lab 心緒研究所的本機資料備份（日記、漂流瓶作品、色盤、收藏、未來信件與偏好設定）。可在網站的設定頁匯入。',
     schemaVersion: SCHEMA_VERSION, appVersion: APP_VERSION, exportedAt: new Date().toISOString(),
-    data: { diaries: Diary.list, bottles: Works.list, palette: Palette.state, quotes: { favorites: Quotes.favorites }, letters: Letters.list, shelves: Shelves.list, moodWeather: MoodWeather.history, settings: safeSettings }
+    data: { diaries: Diary.list, bottles: Works.list, palette: Palette.state, quotes: { favorites: Quotes.favorites }, letters: Letters.list, shelves: Shelves.list, moodWeather: MoodWeather.history, cards: CardDeck.saved, settings: safeSettings }
   };
   downloadBlob(new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' }), `innerlab-backup-${todayStr()}.json`);
   settings.lastBackupAt = new Date().toISOString(); saveSettings(); Backup.render(); BackupStatus.render();
@@ -6191,7 +7656,7 @@ async function importAll(file) {
   const ok = await Dialog.confirm({ title: info.empty ? '這是一份空的備份，仍要匯入？' : '匯入備份？', message: msg, ok: '取代並匯入', danger: true, extra: h('button', { class: 'btn sm', type: 'button', text: '先匯出目前資料', onclick: () => exportAll() }) });
   if (!ok) return;
   // 先記下目前的資料，任何一步寫入失敗就還原，不留下一半的資料
-  const keys = [KEYS.diaries, KEYS.bottles, KEYS.palette, KEYS.quotes, KEYS.letters, KEYS.shelves, KEYS.moodweather, KEYS.settings];
+  const keys = [KEYS.diaries, KEYS.bottles, KEYS.palette, KEYS.quotes, KEYS.letters, KEYS.shelves, KEYS.moodweather, KEYS.cards, KEYS.settings];
   const before = {}; for (const k of keys) { try { before[k] = localStorage.getItem(k); } catch (_) { before[k] = null; } }
   const writes = [[KEYS.diaries, diaries], [KEYS.bottles, bottles]];
   if (d.palette && typeof d.palette === 'object') writes.push([KEYS.palette, d.palette]);
@@ -6199,6 +7664,7 @@ async function importAll(file) {
   if (Array.isArray(d.letters)) writes.push([KEYS.letters, d.letters]);
   if (Array.isArray(d.shelves)) writes.push([KEYS.shelves, d.shelves]);
   if (Array.isArray(d.moodWeather)) writes.push([KEYS.moodweather, d.moodWeather]);
+  if (Array.isArray(d.cards)) writes.push([KEYS.cards, d.cards]);
   if (d.settings && typeof d.settings === 'object' && !Array.isArray(d.settings)) { const keep = { cloudUrl: settings.cloudUrl, cloudKey: settings.cloudKey }; writes.push([KEYS.settings, Object.assign({}, d.settings, keep)]); }
   for (const [k, v] of writes) {
     if (!Store.save(k, v)) {
@@ -6338,11 +7804,11 @@ function boot() {
   Stardust.init();
   applyMotion();
   const steps = [
-    ['作品', () => Works.init()], ['日記', () => Diary.init()], ['語錄', () => Quotes.init()], ['色彩', () => Palette.init()],
+    ['2.0 準備', () => V2.install()], ['作品', () => Works.init()], ['日記', () => Diary.init()], ['語錄', () => Quotes.init()], ['色彩', () => Palette.init()],
     ['工作室', () => Studio.init()], ['信件', () => Letters.init()], ['片刻', () => Moment.init()], ['心緒探索', () => Reflect.init()],
     ['時光盒', () => Archive.init()], ['雲端海洋', () => Ocean.init()], ['設定', () => Settings.init()], ['首頁', () => Home.init()], ['天氣', () => Weather.init()], ['書架', () => Shelves.init()], ['立體書架', () => Bookcase.init()], ['心情天氣', () => MoodWeather.init()], ['回望', () => JourneyView.init()],
     ['隨機生成', () => RandomBottle.init()], ['聲景', () => Soundscape.init()], ['每日一瓶', () => OceanDaily.init()], ['首頁旅程', () => HomeJourney.init()], ['備份提醒', () => Backup.render()],
-    ['快速創作', () => QuickMode.init()], ['離開提醒', () => LeaveGuard.init()], ['繼續編輯', () => ContinueCard.render()], ['備份狀態', () => BackupStatus.render()]
+    ['快速創作', () => QuickMode.init()], ['2.0 互動', () => V2.init()], ['離開提醒', () => LeaveGuard.init()], ['繼續編輯', () => ContinueCard.render()], ['備份狀態', () => BackupStatus.render()]
   ];
   for (const [name, fn] of steps) { try { fn(); } catch (e) { reportError(e, `「${name}」功能載入失敗`); } }
   if (!Store.available) toast('這個瀏覽器無法使用本機儲存（可能是無痕模式），日記與作品不會被保存。', 'err');
@@ -6354,6 +7820,7 @@ function boot() {
   Router.on('palette', () => Palette.render());
   Router.on('settings', () => { Settings.render(); BackupStatus.render(); });
   Router.on('journey', () => JourneyView.render());
+  Router.on('cards', () => CardDeck.render());
   Ocean.renderMode();
   Router.render();
 }
